@@ -1,0 +1,173 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                     - Config -                       | #
+# |               Plugin by Christian34	  	      	     | #
+# +------------------------------------------------------+ #
+############################################################
+
+# texts use MiniMessage (<red>, <bold>, <#ff8800>, <gradient:aqua:blue>, ... see https://docs.papermc.io/adventure/minimessage/format),
+# old color codes (&c) still work - the same goes for messages.yml
+# in front of all messages (leave it empty for none)
+prefix: "<dark_gray>[<aqua>CatchTheBeacon<dark_gray>]"
+tablist:
+  header:
+    - "<aqua><bold>Catch<white>The<aqua>Beacon</bold> <dark_gray>■ <gray>Your <aqua>Network"
+  footer:
+    - "<gray>Discord <dark_gray>» <white>discord.gg <dark_gray>▎ <gray>powered by <dark_gray>» <aqua><bold>Christian34"
+lobby:
+  # seconds until the game starts once enough players are in the lobby (at least 10)
+  # it is shortened to 10 seconds if the lobby is full, /ctb start starts the game in 5 seconds
+  countdown: 180
+game:
+  # set it to '0' to disable it
+  # blocks in this radius cannot be set or broken
+  spawn-protection: 5
+  # the team is warned if an enemy comes this close to one of its beacons (in blocks)
+  beacon-warning-radius: 10
+  # the player cannot get any damage in this time (time in seconds)
+  respawn-protection: 3
+  # "x was killed by y" - the messages can be changed in 'messages.yml'
+  show-death-messages: true
+  # true: players can hurt the players of their own team
+  friendly-fire: false
+  # the last player who hit somebody gets the kill if the victim dies within this time (knocked into the void,
+  # into lava, ...) - in seconds, 0: only direct kills count
+  last-hit-seconds: 10
+  # true: players can only break blocks placed by players, the map stays as it is
+  only-placed-blocks-breakable: false
+  # a player who leaves a running game can come back into the team within this time (in seconds, 0: disabled)
+  rejoin-seconds: 120
+  # hearts the players have in addition to the normal 10 hearts
+  extra-hearts: 3
+  # modern: current pvp with attack cooldown, legacy: 1.8 pvp without attack cooldown
+  combat: modern
+  # blocks nobody can break (also not with explosions)
+  unbreakable-blocks:
+    - ENCHANTING_TABLE
+  # a compass in the kit points to the nearest enemy beacon - or to an own beacon while it is being mined
+  beacon-compass: true
+  # summary at the end of a round: MVP, most kills, destroyed beacons, mined resources
+  round-summary: true
+  # seconds after the end of a round (winner, fireworks) until the players are sent back (at least 3)
+  ending-seconds: 15
+  # players choosing "random" are put into teams by their win rate (from the stats), so teams are even
+  balance-teams: true
+# the bases around the beacons
+base:
+  # enemies near a beacon get mining fatigue, so destroying it takes about 15 seconds (radius in blocks, 0: disabled)
+  # their team has to protect them meanwhile - the central idea of the game
+  mining-fatigue-radius: 6
+  # 1 = mining fatigue I (beacon: ~15 s), 2 = mining fatigue II (much slower)
+  mining-fatigue-level: 1
+  # defenders get regeneration near their own beacons (radius in blocks, 0: disabled)
+  regeneration-radius: 8
+  # every beacon has a trap: the first enemy coming this close gets blindness and slowness (in blocks, 0: disabled)
+  trap-radius: 5
+  # how long the trap lasts (in seconds)
+  trap-seconds: 4
+  # players standing near their own beacon for too long get poison (radius in blocks, 0: disabled)
+  # the time doesn't count while enemies are near the beacon - defending is no camping
+  camping-radius: 4
+  camping-seconds: 30
+  # everybody sees a boss bar while a beacon is being mined (with its progress)
+  mining-bossbar: true
+# blocks of the map that give rewards when broken (instead of their normal drop): one of the rewards by chance,
+# armor is put on if it is better ("IRON_INGOT:4" = 4 iron ingots)
+resources:
+  - block: IRON_BLOCK
+    rewards:
+      - IRON_HELMET
+      - IRON_CHESTPLATE
+      - IRON_LEGGINGS
+      - IRON_BOOTS
+      - IRON_SWORD
+  - block: DIAMOND_BLOCK
+    rewards:
+      - DIAMOND_HELMET
+      - DIAMOND_CHESTPLATE
+      - DIAMOND_LEGGINGS
+      - DIAMOND_BOOTS
+      - DIAMOND_SWORD
+# things that happen after some minutes, shown as "Next event" in the scoreboard
+# actions: beacon-protection-off (blocks around beacons can be changed), effects (all players get the effects,
+# e.g. "SPEED:1" = speed II), end (the team with more beacons wins, otherwise nobody)
+events:
+  - minute: 10
+    action: beacon-protection-off
+  - minute: 15
+    action: effects
+    effects:
+      - "SPEED:0"
+      - "STRENGTH:0"
+  - minute: 25
+    action: end
+spectators:
+  # players can watch running games (/ctb spectate or /ctb join if no game is waiting)
+  enabled: true
+chat:
+  # while playing, messages only go to the own team
+  team-chat: true
+  # messages starting with this go to everybody (empty: disabled)
+  shout-prefix: "!"
+stats:
+  # saves kills, deaths, wins, ... of every player in the database (placeholders with PlaceholderAPI)
+  enabled: true
+# player data (stats) in MySQL or MariaDB - use it in a network, so all servers share the stats
+# disabled: saved in plugins/CatchTheBeacon/database.db (SQLite)
+sql:
+  enabled: false
+  host: 'localhost'
+  port: 3306
+  database: 'CatchTheBeacon'
+  username: 'username'
+  password: 'password'
+  # tables are called <prefix>_stats (the same database can be used for EasyPrefix)
+  table-prefix: 'ctb'
+# for servers behind a Velocity proxy (enable bungee-plugin-message-channel in velocity.toml, it is by default)
+network:
+  # standalone: the games run on this server (no network)
+  # game: this server hosts the game of one arena - players joining the server join it (or watch it),
+  #       after the game or with /ctb quit they are sent to the lobby server (ctb.network.bypass: not put into the game)
+  # lobby: join signs ("[ctb]" + server name) and /ctb join send players to the game servers below
+  mode: standalone
+  # game servers: the name of the lobby server in velocity.toml
+  lobby-server: lobby
+  # game servers: the arena of this server (empty: the first playable one)
+  arena: ""
+  # lobby server: the game servers - name in velocity.toml and address to read their state from (host:port)
+  servers:
+    - name: ctb-1
+      address: 127.0.0.1:25566
+# parties of the plugins Parties or Party and Friends (in a network: "Spigot Party API for Party and Friends" on the
+# game servers; the proxy plugins take the members along when the leader is sent to a game server)
+parties:
+  enabled: true
+  # the party leader takes the members of his party on this server into the game (/ctb join, join signs)
+  join-together: true
+  # parties play in the same team, as long as the teams stay even (players who chose a team keep it)
+  same-team: true
+achievements:
+  # e.g. "Last-second rescue": kill an enemy while he is mining your beacon (saved in the database, /ctb achievements)
+  enabled: true
+  # "That was quick": win within this time (in minutes)
+  quick-win-minutes: 5
+tips:
+  # new players get tips in the action bar during their first rounds (0: disabled, needs the stats)
+  rounds: 3
+variants:
+  # players vote for a variant in the lobby (item), the one with the most votes is played (no votes: normal)
+  voting: true
+  # rush: mining takes half the time, events come twice as fast
+  # bow-only: only arrows hurt, bows have infinity
+  # no-iron: resource blocks give nothing
+  # one-hit: every hit of an enemy kills
+  list:
+    - rush
+    - bow-only
+    - no-iron
+    - one-hit
+# anonymous error reports to Sentry, so bugs of CatchTheBeacon get fixed: only errors in the code of
+# CatchTheBeacon, without player names, uuids or the address of the server - set to false to send nothing
+# (the anonymous statistics of bStats are disabled in plugins/bStats/config.yml)
+sentry:
+  enabled: true

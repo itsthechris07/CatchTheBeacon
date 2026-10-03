@@ -1,0 +1,15 @@
+name: CatchTheBeacon
+version: ${version}
+author: Christian34
+main: com.christian34.catchthebeacon.CatchTheBeacon
+# keep below 1.21.5: Paper then rewrites the old enum calls of the shaded InventoryGui (org.bukkit.Sound is an interface now)
+api-version: "1.13"
+# commands are registered by cloud (commands/CommandManager)
+
+softdepend: [PlaceholderAPI, MiniPlaceholders, Parties, Spigot-Party-API-PAF, Citizens, FancyNpcs, floodgate]
+
+permissions:
+  ctb.network.bypass:
+    description: not put into the game when joining a game server (network.mode game), e.g. to set up the arena
+    # not even for operators, who would otherwise never get into the game
+    default: false

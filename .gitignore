@@ -1,0 +1,9 @@
+/.idea/
+/.github/
+*.iml
+/src/snippets/
+# local settings (serverPluginsDir, relocateLibraries)
+gradle.properties
+# Gradle
+.gradle
+build

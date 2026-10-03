@@ -74,6 +74,7 @@ public class CatchTheBeacon extends JavaPlugin {
     private BedrockForms bedrockForms = BedrockForms.NONE;
     private EssentialsSupport essentials = EssentialsSupport.NONE;
     private Telemetry telemetry;
+    private UpdateChecker updateChecker;
 
     public static CatchTheBeacon getInstance() {
         return instance;
@@ -102,6 +103,10 @@ public class CatchTheBeacon extends JavaPlugin {
 
     public Telemetry getTelemetry() {
         return telemetry;
+    }
+
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
     }
 
     public NpcSupport getNpcSupport() {
@@ -234,6 +239,8 @@ public class CatchTheBeacon extends JavaPlugin {
         }
         this.telemetry = new Telemetry(this);
         this.telemetry.start();
+        this.updateChecker = new UpdateChecker(this);
+        this.updateChecker.start();
 
         if (Boolean.getBoolean(DEBUG_AUTOSTART_PROPERTY)) {
             Bukkit.getScheduler().runTaskLater(this, this::debugAutostart, 10L);

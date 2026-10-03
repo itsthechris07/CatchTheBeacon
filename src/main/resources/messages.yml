@@ -147,6 +147,11 @@ reward_kill: 'kill'
 reward_beacon: 'beacon destroyed'
 reward_win: 'victory'
 reward_game: 'round played'
+# update checker (admins, when they join)
+update_available: '<gold>A new version of CatchTheBeacon is available: <gray>{0} <dark_gray>→ <green>{1}'
+update_outdated: '<red>Updates missed: <yellow>{0}<red>, the first one came out <yellow>{1} <red>days ago - please update!'
+update_download: '<aqua><bold>[Download]'
+update_download_hover: "<gray>Open the release on GitHub\n<dark_gray>{0}"
 not_in_game: '<red>You''re not playing a game!'
 player_not_playing: '<red>{0} is not playing a game!'
 stats_load_failed: '<red>Couldn''t load the stats, see the console.'

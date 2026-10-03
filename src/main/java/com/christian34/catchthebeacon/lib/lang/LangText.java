@@ -325,7 +325,11 @@ public enum LangText {
     REWARD_KILL("reward_kill"),
     REWARD_BEACON("reward_beacon"),
     REWARD_WIN("reward_win"),
-    REWARD_GAME("reward_game");
+    REWARD_GAME("reward_game"),
+    UPDATE_AVAILABLE("update_available"),
+    UPDATE_OUTDATED("update_outdated"),
+    UPDATE_DOWNLOAD("update_download"),
+    UPDATE_DOWNLOAD_HOVER("update_download_hover");
 
     private final String KEY;
 

@@ -1,6 +1,7 @@
 package com.christian34.catchthebeacon.commands;
 
 import com.christian34.catchthebeacon.CatchTheBeacon;
+import com.christian34.catchthebeacon.UpdateChecker;
 import com.christian34.catchthebeacon.game.Game;
 import com.christian34.catchthebeacon.game.states.GameState;
 import com.christian34.catchthebeacon.game.states.LobbyState;
@@ -269,6 +270,9 @@ public class CommandCatchTheBeacon {
         sender.sendMessage(debugLine("Arenas", getInstance().getMapHandler().getGameMaps().size()));
         sender.sendMessage(debugLine("Games", getInstance().getGameManager().getGames().size()));
         sender.sendMessage(debugLine("Version", getInstance().getPluginMeta().getVersion()));
+        UpdateChecker.Update update = getInstance().getUpdateChecker().getUpdate();
+        sender.sendMessage(debugLine("Latest version",
+                update == null ? "installed (or not checked)" : update.version() + " (" + update.behind() + " behind)"));
         sender.sendMessage(debugLine("Users cached", getInstance().getUsers().size()));
         sender.sendMessage(debugLine("Server Version", Bukkit.getVersion()));
         sender.sendMessage(debugLine("Java Version", System.getProperty("java.version")));

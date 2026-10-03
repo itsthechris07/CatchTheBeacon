@@ -1,6 +1,6 @@
 # Data CatchTheBeacon sends
 
-CatchTheBeacon sends two kinds of anonymous data to help develop the plugin. Both can be disabled.
+CatchTheBeacon sends anonymous data to help develop the plugin and checks for updates. All of it can be disabled.
 
 ## Statistics (bStats)
 [bStats](https://bstats.org/plugin/bukkit/CatchTheBeacon/34381) collects anonymous statistics like the number of
@@ -22,5 +22,13 @@ once per server start, at most 25 per start.
 
 **Disable:** set `sentry.enabled: false` in `plugins/CatchTheBeacon/config.yml`.
 
-Legal basis (GDPR): legitimate interest in finding and fixing errors (Art. 6 (1) (f)); you can object at any time by
-disabling the reports as described above.
+## Update checker (GitHub)
+At the start and every 12 hours, CatchTheBeacon requests the list of its releases from the GitHub API
+(`api.github.com`, GitHub, Inc., USA) to tell admins about new versions. Nothing about the server or its players is
+sent; like every web request, GitHub sees the IP address of the server and the installed version of CatchTheBeacon
+(user agent), see [GitHub's privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement).
+
+**Disable:** set `update-checker.enabled: false` in `plugins/CatchTheBeacon/config.yml`.
+
+Legal basis (GDPR): legitimate interest in finding and fixing errors and in keeping the plugin up to date
+(Art. 6 (1) (f)); you can object at any time by disabling the reports and the update checker as described above.

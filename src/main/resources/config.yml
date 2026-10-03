@@ -184,3 +184,7 @@ variants:
 # (the anonymous statistics of bStats are disabled in plugins/bStats/config.yml)
 sentry:
   enabled: true
+# checks GitHub for new versions of CatchTheBeacon (at the start and every 12 hours) and tells the console and the
+# admins (ctb.admin) every time they join - only the list of releases is requested, nothing is sent about the server
+update-checker:
+  enabled: true

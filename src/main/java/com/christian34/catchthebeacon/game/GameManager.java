@@ -165,7 +165,7 @@ public class GameManager {
             }
         }
         Game game = findJoinableGame(arena, 1 + followers.size());
-        if (game == null) game = findJoinableGame(arena);
+        if (game == null) game = findGameFor(arena, gamePlayer.getPlayer());
         if (game != null) {
             game.join(gamePlayer);
             for (GamePlayer follower : followers) {
@@ -206,6 +206,20 @@ public class GameManager {
                 .filter(Game::isJoinable)
                 .filter(game -> game.getArena().getMaxPlayers() - game.getGamePlayers().size() >= slots)
                 .max(Comparator.comparingInt(game -> game.getGamePlayers().size()))
+                .orElse(null);
+    }
+
+    /**
+     * @param arena only games of this arena, null: all
+     * @return the game the player can join - a VIP also gets into a full lobby (see {@link Game#isJoinable(Player)})
+     */
+    @Nullable
+    public Game findGameFor(@Nullable Arena arena, @NotNull Player player) {
+        Game game = findJoinableGame(arena);
+        if (game != null) return game;
+        return (arena == null ? new ArrayList<>(getGames()) : getGames(arena)).stream()
+                .filter(g -> g.isJoinable(player))
+                .findFirst()
                 .orElse(null);
     }
 

@@ -6,6 +6,7 @@ import com.christian34.catchthebeacon.game.Countdown;
 import com.christian34.catchthebeacon.game.Game;
 import com.christian34.catchthebeacon.game.RoundSummary;
 import com.christian34.catchthebeacon.game.Team;
+import com.christian34.catchthebeacon.game.VipPerks;
 import com.christian34.catchthebeacon.integrations.EconomySupport;
 import com.christian34.catchthebeacon.lib.lang.I;
 import com.christian34.catchthebeacon.lib.lang.LangText;
@@ -159,6 +160,7 @@ public class EndingState implements State {
                 meta.setPower(1);
                 firework.setFireworkMeta(meta);
             });
+            if (winner != null) VipPerks.launchWinFirework(gamePlayer.getPlayer(), color);
         }
     }
 

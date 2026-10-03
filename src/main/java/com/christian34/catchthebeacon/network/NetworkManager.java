@@ -167,7 +167,7 @@ public class NetworkManager implements Listener {
         }
         Arena arena = getArena();
         if (arena == null) return;
-        Game game = gameManager.findJoinableGame(arena);
+        Game game = gameManager.findGameFor(arena, player);
         if (game != null) {
             game.join(gamePlayer);
             return;

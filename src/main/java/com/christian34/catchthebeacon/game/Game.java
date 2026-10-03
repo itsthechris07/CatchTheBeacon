@@ -39,7 +39,7 @@ public class Game {
     /**
      * /ctb start and the start item in the lobby
      */
-    public static final String START_PERMISSION = "ctb.vip";
+    public static final String START_PERMISSION = VipPerks.PERMISSION;
     private final CatchTheBeacon instance;
     private final Arena arena;
     private final GameStateManager gameStateManager;
@@ -102,7 +102,8 @@ public class Game {
         this.instance = CatchTheBeacon.getInstance();
         this.arena = arena;
         this.uniqueId = uniqueId;
-        this.gamePlayers = new HashSet<>();
+        // in the order they joined (the last one makes room for a VIP)
+        this.gamePlayers = new LinkedHashSet<>();
         this.gameStateManager = new GameStateManager(this);
         this.teamSpawns = new HashMap<>();
         this.gameWorld = new GameWorld(arena.getDirectory(), uniqueId);
@@ -206,6 +207,11 @@ public class Game {
     }
 
     public void join(GamePlayer gamePlayer) {
+        GamePlayer makesRoom = gamePlayers.size() >= arena.getMaxPlayers() ? getPlayerToMakeRoom(gamePlayer.getPlayer()) : null;
+        if (makesRoom != null) {
+            quit(makesRoom);
+            makesRoom.sendMessage(LangText.VIP_MADE_ROOM, gamePlayer.getPlayer().displayName());
+        }
         log("Player '" + gamePlayer.getPlayer().getName() + "' joined the game.");
         if (gamePlayers.size() == 0) {
             getGameStateManager().setGameState(GameState.LOBBY);
@@ -225,13 +231,33 @@ public class Game {
         }
         gamePlayer.teleport(lobbySpawn);
 
-        broadcast(i18n(LangText.PLAYER_JOINED_GAME, gamePlayer.getPlayer().displayName(), gamePlayers.size(),
-                arena.getMaxPlayers()));
+        broadcast(i18n(VipPerks.isVip(gamePlayer.getPlayer()) ? LangText.PLAYER_JOINED_GAME_VIP : LangText.PLAYER_JOINED_GAME,
+                gamePlayer.getPlayer().displayName(), gamePlayers.size(), arena.getMaxPlayers()));
         updateTabList();
 
         if (gamePlayers.size() >= arena.getMinPlayers() && this.gameWorld.getWorld() == null) {
             prepareGameWorld();
         }
+        if (makesRoom != null) {
+            // into another lobby, on a game server back to the lobby server
+            if (instance.getNetworkManager().isGameServer()) {
+                instance.getNetworkManager().sendToLobby(makesRoom.getPlayer());
+            } else {
+                instance.getGameManager().join(makesRoom, arena);
+            }
+        }
+    }
+
+    /**
+     * @return the player who leaves the full lobby for a VIP: the last one who joined without VIP, null if the
+     * player isn't a VIP or nobody can make room
+     */
+    @Nullable
+    private GamePlayer getPlayerToMakeRoom(Player player) {
+        GameState state = getGameState();
+        if (!VipPerks.isVip(player) || (state != GameState.PENDING && state != GameState.LOBBY)) return null;
+        return gamePlayers.stream().filter(p -> !VipPerks.isVip(p.getPlayer())).reduce((first, second) -> second)
+                .orElse(null);
     }
 
     public void quit(GamePlayer gamePlayer) {
@@ -363,8 +389,14 @@ public class Game {
         return votes.get(gamePlayer.getPlayer().getUniqueId());
     }
 
+    /**
+     * @return the votes for the variant - the vote of a VIP counts twice
+     */
     public int getVotes(Variant variant) {
-        return (int) votes.values().stream().filter(variant::equals).count();
+        return votes.entrySet().stream().filter(vote -> variant.equals(vote.getValue())).mapToInt(vote -> {
+            Player player = Bukkit.getPlayer(vote.getKey());
+            return player != null && VipPerks.isVip(player) ? VipPerks.VOTE_WEIGHT : 1;
+        }).sum();
     }
 
     /**
@@ -639,6 +671,13 @@ public class Game {
         GameState state = getGameState();
         return (state == GameState.PENDING || state == GameState.LOBBY)
                 && gamePlayers.size() < arena.getMaxPlayers();
+    }
+
+    /**
+     * @return true if the player can join - a VIP also into a full lobby if a player without VIP can make room
+     */
+    public boolean isJoinable(Player player) {
+        return isJoinable() || getPlayerToMakeRoom(player) != null;
     }
 
     public Location getTeamSpawn(Team team) {

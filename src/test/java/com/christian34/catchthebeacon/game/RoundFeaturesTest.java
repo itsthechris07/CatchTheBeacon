@@ -506,8 +506,8 @@ class RoundFeaturesTest extends GameTestBase {
 
     @Test
     void votesCanBeChanged() {
-        game.vote(plugin.getUser(red), Variant.RUSH);
-        game.vote(plugin.getUser(red), Variant.ONE_HIT);
+        game.vote(plugin.getUser(blue), Variant.RUSH);
+        game.vote(plugin.getUser(blue), Variant.ONE_HIT);
         assertEquals(0, game.getVotes(Variant.RUSH));
         assertEquals(1, game.getVotes(Variant.ONE_HIT));
     }
@@ -515,7 +515,11 @@ class RoundFeaturesTest extends GameTestBase {
     @RepeatedTest(5)
     void tieIsDecidedRandomly() {
         game.vote(plugin.getUser(red), Variant.BOW_ONLY);
+        // red is a VIP: his vote counts twice
+        PlayerMock blue2 = addPlayer("Blue2");
+        joinWithTeam(blue2, Team.BLUE);
         game.vote(plugin.getUser(blue), Variant.ONE_HIT);
+        game.vote(plugin.getUser(blue2), Variant.ONE_HIT);
         startGame();
         assertTrue(Set.of(Variant.BOW_ONLY, Variant.ONE_HIT).contains(game.getVariant()), game.getVariant().name());
     }

@@ -4,6 +4,7 @@ import com.christian34.catchthebeacon.CatchTheBeacon;
 import com.christian34.catchthebeacon.game.Game;
 import com.christian34.catchthebeacon.game.Team;
 import com.christian34.catchthebeacon.game.Variant;
+import com.christian34.catchthebeacon.game.VipPerks;
 import com.christian34.catchthebeacon.game.states.GameState;
 import com.christian34.catchthebeacon.game.states.LobbyState;
 import com.christian34.catchthebeacon.lib.InteractionItems;
@@ -99,7 +100,8 @@ public class LobbyInteractionListener implements Listener {
             menu.button(icon, variant.getName().colorIfAbsent(NamedTextColor.YELLOW), votes,
                     List.of(variant.getDescription().colorIfAbsent(NamedTextColor.GRAY), votes), player -> {
                         game.vote(gamePlayer, variant);
-                        gamePlayer.sendMessage(i18n(LangText.VOTED, variant.getName()));
+                        gamePlayer.sendMessage(i18n(VipPerks.isVip(player) ? LangText.VOTED_VIP : LangText.VOTED,
+                                variant.getName()));
                     });
         }
         menu.show(gamePlayer.getPlayer());

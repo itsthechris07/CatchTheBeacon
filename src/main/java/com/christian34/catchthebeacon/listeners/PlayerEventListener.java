@@ -7,6 +7,7 @@ import com.christian34.catchthebeacon.game.GameItems;
 import com.christian34.catchthebeacon.game.ResourceBlocks;
 import com.christian34.catchthebeacon.game.Team;
 import com.christian34.catchthebeacon.game.Variant;
+import com.christian34.catchthebeacon.game.VipPerks;
 import com.christian34.catchthebeacon.game.states.GameState;
 import com.christian34.catchthebeacon.integrations.EconomySupport;
 import com.christian34.catchthebeacon.lib.lang.LangText;
@@ -390,6 +391,7 @@ public class PlayerEventListener implements Listener {
                 instance.getStatsManager().add(killerPlayer.getPlayer(), StatsManager.Stat.KILLS);
                 instance.getEconomySupport().reward(killerPlayer.getPlayer(), EconomySupport.Reward.KILL);
                 unlockKillAchievements(game, killerPlayer, mined);
+                VipPerks.playKillEffect(killerPlayer.getPlayer(), e.getEntity().getLocation(), killerPlayer.getTeam());
                 if (showDeathMessages()) {
                     game.broadcast(i18n(LangText.PLAYER_WAS_KILLED,
                             gamePlayer.getDisplayName(), killerPlayer.getDisplayName()));

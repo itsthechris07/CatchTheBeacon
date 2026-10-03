@@ -1,0 +1,26 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                     - Teams -                        | #
+# |               Plugin by Christian34	  	      	     | #
+# +------------------------------------------------------+ #
+############################################################
+#
+# chat_color: a color code (0-9, a-f), a color name (red, dark_blue, ...) or a hex color (#ff0000)
+#
+
+teams:
+  blue:
+    name: "Blue"
+    chat_color: "9"
+    item: "BLUE_WOOL"
+    leather_color: "0, 0, 205"
+  red:
+    name: "Red"
+    chat_color: "c"
+    item: "RED_WOOL"
+    leather_color: "176, 46, 38"
+  random:
+    name: "Random"
+    chat_color: "a"
+    item: "WHITE_WOOL"
+    leather_color: "255, 255, 255"

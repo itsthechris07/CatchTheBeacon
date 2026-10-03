@@ -316,7 +316,11 @@ public enum LangText {
     NPC_NOT_LINKED("npc_not_linked"),
     NPC_LIST_TITLE("npc_list_title"),
     NPC_LIST_ENTRY("npc_list_entry"),
-    NPC_LIST_EMPTY("npc_list_empty");
+    NPC_LIST_EMPTY("npc_list_empty"),
+    NPC_STATUS("npc_status"),
+    JOIN_VANISHED("join_vanished"),
+    ESSENTIALS_BLOCKED_IN_GAME("essentials_blocked_in_game"),
+    TELEPORT_INTO_GAME_DENIED("teleport_into_game_denied");
 
     private final String KEY;
 

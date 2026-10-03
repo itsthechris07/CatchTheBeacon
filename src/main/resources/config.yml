@@ -146,6 +146,10 @@ parties:
   join-together: true
   # parties play in the same team, as long as the teams stay even (players who chose a team keep it)
   same-team: true
+# join NPCs of Citizens or FancyNpcs (/ctb npc link <arena>)
+npcs:
+  # linked NPCs show the state of the game (Citizens: an extra hologram line, FancyNpcs: behind the display name)
+  show-status: true
 achievements:
   # e.g. "Last-second rescue": kill an enemy while he is mining your beacon (saved in the database, /ctb achievements)
   enabled: true

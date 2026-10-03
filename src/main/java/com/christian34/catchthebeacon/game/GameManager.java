@@ -5,6 +5,7 @@ import com.christian34.catchthebeacon.Debug;
 import com.christian34.catchthebeacon.files.FileManager;
 import com.christian34.catchthebeacon.game.map.Arena;
 import com.christian34.catchthebeacon.game.map.GameWorld;
+import com.christian34.catchthebeacon.integrations.VanishSupport;
 import com.christian34.catchthebeacon.lib.lang.I;
 import com.christian34.catchthebeacon.lib.lang.LangText;
 import com.christian34.catchthebeacon.user.GamePlayer;
@@ -150,10 +151,18 @@ public class GameManager {
      * @param arena only games of this arena, null: all
      */
     public void join(@NotNull GamePlayer gamePlayer, @Nullable Arena arena) {
+        // vanish plugins would hide him from the other players (EssentialsX makes him visible)
+        if (!VanishSupport.canPlay(gamePlayer.getPlayer())) {
+            gamePlayer.sendMessage(LangText.JOIN_VANISHED);
+            return;
+        }
         List<GamePlayer> followers = new ArrayList<>();
         for (Player player : plugin.getPartySupport().getFollowers(gamePlayer.getPlayer())) {
             GamePlayer follower = plugin.getUser(player);
-            if (follower.getGame() == null && plugin.getSetupManager().getSession(player) == null) followers.add(follower);
+            if (follower.getGame() == null && plugin.getSetupManager().getSession(player) == null
+                    && !VanishSupport.isVanished(player)) {
+                followers.add(follower);
+            }
         }
         Game game = findJoinableGame(arena, 1 + followers.size());
         if (game == null) game = findJoinableGame(arena);

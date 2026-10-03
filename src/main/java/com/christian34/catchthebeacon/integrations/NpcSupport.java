@@ -2,9 +2,12 @@ package com.christian34.catchthebeacon.integrations;
 
 import com.christian34.catchthebeacon.CatchTheBeacon;
 import com.christian34.catchthebeacon.Debug;
+import com.christian34.catchthebeacon.game.SignManager;
 import com.christian34.catchthebeacon.game.map.Arena;
 import com.christian34.catchthebeacon.lib.lang.I;
 import com.christian34.catchthebeacon.lib.lang.LangText;
+import com.christian34.catchthebeacon.network.ServerStatus;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,11 +23,15 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+
+import static com.christian34.catchthebeacon.lib.lang.I.i18n;
 
 /**
  * Join NPCs of Citizens or FancyNpcs: an admin links an NPC with an arena (on a lobby server: a game server) by
- * /ctb npc link <target> and clicking the NPC. Clicking it then works like a join sign. Saved in npcs.yml.
+ * /ctb npc link <target> and clicking the NPC. Clicking it then works like a join sign, and the NPC shows the state
+ * of the game (npcs.show-status, see {@link NpcStatusDisplay}). Saved in npcs.yml.
  *
  * @author Christian34
  */
@@ -38,6 +45,19 @@ public class NpcSupport {
     private final Map<String, Link> links = new LinkedHashMap<>();
     private final Map<UUID, Pending> pending = new HashMap<>();
     private final List<String> plugins = new ArrayList<>();
+    /**
+     * the status displays of the NPC plugins by the prefix of the keys ("citizens")
+     */
+    private final Map<String, NpcStatusDisplay> displays = new HashMap<>();
+    /**
+     * what the NPC plugins show on the NPCs (see {@link NpcStatusDisplay#showStatus}), saved in npcs.yml
+     */
+    private final Map<String, String> shown = new HashMap<>();
+    /**
+     * the state last shown on the NPCs (null: none), so the NPCs only change when the state does
+     */
+    private final Map<String, Component> statuses = new HashMap<>();
+    private boolean failed;
 
     /**
      * @param npc    the name of the NPC when it was linked
@@ -60,10 +80,18 @@ public class NpcSupport {
             for (String key : section.getKeys(false)) {
                 String target = section.getString(key + ".target");
                 if (target != null) links.put(key, new Link(key, section.getString(key + ".name", key), target));
+                String status = section.getString(key + ".shown");
+                if (status != null) shown.put(key, status);
             }
         }
-        if (Bukkit.getPluginManager().isPluginEnabled(CitizensNpcs.PLUGIN)) register(CitizensNpcs.PLUGIN, new CitizensNpcs(this));
-        if (Bukkit.getPluginManager().isPluginEnabled(FancyNpcsNpcs.PLUGIN)) register(FancyNpcsNpcs.PLUGIN, new FancyNpcsNpcs(this));
+        if (Bukkit.getPluginManager().isPluginEnabled(CitizensNpcs.PLUGIN)) {
+            CitizensNpcs citizens = new CitizensNpcs(this);
+            register(CitizensNpcs.PLUGIN, CitizensNpcs.PREFIX, citizens, citizens);
+        }
+        if (Bukkit.getPluginManager().isPluginEnabled(FancyNpcsNpcs.PLUGIN)) {
+            FancyNpcsNpcs fancyNpcs = new FancyNpcsNpcs(this);
+            register(FancyNpcsNpcs.PLUGIN, FancyNpcsNpcs.PREFIX, fancyNpcs, fancyNpcs);
+        }
         // the arenas of NPCs get a game on start, like those of signs
         if (!plugin.getNetworkManager().isLobby()) {
             for (Link link : links.values()) {
@@ -71,12 +99,14 @@ public class NpcSupport {
                 if (arena != null) plugin.getSignManager().ensureGame(arena);
             }
         }
+        Bukkit.getScheduler().runTaskTimer(plugin, this::updateStatus, 20L, 20L);
     }
 
-    private void register(String name, Listener listener) {
+    private void register(String name, String prefix, Listener listener, NpcStatusDisplay display) {
         try {
             Bukkit.getPluginManager().registerEvents(listener, plugin);
             plugins.add(name);
+            displays.put(prefix, display);
             Debug.info("Hooked into " + name + " (join NPCs)");
         } catch (Exception | LinkageError ex) {
             Debug.warn("Couldn't hook into " + name + ", join NPCs don't work with it: " + ex);
@@ -88,6 +118,16 @@ public class NpcSupport {
      */
     public void addPlugin(String name) {
         plugins.add(name);
+    }
+
+    /**
+     * for tests: pretends an NPC plugin is installed that shows the state of the game on NPCs
+     *
+     * @param prefix the prefix of the keys of its NPCs ("citizens")
+     */
+    public void addPlugin(String name, String prefix, NpcStatusDisplay display) {
+        plugins.add(name);
+        displays.put(prefix, display);
     }
 
     /**
@@ -121,14 +161,18 @@ public class NpcSupport {
         Pending action = pending.remove(player.getUniqueId());
         if (action != null && action.until() >= System.currentTimeMillis()) {
             if (action.target() == null) {
-                if (links.remove(key) == null) {
+                if (!links.containsKey(key)) {
                     player.sendMessage(I.prefixed(LangText.NPC_NOT_LINKED, name));
                 } else {
+                    showStatus(key, null);
+                    links.remove(key);
                     save();
                     player.sendMessage(I.prefixed(LangText.NPC_UNLINKED, name));
                 }
             } else {
                 links.put(key, new Link(key, name, action.target()));
+                // the new target is shown with the next update
+                statuses.remove(key);
                 save();
                 player.sendMessage(I.prefixed(LangText.NPC_LINKED, name, action.target()));
             }
@@ -140,11 +184,78 @@ public class NpcSupport {
         return true;
     }
 
+    /**
+     * shows the state of the games on the linked NPCs (every second, only changes are sent to the NPC plugins)
+     */
+    public void updateStatus() {
+        boolean enabled = plugin.getFileManager().getConfigFile().getBoolean("npcs.show-status");
+        boolean changed = false;
+        for (Link link : links.values()) {
+            Component status = enabled ? getStatus(link.target()) : null;
+            if (statuses.containsKey(link.key()) && Objects.equals(statuses.get(link.key()), status)) continue;
+            changed |= showStatus(link.key(), status);
+        }
+        if (changed) save();
+    }
+
+    /**
+     * removes the state from all NPCs (CatchTheBeacon is disabled - it may be removed)
+     */
+    public void removeStatus() {
+        boolean changed = false;
+        for (Link link : links.values()) {
+            changed |= showStatus(link.key(), null);
+        }
+        if (changed) save();
+    }
+
+    /**
+     * @return the state of the game shown on the NPCs ("Waiting • 2/8")
+     */
+    public Component getStatus(String target) {
+        ServerStatus status = plugin.getSignManager().getStatus(target);
+        Component state = SignManager.stateText(status);
+        if (status.state() == ServerStatus.State.OFFLINE) return state;
+        return i18n(LangText.NPC_STATUS, state, status.players(), status.maxPlayers());
+    }
+
+    /**
+     * @param status null: removes it
+     * @return true if what the NPC shows has changed (npcs.yml needs to be saved)
+     */
+    private boolean showStatus(String key, @Nullable Component status) {
+        int separator = key.indexOf(':');
+        NpcStatusDisplay display = separator < 0 ? null : displays.get(key.substring(0, separator));
+        if (display == null) return false;
+        String id = key.substring(separator + 1);
+        String before = shown.get(key);
+        String now;
+        try {
+            // tried again with the next update (NPCs are loaded after the start)
+            if (!display.exists(id)) return false;
+            statuses.put(key, status);
+            now = display.showStatus(id, before, status);
+        } catch (Exception | LinkageError ex) {
+            // an incompatible version of the NPC plugin: clicks may still work
+            if (!failed) Debug.warn("Couldn't show the state of the game on the NPC " + key + ": " + ex);
+            failed = true;
+            return false;
+        }
+        if (Objects.equals(before, now)) return false;
+        if (now == null) {
+            shown.remove(key);
+        } else {
+            shown.put(key, now);
+        }
+        return true;
+    }
+
     private void save() {
         YamlConfiguration data = new YamlConfiguration();
         for (Link link : links.values()) {
             data.set("npcs." + link.key() + ".name", link.npc());
             data.set("npcs." + link.key() + ".target", link.target());
+            data.set("npcs." + link.key() + ".shown", shown.get(link.key()));
         }
         try {
             data.save(file);

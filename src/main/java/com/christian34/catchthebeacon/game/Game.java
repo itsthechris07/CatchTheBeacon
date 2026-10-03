@@ -209,6 +209,7 @@ public class Game {
         this.gamePlayers.add(gamePlayer);
         gamePlayer.getUserStorage().store();
         gamePlayer.getUserStorage().cleanPlayer();
+        instance.getEssentials().joinGame(gamePlayer.getPlayer(), false);
         gamePlayer.setGame(this);
         gamePlayer.getPlayer().setGameMode(GameMode.ADVENTURE);
         gamePlayer.getPlayer().getInventory().setItem(4, InteractionItems.getSelectTeamItem());
@@ -270,6 +271,7 @@ public class Game {
         this.gamePlayers.add(gamePlayer);
         gamePlayer.getUserStorage().store();
         gamePlayer.getUserStorage().cleanPlayer();
+        instance.getEssentials().joinGame(gamePlayer.getPlayer(), false);
         gamePlayer.setGame(this);
         gamePlayer.assignTeam(rejoin.team());
         gamePlayer.setKills(rejoin.kills());
@@ -301,6 +303,7 @@ public class Game {
         }
         gamePlayer.getUserStorage().restore();
         gamePlayer.setGame(null);
+        instance.getEssentials().leaveGame(gamePlayer.getPlayer());
         gamePlayer.setSpectator(false);
         Player player = gamePlayer.getPlayer();
         player.setInvulnerable(false);
@@ -448,6 +451,7 @@ public class Game {
         spectators.add(gamePlayer);
         gamePlayer.getUserStorage().store();
         gamePlayer.getUserStorage().cleanPlayer();
+        instance.getEssentials().joinGame(gamePlayer.getPlayer(), true);
         gamePlayer.setGame(this);
         gamePlayer.setSpectator(true);
         Player player = gamePlayer.getPlayer();

@@ -146,6 +146,15 @@ parties:
   join-together: true
   # parties play in the same team, as long as the teams stay even (players who chose a team keep it)
   same-team: true
+# money of an economy plugin (needs Vault or VaultUnlocked and an economy plugin, e.g. EssentialsX), 0 = nothing
+rewards:
+  enabled: false
+  kill: 5
+  beacon: 20
+  # every player of the winning team
+  win: 50
+  # every player who is still in the game at the end, also without a winner
+  game: 10
 achievements:
   # e.g. "Last-second rescue": kill an enemy while he is mining your beacon (saved in the database, /ctb achievements)
   enabled: true

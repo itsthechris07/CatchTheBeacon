@@ -63,7 +63,7 @@ dependencies {
     testImplementation("me.clip:placeholderapi:2.12.3")
     testImplementation("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
     // the database drivers Paper ships (stats)
-    testRuntimeOnly("org.xerial:sqlite-jdbc:3.49.1.0")
+    testRuntimeOnly("org.xerial:sqlite-jdbc:3.53.4.0")
     testRuntimeOnly("com.mysql:mysql-connector-j:9.2.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

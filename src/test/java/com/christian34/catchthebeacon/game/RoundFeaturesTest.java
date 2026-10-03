@@ -539,10 +539,11 @@ class RoundFeaturesTest extends GameTestBase {
 
     @Test
     void startItemNeedsPermissionAndEnoughPlayers() {
-        assertNotEquals(InteractionItems.getStartItem(), red.getInventory().getItem(2));
+        assertEquals(InteractionItems.getStartItem(), red.getInventory().getItem(2));
+        assertNotEquals(InteractionItems.getStartItem(), blue.getInventory().getItem(2));
         execute(blue, "ctb quit");
         execute(red, "ctb quit");
-        PlayerMock starter = addPlayer("Starter", Game.START_ITEM_PERMISSION);
+        PlayerMock starter = addPlayer("Starter", Game.START_PERMISSION);
         execute(starter, "ctb join");
         ItemStack item = starter.getInventory().getItem(2);
         assertEquals(InteractionItems.getStartItem(), item);

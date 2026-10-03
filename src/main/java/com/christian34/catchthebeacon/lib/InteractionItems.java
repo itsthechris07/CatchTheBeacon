@@ -39,7 +39,7 @@ public class InteractionItems {
     }
 
     /**
-     * lobby (ctb.startitem): starts the game in 5 seconds, like /ctb start
+     * lobby (ctb.vip): starts the game in 5 seconds, like /ctb start
      */
     public static ItemStack getStartItem() {
         return named(Material.LIME_DYE, LangText.ITEM_START);

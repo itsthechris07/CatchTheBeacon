@@ -43,7 +43,7 @@ import static com.christian34.catchthebeacon.lib.lang.I.i18n;
 public class CommandCatchTheBeacon {
     static final String ROOT = "ctb|catchthebeacon|catchbeacon|ctbeacon";
     static final String ADMIN = "ctb.admin";
-    static final String VIP = "ctb.vip";
+    static final String VIP = Game.START_PERMISSION;
     /**
      * number of players shown by /ctb top
      */

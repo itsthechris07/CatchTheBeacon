@@ -52,7 +52,7 @@ public class LobbyInteractionListener implements Listener {
             openVoteMenu(gamePlayer, game);
         } else if (item.isSimilar(InteractionItems.getStartItem())) {
             e.setCancelled(true);
-            if (!gamePlayer.getPlayer().hasPermission(Game.START_ITEM_PERMISSION)) return;
+            if (!gamePlayer.getPlayer().hasPermission(Game.START_PERMISSION)) return;
             if (game.getGameState() != GameState.LOBBY) {
                 gamePlayer.sendMessage(LangText.GAME_WAS_ALREADY_STARTED);
             } else if (((LobbyState) game.getGameStateManager().getCurrentGameState()).forceStart()) {

@@ -1,0 +1,22 @@
+# "Sakura" by BreadBuilds - not included (it isn't ours), only its setup: download the map and put the zip (or the
+# world folder) into plugins/CatchTheBeacon/maps, it is set up on the next start or with /ctb arena create sakura
+# (lobby: default_lobby, comes with the plugin).
+# Red plays on the east side (+x), blue on the west side; the map is mirrored at x = -8.
+author: BreadBuilds
+url: https://www.planetminecraft.com/project/sakura-cores-map/
+arena:
+  display-name: "<light_purple>Sakura"
+  min-players: 2
+  max-players: 8
+  auto-game: true
+  teams:
+    RED:
+      spawn: { x: 57.5, y: 81.0, z: 256.5, yaw: 90.0, pitch: 0.0 }
+      beacon:
+        LEFT: { x: 18, y: 80, z: 275 }
+        RIGHT: { x: 18, y: 80, z: 237 }
+    BLUE:
+      spawn: { x: -72.5, y: 81.0, z: 256.5, yaw: -90.0, pitch: 0.0 }
+      beacon:
+        LEFT: { x: -34, y: 80, z: 237 }
+        RIGHT: { x: -34, y: 80, z: 275 }

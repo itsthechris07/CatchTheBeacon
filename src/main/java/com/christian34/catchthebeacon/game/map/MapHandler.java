@@ -29,8 +29,14 @@ public class MapHandler {
         this.arenas = Collections.synchronizedSet(new HashSet<>());
         this.instance = instance;
         this.mapDirectory = new File(FileManager.getPluginFolder(), "maps/");
-        DefaultMap.installIfNew(instance, mapDirectory);
+        MapPreset.installDownloaded(instance, mapDirectory);
         loadMaps();
+        if (arenas.isEmpty()) {
+            for (MapPreset preset : MapPreset.notInstalled(instance)) {
+                Debug.info("No arenas yet? Download '" + preset.name() + "' by " + preset.author() + " (" + preset.url()
+                        + "), put the zip into " + mapDirectory + " and restart - its setup comes with CatchTheBeacon");
+            }
+        }
     }
 
     public ArenasFile getArenasFile() {
@@ -89,6 +95,21 @@ public class MapHandler {
      */
     public static String toMapName(String name) {
         return name.replace(" ", "_").replaceAll("[^A-Za-z0-9_]", "");
+    }
+
+    /**
+     * sets up the downloaded map of the preset (see {@link MapPreset#install})
+     *
+     * @return the name of the arena, null if it couldn't be set up
+     */
+    @Nullable
+    public String installPreset(MapPreset preset) {
+        return preset.install(instance, mapDirectory);
+    }
+
+    @Nullable
+    public File findPresetDownload(MapPreset preset) {
+        return preset.findDownload(mapDirectory);
     }
 
     public boolean isMap(String name) {

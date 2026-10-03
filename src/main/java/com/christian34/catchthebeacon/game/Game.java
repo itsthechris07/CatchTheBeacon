@@ -1,6 +1,7 @@
 package com.christian34.catchthebeacon.game;
 
 import com.christian34.catchthebeacon.CatchTheBeacon;
+import com.christian34.catchthebeacon.Debug;
 import com.christian34.catchthebeacon.game.map.Arena;
 import com.christian34.catchthebeacon.game.map.GameWorld;
 import com.christian34.catchthebeacon.game.map.LobbyMap;
@@ -566,7 +567,14 @@ public class Game {
             loc.setWorld(this.gameWorld.getWorld());
             this.teamSpawns.put(team, loc);
             for (Beacon beacon : getBeacons(team)) {
-                beacon.getLocation().setWorld(this.gameWorld.getWorld());
+                Location location = beacon.getLocation();
+                location.setWorld(this.gameWorld.getWorld());
+                if (location.getBlock().getType() != Material.BEACON) {
+                    // e.g. a map that doesn't fit its setup (changed map, other version of a downloaded map)
+                    Debug.warn("Arena '" + arena.getName() + "': there is no beacon at " + location.getBlockX() + " "
+                            + location.getBlockY() + " " + location.getBlockZ() + " (" + team + " "
+                            + beacon.getPosition() + ") - set it again with /ctb arena " + arena.getName() + " setup");
+                }
             }
         }
     }

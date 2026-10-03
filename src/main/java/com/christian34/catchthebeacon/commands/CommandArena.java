@@ -10,6 +10,7 @@ import com.christian34.catchthebeacon.game.map.Arena;
 import com.christian34.catchthebeacon.game.map.LobbyMap;
 import com.christian34.catchthebeacon.game.map.MapHandler;
 import com.christian34.catchthebeacon.game.map.MapInUseException;
+import com.christian34.catchthebeacon.game.map.MapPreset;
 import com.christian34.catchthebeacon.game.map.MapTemplate;
 import com.christian34.catchthebeacon.game.setup.SetupSession;
 import com.christian34.catchthebeacon.lib.lang.I;
@@ -88,6 +89,7 @@ public class CommandArena {
             send(sender, LangText.ARENA_EXISTS);
             return;
         }
+        MapPreset preset = MapPreset.get(getInstance(), arenaName);
         if (worldName != null) {
             World world = MapHandler.getImportableWorld(worldName);
             if (world == null) {
@@ -102,6 +104,17 @@ public class CommandArena {
                 send(sender, LangText.WORLD_COPY_FAILED, world.getName());
                 return;
             }
+        } else if (preset != null && mapHandler.findPresetDownload(preset) != null) {
+            // a downloaded map whose setup comes with the plugin
+            String installed = mapHandler.installPreset(preset);
+            if (installed == null || !mapHandler.createMap(installed)) {
+                send(sender, LangText.ARENA_CREATE_FAILED);
+                return;
+            }
+            sender.sendMessage(I.prefixed(I.i18n(LangText.ARENA_READY, installed)
+                    .append(I.button(LangText.BUTTON_CREATE_GAME,
+                            ClickEvent.runCommand("/ctb arena " + installed + " creategame")))));
+            return;
         } else if (!mapHandler.isMap(arenaName)) {
             send(sender, LangText.MAP_MISSING, arenaName);
             return;
@@ -121,9 +134,9 @@ public class CommandArena {
         Set<Arena> arenas = getInstance().getMapHandler().getGameMaps();
         if (arenas.isEmpty()) {
             send(sender, LangText.ARENA_LIST_EMPTY);
-            return;
+        } else {
+            send(sender, LangText.ARENA_LIST_TITLE);
         }
-        send(sender, LangText.ARENA_LIST_TITLE);
         for (Arena arena : arenas) {
             int missing = arena.getMissingSetup().size();
             Component line = missing == 0
@@ -132,6 +145,13 @@ public class CommandArena {
                     : I.i18n(LangText.ARENA_LIST_MISSING, arena.getName(), missing).append(I.button(LangText.BUTTON_SETUP,
                     ClickEvent.runCommand("/ctb arena " + arena.getName() + " setup")));
             sender.sendMessage(line);
+        }
+        List<MapPreset> presets = MapPreset.notInstalled(getInstance());
+        if (presets.isEmpty()) return;
+        send(sender, LangText.ARENA_PRESETS);
+        for (MapPreset preset : presets) {
+            sender.sendMessage(I.i18n(LangText.ARENA_PRESET, preset.name(), preset.author())
+                    .append(I.button(LangText.BUTTON_MAP_DOWNLOAD, ClickEvent.openUrl(preset.url()))));
         }
     }
 

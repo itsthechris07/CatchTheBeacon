@@ -1,0 +1,3 @@
+# The lobby that comes with CatchTheBeacon (maps/lobby.zip): a glass-walled platform, installed as maps/default_lobby
+# when a map preset (maps/presets) is set up. Any arena can use it: /ctb arena <arena> lobby setworld default_lobby
+spawn: { x: 1100.5, y: 65.0, z: 100.5, yaw: 0.0, pitch: 0.0 }

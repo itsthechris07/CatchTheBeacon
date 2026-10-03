@@ -39,6 +39,13 @@ public class InteractionItems {
     }
 
     /**
+     * lobby (ctb.startitem): starts the game in 5 seconds, like /ctb start
+     */
+    public static ItemStack getStartItem() {
+        return named(Material.LIME_DYE, LangText.ITEM_START);
+    }
+
+    /**
      * game: points to the nearest enemy beacon, or to an own one while it is being mined
      */
     public static ItemStack getBeaconCompass() {

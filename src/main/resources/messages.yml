@@ -105,6 +105,7 @@ tip_defend: '<yellow>Tip: <gray>Enemies near your beacons get mining fatigue - d
 tip_compass: '<yellow>Tip: <gray>Your compass points to the enemy beacons (or to yours if it is attacked)'
 tip_arrows: '<yellow>Tip: <gray>You only have a few arrows - use them wisely'
 item_vote: '<yellow>Vote for a variant'
+item_start: '<green>Start the game'
 gui_vote: '<gray>Vote for a variant'
 voted: '<gray>You voted for <yellow>{0}<gray>.'
 variant_chosen: '<gold>Variant: <yellow>{0} <gray>- {1}'

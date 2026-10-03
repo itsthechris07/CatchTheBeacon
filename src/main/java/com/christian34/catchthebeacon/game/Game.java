@@ -36,6 +36,10 @@ import static com.christian34.catchthebeacon.lib.lang.I.i18n;
 
 
 public class Game {
+    /**
+     * players with it get the start item in the lobby
+     */
+    public static final String START_ITEM_PERMISSION = "ctb.startitem";
     private final CatchTheBeacon instance;
     private final Arena arena;
     private final GameStateManager gameStateManager;
@@ -215,6 +219,9 @@ public class Game {
         gamePlayer.getPlayer().getInventory().setItem(4, InteractionItems.getSelectTeamItem());
         if (!Variant.getVotable().isEmpty()) {
             gamePlayer.getPlayer().getInventory().setItem(6, InteractionItems.getVoteItem());
+        }
+        if (gamePlayer.getPlayer().hasPermission(START_ITEM_PERMISSION)) {
+            gamePlayer.getPlayer().getInventory().setItem(2, InteractionItems.getStartItem());
         }
         gamePlayer.teleport(lobbySpawn);
 

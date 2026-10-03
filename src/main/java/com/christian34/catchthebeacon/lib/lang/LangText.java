@@ -106,6 +106,7 @@ public enum LangText {
     TIP_COMPASS("tip_compass"),
     TIP_ARROWS("tip_arrows"),
     ITEM_VOTE("item_vote"),
+    ITEM_START("item_start"),
     GUI_VOTE("gui_vote"),
     VOTED("voted"),
     VARIANT_CHOSEN("variant_chosen"),

@@ -13,3 +13,6 @@ permissions:
     description: not put into the game when joining a game server (network.mode game), e.g. to set up the arena
     # not even for operators, who would otherwise never get into the game
     default: false
+  ctb.startitem:
+    description: gets an item in the lobby that starts the game in 5 seconds (like /ctb start)
+    default: op

@@ -4,6 +4,8 @@ import com.christian34.catchthebeacon.CatchTheBeacon;
 import com.christian34.catchthebeacon.game.Game;
 import com.christian34.catchthebeacon.game.Team;
 import com.christian34.catchthebeacon.game.Variant;
+import com.christian34.catchthebeacon.game.states.GameState;
+import com.christian34.catchthebeacon.game.states.LobbyState;
 import com.christian34.catchthebeacon.lib.InteractionItems;
 import com.christian34.catchthebeacon.lib.Menu;
 import com.christian34.catchthebeacon.lib.lang.LangText;
@@ -48,6 +50,16 @@ public class LobbyInteractionListener implements Listener {
         } else if (item.isSimilar(InteractionItems.getVoteItem())) {
             e.setCancelled(true);
             openVoteMenu(gamePlayer, game);
+        } else if (item.isSimilar(InteractionItems.getStartItem())) {
+            e.setCancelled(true);
+            if (!gamePlayer.getPlayer().hasPermission(Game.START_ITEM_PERMISSION)) return;
+            if (game.getGameState() != GameState.LOBBY) {
+                gamePlayer.sendMessage(LangText.GAME_WAS_ALREADY_STARTED);
+            } else if (((LobbyState) game.getGameStateManager().getCurrentGameState()).forceStart()) {
+                gamePlayer.sendMessage(LangText.FORCE_START);
+            } else {
+                gamePlayer.sendMessage(LangText.GAME_NOT_ENOUGH_PLAYERS, game.getArena().getMinPlayers());
+            }
         }
     }
 

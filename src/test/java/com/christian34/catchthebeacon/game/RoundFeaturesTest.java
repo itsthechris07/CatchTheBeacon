@@ -538,6 +538,29 @@ class RoundFeaturesTest extends GameTestBase {
     }
 
     @Test
+    void startItemNeedsPermissionAndEnoughPlayers() {
+        assertNotEquals(InteractionItems.getStartItem(), red.getInventory().getItem(2));
+        execute(blue, "ctb quit");
+        execute(red, "ctb quit");
+        PlayerMock starter = addPlayer("Starter", Game.START_ITEM_PERMISSION);
+        execute(starter, "ctb join");
+        ItemStack item = starter.getInventory().getItem(2);
+        assertEquals(InteractionItems.getStartItem(), item);
+        messages(starter);
+
+        server.getPluginManager().callEvent(new org.bukkit.event.player.PlayerInteractEvent(starter,
+                org.bukkit.event.block.Action.RIGHT_CLICK_AIR, item, null, org.bukkit.block.BlockFace.SELF));
+        assertContains(messages(starter), "at least 2 players");
+
+        execute(blue, "ctb join");
+        server.getPluginManager().callEvent(new org.bukkit.event.player.PlayerInteractEvent(starter,
+                org.bukkit.event.block.Action.RIGHT_CLICK_AIR, item, null, org.bukkit.block.BlockFace.SELF));
+        assertContains(messages(starter), "The game was started");
+        server.getScheduler().performTicks(20 * 7);
+        assertEquals(GameState.INGAME, game.getGameState());
+    }
+
+    @Test
     void votesForDisabledVariantsDontCount() {
         config("variants.list", List.of("rush"));
         voteBoth(Variant.ONE_HIT);

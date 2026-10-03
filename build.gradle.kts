@@ -15,7 +15,6 @@ java {
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://repo.minebench.de/")
     maven("https://repo.extendedclip.com/releases/")
     // party plugins (integrations/PartySupport)
     maven("https://repo.alessiodp.com/releases/") { content { includeGroup("com.alessiodp.parties") } }
@@ -65,7 +64,6 @@ dependencies {
     implementation("org.incendo:cloud-annotations:2.1.0")
     implementation("org.incendo:cloud-paper:2.0.1")
     implementation("org.incendo:cloud-minecraft-extras:2.0.1")
-    implementation("de.themoep:inventorygui:1.6.5-SNAPSHOT")
     // anonymous statistics (bstats.org) and error reports (sentry.io), see Telemetry
     implementation("org.bstats:bstats-bukkit:3.2.1")
     implementation("io.sentry:sentry:8.58.0")
@@ -199,7 +197,6 @@ tasks {
         }
         relocate("org.incendo.cloud", "com.christian34.catchthebeacon.libs.cloud")
         relocate("io.leangen.geantyref", "com.christian34.catchthebeacon.libs.geantyref")
-        relocate("de.themoep", "com.christian34.catchthebeacon.libs.inventorygui")
         // bStats refuses to start unless relocated
         relocate("org.bstats", "com.christian34.catchthebeacon.libs.bstats")
         relocate("io.sentry", "com.christian34.catchthebeacon.libs.sentry")

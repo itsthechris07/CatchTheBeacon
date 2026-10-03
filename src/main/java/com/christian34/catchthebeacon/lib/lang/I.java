@@ -115,7 +115,7 @@ public class I {
     }
 
     /**
-     * for APIs that still need color codes (InventoryGui)
+     * for APIs that still need color codes (Bedrock forms, PlaceholderAPI)
      */
     public static String legacy(Component component) {
         return LEGACY.serialize(component);

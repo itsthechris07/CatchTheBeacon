@@ -3,6 +3,7 @@ package com.christian34.catchthebeacon.listeners;
 import com.christian34.catchthebeacon.CatchTheBeacon;
 import com.christian34.catchthebeacon.game.Game;
 import com.christian34.catchthebeacon.game.states.GameState;
+import com.christian34.catchthebeacon.lib.Menu;
 import com.christian34.catchthebeacon.user.GamePlayer;
 import com.christian34.catchthebeacon.utils.WorldUtils;
 import org.bukkit.Bukkit;
@@ -74,6 +75,7 @@ public class EventListener {
         pm.registerEvents(new WorldEventListener(this), this.instance);
         pm.registerEvents(new SpectatorListener(this.instance), this.instance);
         pm.registerEvents(new RoundListener(this.instance), this.instance);
+        pm.registerEvents(new Menu.ChestListener(), this.instance);
     }
 
 }

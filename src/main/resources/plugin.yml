@@ -2,8 +2,8 @@ name: CatchTheBeacon
 version: ${version}
 author: Christian34
 main: com.christian34.catchthebeacon.CatchTheBeacon
-# keep below 1.21.5: Paper then rewrites the old enum calls of the shaded InventoryGui (org.bukkit.Sound is an interface now)
-api-version: "1.13"
+# the current version only: older ones make Paper rewrite the bytecode of the plugin for old api calls
+api-version: "26.2"
 # commands are registered by cloud (commands/CommandManager)
 
 softdepend: [Vault, PlaceholderAPI, MiniPlaceholders, Parties, Spigot-Party-API-PAF, Citizens, FancyNpcs, floodgate, TAB, Essentials, Multiverse-Core, Multiverse-Inventories]

@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     // Minecraft client protocol (GeyserMC) - the version has to match the server's Minecraft version
-    implementation("org.geysermc.mcprotocollib:protocol:26.2-SNAPSHOT")
+    implementation("org.geysermc.mcprotocollib:protocol:26.3-SNAPSHOT")
     implementation("net.kyori:adventure-text-serializer-plain:5.2.0")
     runtimeOnly("org.slf4j:slf4j-simple:2.0.17")
 }

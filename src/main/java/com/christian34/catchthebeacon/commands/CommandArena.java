@@ -302,13 +302,24 @@ public class CommandArena {
             checkCmd(sender, arena);
             return;
         }
+        createGame(sender, arena);
+    }
+
+    /**
+     * creates a game with the arena (also from the {@link GameMenu}) - a playable arena gets a game after every
+     * restart, too
+     *
+     * @return the new game, null if it couldn't be created
+     */
+    @Nullable
+    static Game createGame(CommandSender sender, Arena arena) {
         Game game;
         try {
-            game = getInstance().getGameManager().createGame(arena);
+            game = CatchTheBeacon.getInstance().getGameManager().createGame(arena);
         } catch (RuntimeException ex) {
             send(sender, LangText.GAME_CREATE_FAILED, ex.getMessage());
             Debug.handleException(ex);
-            return;
+            return null;
         }
         send(sender, LangText.GAME_CREATED, game.getUniqueId(), game.getArena().getName(),
                 game.getLobbyWorld().getWorldName());
@@ -317,6 +328,7 @@ public class CommandArena {
             arena.setAutoGame(true);
             send(sender, LangText.AUTO_GAME_ENABLED, arena.getName());
         }
+        return game;
     }
 
     @Command(ONE_ARENA + " removegame")

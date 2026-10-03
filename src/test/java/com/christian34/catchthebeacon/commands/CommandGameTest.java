@@ -119,7 +119,7 @@ class CommandGameTest extends GameTestBase {
         List<Menu> menus = captureMenus();
         execute(admin, "ctb game");
         assertEquals(1, menus.size());
-        assertEquals(List.of(game.getUniqueId() + " castle"), names(menus.getFirst()));
+        assertEquals(List.of(game.getUniqueId() + " castle", "New game"), names(menus.getFirst()));
         Menu.Button entry = menus.getFirst().getButtons().getFirst();
         assertEquals("LOBBY - 2/" + game.getArena().getMaxPlayers(),
                 PlainTextComponentSerializer.plainText().serialize(Objects.requireNonNull(entry.detail())));
@@ -152,7 +152,7 @@ class CommandGameTest extends GameTestBase {
         assertNotSame(game, next);
         assertNull(plugin.getUser(red).getGame());
         // back to the overview with the new round
-        assertEquals(List.of(next.getUniqueId() + " castle"), names(menus.getLast()));
+        assertEquals(List.of(next.getUniqueId() + " castle", "New game"), names(menus.getLast()));
     }
 
     @Test
@@ -172,6 +172,42 @@ class CommandGameTest extends GameTestBase {
         startGame();
         execute(admin, "ctb game " + game.getUniqueId() + " spectate");
         assertTrue(game.getSpectators().contains(plugin.getUser(admin)));
+    }
+
+    @Test
+    void menuCreatesAGameWithTheOnlyArena() {
+        List<Menu> menus = captureMenus();
+        execute(admin, "ctb game");
+        button(menus.getLast(), "New game").action().accept(admin);
+
+        assertEquals(2, plugin.getGameManager().getGames().size());
+        Game created = plugin.getGameManager().getGames().stream().filter(other -> other != game).findFirst().orElseThrow();
+        assertEquals("castle", created.getArena().getName());
+        assertContains(messages(admin), "The game " + created.getUniqueId() + " with arena 'castle' has been created");
+        // no arena selection, straight to the new game (still loading: no start button yet)
+        assertEquals(PlainTextComponentSerializer.plainText().serialize(menus.getLast().getTitle()),
+                "Game " + created.getUniqueId() + " (castle)");
+    }
+
+    @Test
+    void menuChoosesTheArenaOfANewGame() {
+        setUpArena(admin, "fortress");
+        List<Menu> menus = captureMenus();
+        execute(admin, "ctb game");
+        button(menus.getLast(), "New game").action().accept(admin);
+        assertEquals(List.of("castle", "fortress", "Back"), names(menus.getLast()));
+
+        button(menus.getLast(), "fortress").action().accept(admin);
+        assertTrue(plugin.getGameManager().getGames().stream().anyMatch(other -> other.getArena().getName().equals("fortress")));
+        assertTrue(plugin.getMapHandler().getArena("fortress").hasAutoGame());
+    }
+
+    @Test
+    void menuWithoutGamesStillCreatesOne() {
+        execute(admin, "ctb game " + game.getUniqueId() + " stop --remove");
+        List<Menu> menus = captureMenus();
+        execute(admin, "ctb game");
+        assertEquals(List.of("New game"), names(menus.getLast()));
     }
 
 }

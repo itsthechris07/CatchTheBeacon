@@ -2,6 +2,7 @@ package com.christian34.catchthebeacon.commands;
 
 import com.christian34.catchthebeacon.CatchTheBeacon;
 import com.christian34.catchthebeacon.game.Game;
+import com.christian34.catchthebeacon.game.map.Arena;
 import com.christian34.catchthebeacon.game.states.GameState;
 import com.christian34.catchthebeacon.lib.Menu;
 import com.christian34.catchthebeacon.lib.lang.I;
@@ -20,7 +21,7 @@ import static com.christian34.catchthebeacon.lib.lang.I.i18n;
 
 /**
  * The game manager for admins (/ctb game): all games, clicking one shows what can be done with it (start, watch,
- * stop). Every action checks again that the game still exists - the menu may be old.
+ * stop), "New game" creates one. Every action checks again that the game still exists - the menu may be old.
  *
  * @author Christian34
  */
@@ -35,7 +36,8 @@ public final class GameMenu {
 
     public static void openGames(Player player) {
         List<Game> games = new ArrayList<>(CatchTheBeacon.getInstance().getGameManager().getGames());
-        if (games.isEmpty()) {
+        List<Arena> arenas = playableArenas();
+        if (games.isEmpty() && arenas.isEmpty()) {
             player.sendMessage(I.prefixed(LangText.GAME_LIST_EMPTY));
             return;
         }
@@ -55,7 +57,59 @@ public final class GameMenu {
             menu.button(new ItemStack(icon(game.getGameState())), name(game), summary(game), lore,
                     clicker -> ifRunning(clicker, game, () -> openGame(clicker, game)));
         }
+        if (!arenas.isEmpty()) {
+            menu.button(new ItemStack(Material.NETHER_STAR), i18n(LangText.ITEM_NEW_GAME), null,
+                    List.of(i18n(LangText.ITEM_NEW_GAME_LORE)), GameMenu::openNewGame);
+        }
         menu.show(player);
+    }
+
+    /**
+     * creates a game: chooses the arena first if there is more than one playable arena
+     */
+    public static void openNewGame(Player player) {
+        List<Arena> arenas = playableArenas();
+        if (arenas.isEmpty()) {
+            player.sendMessage(I.prefixed(LangText.NO_PLAYABLE_ARENA));
+            return;
+        }
+        if (arenas.size() == 1) {
+            createGame(player, arenas.getFirst());
+            return;
+        }
+        Menu menu = new Menu(i18n(LangText.GUI_NEW_GAME));
+        for (Arena arena : arenas) {
+            long running = CatchTheBeacon.getInstance().getGameManager().getGames().stream()
+                    .filter(game -> game.getArena() == arena).count();
+            menu.button(new ItemStack(Material.FILLED_MAP), arena.getDisplayName(),
+                    i18n(LangText.NEW_GAME_ARENA_GAMES, running),
+                    List.of(i18n(LangText.NEW_GAME_ARENA_GAMES, running),
+                            i18n(LangText.NEW_GAME_ARENA_PLAYERS, arena.getMinPlayers(), arena.getMaxPlayers())),
+                    clicker -> createGame(clicker, arena));
+        }
+        menu.button(new ItemStack(Material.ARROW), i18n(LangText.ITEM_BACK), null, List.of(), GameMenu::openGames);
+        menu.show(player);
+    }
+
+    /**
+     * creates the game and shows what can be done with it
+     */
+    private static void createGame(Player player, Arena arena) {
+        if (!playableArenas().contains(arena)) {
+            player.sendMessage(I.prefixed(LangText.NO_PLAYABLE_ARENA));
+            return;
+        }
+        Game game = CommandArena.createGame(player, arena);
+        if (game != null) openGame(player, game);
+    }
+
+    /**
+     * the arenas a game can be created with (sorted by name)
+     */
+    private static List<Arena> playableArenas() {
+        return CatchTheBeacon.getInstance().getMapHandler().getGameMaps().stream()
+                .filter(arena -> arena.isPlayable() && arena.getLobbyMap().isPlayable())
+                .sorted(Comparator.comparing(Arena::getName)).toList();
     }
 
     public static void openGame(Player player, Game game) {

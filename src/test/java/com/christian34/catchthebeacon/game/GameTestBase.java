@@ -37,28 +37,8 @@ public abstract class GameTestBase extends PluginTestBase {
     @BeforeEach
     void setUpArena() {
         PlayerMock admin = addAdmin("Admin");
-        World world = admin.getWorld();
-        addMapFolder("castle");
         addMapFolder("lobby");
-        execute(admin, "ctb arena create castle");
-        execute(admin, "ctb arena castle lobby setworld lobby");
-        admin.setLocation(new Location(world, 0.5, 70, 0.5));
-        execute(admin, "ctb arena castle lobby setspawn");
-        admin.setLocation(at(RED_SPAWN, world));
-        execute(admin, "ctb arena castle team red setspawn");
-        admin.setLocation(at(BLUE_SPAWN, world));
-        execute(admin, "ctb arena castle team blue setspawn");
-        String[] positions = {"left", "right"};
-        for (int i = 0; i < 2; i++) {
-            for (var entry : List.of(new Object[]{"red", RED_BEACONS.get(i)}, new Object[]{"blue", BLUE_BEACONS.get(i)})) {
-                Location beacon = at((Location) entry[1], world);
-                beacon.getBlock().setType(Material.BEACON);
-                admin.setLocation(beacon.clone().add(1, 0, 0));
-                execute(admin, "ctb arena castle team " + entry[0] + " setbeacon " + positions[i]);
-            }
-        }
-        assertTrue(plugin.getMapHandler().getArena("castle").isPlayable(),
-                "missing: " + plugin.getMapHandler().getArena("castle").getMissingSetup());
+        setUpArena(admin, "castle");
         execute(admin, "ctb arena castle creategame");
         game = plugin.getGameManager().getGames().iterator().next();
 
@@ -70,6 +50,33 @@ public abstract class GameTestBase extends PluginTestBase {
         plugin.getUser(blue).setTeam(Team.BLUE);
         messages(red);
         messages(blue);
+    }
+
+    /**
+     * sets up a playable arena (lobby: the map "lobby")
+     */
+    protected void setUpArena(PlayerMock admin, String name) {
+        World world = admin.getWorld();
+        addMapFolder(name);
+        execute(admin, "ctb arena create " + name);
+        execute(admin, "ctb arena " + name + " lobby setworld lobby");
+        admin.setLocation(new Location(world, 0.5, 70, 0.5));
+        execute(admin, "ctb arena " + name + " lobby setspawn");
+        admin.setLocation(at(RED_SPAWN, world));
+        execute(admin, "ctb arena " + name + " team red setspawn");
+        admin.setLocation(at(BLUE_SPAWN, world));
+        execute(admin, "ctb arena " + name + " team blue setspawn");
+        String[] positions = {"left", "right"};
+        for (int i = 0; i < 2; i++) {
+            for (var entry : List.of(new Object[]{"red", RED_BEACONS.get(i)}, new Object[]{"blue", BLUE_BEACONS.get(i)})) {
+                Location beacon = at((Location) entry[1], world);
+                beacon.getBlock().setType(Material.BEACON);
+                admin.setLocation(beacon.clone().add(1, 0, 0));
+                execute(admin, "ctb arena " + name + " team " + entry[0] + " setbeacon " + positions[i]);
+            }
+        }
+        assertTrue(plugin.getMapHandler().getArena(name).isPlayable(),
+                "missing: " + plugin.getMapHandler().getArena(name).getMissingSetup());
     }
 
     protected void startGame() {

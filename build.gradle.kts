@@ -28,6 +28,8 @@ repositories {
     maven("https://jitpack.io") { content { includeGroup("com.github.NEZNAMY") } }
     maven("https://repo.essentialsx.net/releases/") { content { includeGroup("net.essentialsx") } }
     maven("https://repo.onarandombox.com/multiverse-releases") { content { includeGroupByRegex("org\\.mvplugins.*") } }
+    // VaultUnlocked API (integrations/EconomySupport)
+    maven("https://repo.codemc.io/repository/creatorfromhell/") { content { includeGroup("net.milkbowl.vault") } }
 }
 
 dependencies {
@@ -56,6 +58,9 @@ dependencies {
     // optional: the worlds of games aren't managed by Multiverse (integrations/MultiverseSupport)
     compileOnly("org.mvplugins.multiverse.core:multiverse-core:5.8.1") { isTransitive = false }
     compileOnly("org.mvplugins.multiverse.inventories:multiverse-inventories:5.3.6") { isTransitive = false }
+    // optional: money for kills, beacons and wins (integrations/EconomySupport); VaultUnlocked (the Vault fork) contains
+    // the legacy Vault api (net.milkbowl.vault) and its new one (net.milkbowl.vault2), like in EasyPrefix
+    compileOnly("net.milkbowl.vault:VaultUnlockedAPI:2.20") { isTransitive = false }
 
     implementation("org.incendo:cloud-annotations:2.1.0")
     implementation("org.incendo:cloud-paper:2.0.1")
@@ -73,6 +78,7 @@ dependencies {
     testImplementation("org.jetbrains:annotations:26.1.0")
     testImplementation("me.clip:placeholderapi:2.12.3")
     testImplementation("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
+    testImplementation("net.milkbowl.vault:VaultUnlockedAPI:2.20") { isTransitive = false }
     // the database drivers Paper ships (stats)
     testRuntimeOnly("org.xerial:sqlite-jdbc:3.49.1.0")
     testRuntimeOnly("com.mysql:mysql-connector-j:9.2.0")

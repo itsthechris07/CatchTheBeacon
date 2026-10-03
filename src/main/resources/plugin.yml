@@ -6,7 +6,7 @@ main: com.christian34.catchthebeacon.CatchTheBeacon
 api-version: "1.13"
 # commands are registered by cloud (commands/CommandManager)
 
-softdepend: [PlaceholderAPI, MiniPlaceholders, Parties, Spigot-Party-API-PAF, Citizens, FancyNpcs, floodgate, TAB, Essentials, Multiverse-Core, Multiverse-Inventories]
+softdepend: [Vault, PlaceholderAPI, MiniPlaceholders, Parties, Spigot-Party-API-PAF, Citizens, FancyNpcs, floodgate, TAB, Essentials, Multiverse-Core, Multiverse-Inventories]
 
 permissions:
   ctb.network.bypass:

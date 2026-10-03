@@ -320,7 +320,12 @@ public enum LangText {
     NPC_STATUS("npc_status"),
     JOIN_VANISHED("join_vanished"),
     ESSENTIALS_BLOCKED_IN_GAME("essentials_blocked_in_game"),
-    TELEPORT_INTO_GAME_DENIED("teleport_into_game_denied");
+    TELEPORT_INTO_GAME_DENIED("teleport_into_game_denied"),
+    REWARD("reward"),
+    REWARD_KILL("reward_kill"),
+    REWARD_BEACON("reward_beacon"),
+    REWARD_WIN("reward_win"),
+    REWARD_GAME("reward_game");
 
     private final String KEY;
 

@@ -36,8 +36,14 @@ public class Menu {
      * the marker of a button in the rows of {@link #layout(int)}
      */
     private static final char BUTTON = 'g';
+    /**
+     * the marker of the corner button in the rows of {@link #layout(int, boolean)}
+     */
+    private static final char CORNER = 'c';
     private final Component title;
     private final List<Button> buttons = new ArrayList<>();
+    @Nullable
+    private Button corner;
 
     /**
      * @param detail a short second line on Bedrock (e.g. the number of players), null: none
@@ -57,12 +63,27 @@ public class Menu {
         return this;
     }
 
+    /**
+     * a button in its own row below the others, at the very right (e.g. "New game") - the last one on Bedrock
+     */
+    public Menu corner(ItemStack icon, Component name, @Nullable Component detail, List<Component> lore,
+                       Consumer<Player> action) {
+        corner = new Button(icon, name, detail, lore, action);
+        return this;
+    }
+
     public Component getTitle() {
         return title;
     }
 
+    /**
+     * @return all buttons, the corner button last
+     */
     public List<Button> getButtons() {
-        return buttons;
+        if (corner == null) return buttons;
+        List<Button> all = new ArrayList<>(buttons);
+        all.add(corner);
+        return all;
     }
 
     /**
@@ -73,6 +94,16 @@ public class Menu {
         player.openInventory(new Chest(this).getInventory());
     }
 
+    /**
+     * @param corner adds a row with the corner button at the right (the other buttons get at most 5 rows)
+     */
+    static String[] layout(int buttons, boolean corner) {
+        if (!corner) return layout(buttons);
+        String[] rows = buttons == 0 ? new String[0] : layout(Math.min(buttons, 5 * 9));
+        String[] all = Arrays.copyOf(rows, rows.length + 1);
+        all[rows.length] = " ".repeat(8) + CORNER;
+        return all;
+    }
     /**
      * @return up to 5 buttons centered with gaps in one row, otherwise full rows (at most 6, more buttons aren't
      * shown)
@@ -96,15 +127,22 @@ public class Menu {
         private final Map<Integer, Button> slots = new HashMap<>();
 
         Chest(Menu menu) {
-            String[] rows = layout(menu.buttons.size());
+            String[] rows = layout(menu.buttons.size(), menu.corner != null);
             this.inventory = Bukkit.createInventory(this, rows.length * 9, menu.title);
             int next = 0;
-            for (int slot = 0; slot < rows.length * 9 && next < menu.buttons.size(); slot++) {
-                if (rows[slot / 9].charAt(slot % 9) != BUTTON) continue;
-                Button button = menu.buttons.get(next++);
-                slots.put(slot, button);
-                inventory.setItem(slot, icon(button));
+            for (int slot = 0; slot < rows.length * 9; slot++) {
+                char marker = rows[slot / 9].charAt(slot % 9);
+                if (marker == CORNER) {
+                    put(slot, menu.corner);
+                } else if (marker == BUTTON && next < menu.buttons.size()) {
+                    put(slot, menu.buttons.get(next++));
+                }
             }
+        }
+
+        private void put(int slot, Button button) {
+            slots.put(slot, button);
+            inventory.setItem(slot, icon(button));
         }
 
         private static ItemStack icon(Button button) {

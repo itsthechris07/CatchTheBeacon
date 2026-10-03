@@ -119,13 +119,13 @@ class CommandGameTest extends GameTestBase {
         List<Menu> menus = captureMenus();
         execute(admin, "ctb game");
         assertEquals(1, menus.size());
-        assertEquals(List.of(game.getUniqueId() + " castle", "New game"), names(menus.getFirst()));
+        assertEquals(List.of("castle", "New game"), names(menus.getFirst()));
         Menu.Button entry = menus.getFirst().getButtons().getFirst();
         assertEquals("LOBBY - 2/" + game.getArena().getMaxPlayers(),
                 PlainTextComponentSerializer.plainText().serialize(Objects.requireNonNull(entry.detail())));
 
         entry.action().accept(admin);
-        assertEquals(List.of("Start the game", "Stop the game", "Back"), names(menus.getLast()));
+        assertEquals(List.of("Join the game", "Start the game", "Stop the game", "Back"), names(menus.getLast()));
     }
 
     @Test
@@ -152,7 +152,7 @@ class CommandGameTest extends GameTestBase {
         assertNotSame(game, next);
         assertNull(plugin.getUser(red).getGame());
         // back to the overview with the new round
-        assertEquals(List.of(next.getUniqueId() + " castle", "New game"), names(menus.getLast()));
+        assertEquals(List.of("castle", "New game"), names(menus.getLast()));
     }
 
     @Test
@@ -186,7 +186,7 @@ class CommandGameTest extends GameTestBase {
         assertContains(messages(admin), "The game " + created.getUniqueId() + " with arena 'castle' has been created");
         // no arena selection, straight to the new game (still loading: no start button yet)
         assertEquals(PlainTextComponentSerializer.plainText().serialize(menus.getLast().getTitle()),
-                "Game " + created.getUniqueId() + " (castle)");
+                "Game: castle");
     }
 
     @Test
@@ -208,6 +208,18 @@ class CommandGameTest extends GameTestBase {
         List<Menu> menus = captureMenus();
         execute(admin, "ctb game");
         assertEquals(List.of("New game"), names(menus.getLast()));
+    }
+
+    @Test
+    void menuJoinsTheGame() {
+        List<Menu> menus = captureMenus();
+        GameMenu.openGame(admin, game);
+        button(menus.getLast(), "Join the game").action().accept(admin);
+        assertSame(game, plugin.getUser(admin).getGame());
+
+        // already playing: no join button
+        GameMenu.openGame(admin, game);
+        assertFalse(names(menus.getLast()).contains("Join the game"));
     }
 
 }

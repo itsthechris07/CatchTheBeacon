@@ -4,6 +4,7 @@ import com.christian34.catchthebeacon.CatchTheBeacon;
 import com.christian34.catchthebeacon.game.Game;
 import com.christian34.catchthebeacon.game.map.Arena;
 import com.christian34.catchthebeacon.game.states.GameState;
+import com.christian34.catchthebeacon.integrations.VanishSupport;
 import com.christian34.catchthebeacon.lib.Menu;
 import com.christian34.catchthebeacon.lib.lang.I;
 import com.christian34.catchthebeacon.lib.lang.LangText;
@@ -58,7 +59,7 @@ public final class GameMenu {
                     clicker -> ifRunning(clicker, game, () -> openGame(clicker, game)));
         }
         if (!arenas.isEmpty()) {
-            menu.button(new ItemStack(Material.NETHER_STAR), i18n(LangText.ITEM_NEW_GAME), null,
+            menu.corner(new ItemStack(Material.NETHER_STAR), i18n(LangText.ITEM_NEW_GAME), null,
                     List.of(i18n(LangText.ITEM_NEW_GAME_LORE)), GameMenu::openNewGame);
         }
         menu.show(player);
@@ -113,7 +114,11 @@ public final class GameMenu {
     }
 
     public static void openGame(Player player, Game game) {
-        Menu menu = new Menu(i18n(LangText.GUI_GAME, game.getUniqueId(), game.getArena().getName()));
+        Menu menu = new Menu(i18n(LangText.GUI_GAME, game.getArena().getDisplayName(), game.getUniqueId()));
+        if (game.isJoinable() && CatchTheBeacon.getInstance().getUser(player).getGame() == null) {
+            menu.button(new ItemStack(Material.OAK_DOOR), i18n(LangText.ITEM_GAME_JOIN), null, List.of(),
+                    clicker -> ifRunning(clicker, game, () -> join(clicker, game)));
+        }
         if (game.getGameState() == GameState.LOBBY) {
             menu.button(new ItemStack(Material.EMERALD), i18n(LangText.ITEM_GAME_START), null,
                     List.of(i18n(LangText.ITEM_GAME_START_LORE, game.getArena().getMinPlayers())),
@@ -133,7 +138,7 @@ public final class GameMenu {
      * asks how to stop the game
      */
     public static void openStop(Player player, Game game) {
-        Menu menu = new Menu(i18n(LangText.GUI_GAME_STOP, game.getUniqueId()));
+        Menu menu = new Menu(i18n(LangText.GUI_GAME_STOP, game.getArena().getDisplayName(), game.getUniqueId()));
         menu.button(new ItemStack(Material.ORANGE_WOOL), i18n(LangText.ITEM_STOP_NEXT_ROUND), null,
                 List.of(i18n(LangText.ITEM_STOP_NEXT_ROUND_LORE)), clicker -> ifRunning(clicker, game, () -> {
                     CommandGame.stop(clicker, game, false);
@@ -150,6 +155,22 @@ public final class GameMenu {
     }
 
     /**
+     * the admin joins the game himself (like /ctb join, but this game)
+     */
+    private static void join(Player player, Game game) {
+        GamePlayer gamePlayer = CatchTheBeacon.getInstance().getUser(player);
+        if (gamePlayer.getGame() != null) {
+            gamePlayer.sendMessage(LangText.ALREADY_IN_GAME);
+        } else if (!VanishSupport.canPlay(player)) {
+            gamePlayer.sendMessage(LangText.JOIN_VANISHED);
+        } else if (!game.isJoinable()) {
+            gamePlayer.sendMessage(LangText.GAME_NOT_JOINABLE);
+        } else {
+            game.join(gamePlayer);
+        }
+    }
+
+    /**
      * runs the action if the game still exists (the menu was opened a while ago), otherwise tells the player
      */
     private static void ifRunning(Player player, Game game, Runnable action) {
@@ -161,7 +182,7 @@ public final class GameMenu {
     }
 
     private static Component name(Game game) {
-        return i18n(LangText.GAME_MENU_NAME, game.getUniqueId(), game.getArena().getName());
+        return i18n(LangText.GAME_MENU_NAME, game.getArena().getDisplayName(), game.getUniqueId());
     }
 
     /**
@@ -177,7 +198,8 @@ public final class GameMenu {
                 i18n(LangText.GAME_MENU_STATE, game.getGameState().name()),
                 i18n(LangText.GAME_MENU_PLAYERS, game.getGamePlayers().size(), game.getArena().getMaxPlayers()),
                 i18n(LangText.GAME_MENU_SPECTATORS, game.getSpectators().size()),
-                i18n(LangText.GAME_MENU_TIME, CommandGame.formatTime(game.getRoundSeconds())));
+                i18n(LangText.GAME_MENU_TIME, CommandGame.formatTime(game.getRoundSeconds())),
+                i18n(LangText.GAME_MENU_ID, game.getUniqueId()));
     }
 
     static Material icon(GameState state) {

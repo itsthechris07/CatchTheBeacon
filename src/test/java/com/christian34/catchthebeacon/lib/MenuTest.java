@@ -46,6 +46,27 @@ class MenuTest extends PluginTestBase {
     }
 
     @Test
+    void cornerButtonGetsItsOwnRowAtTheRight() {
+        assertArrayEquals(new String[]{"    g    ", "        c"}, Menu.layout(1, true));
+        assertArrayEquals(new String[]{"        c"}, Menu.layout(0, true));
+        assertEquals(6, Menu.layout(100, true).length);
+    }
+
+    @Test
+    void cornerButtonIsAtTheBottomRight() {
+        PlayerMock player = addPlayer("Player");
+        List<Player> clicked = new ArrayList<>();
+        menu(new ArrayList<>()).corner(new ItemStack(Material.NETHER_STAR), Component.text("New"), null, List.of(),
+                clicked::add).show(player);
+        Inventory top = player.getOpenInventory().getTopInventory();
+        assertEquals(18, top.getSize());
+        assertEquals(Material.NETHER_STAR, Objects.requireNonNull(top.getItem(17)).getType());
+        click(player, 17);
+        server.getScheduler().performOneTick();
+        assertEquals(List.of(player), clicked);
+    }
+
+    @Test
     void emptyMenuHasOneRow() {
         assertEquals(1, Menu.layout(0).length);
         assertEquals(9, Menu.layout(0)[0].length());

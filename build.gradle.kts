@@ -24,6 +24,8 @@ repositories {
     maven("https://maven.citizensnpcs.co/repo") { content { includeGroup("net.citizensnpcs") } }
     maven("https://repo.fancyinnovations.com/releases") { content { includeGroup("de.oliver") } }
     maven("https://repo.opencollab.dev/main/") { content { includeGroupByRegex("org\\.geysermc.*") } }
+    // VaultUnlocked API (integrations/EconomySupport)
+    maven("https://repo.codemc.io/repository/creatorfromhell/") { content { includeGroup("net.milkbowl.vault") } }
 }
 
 dependencies {
@@ -45,6 +47,9 @@ dependencies {
     compileOnly("org.geysermc.cumulus:cumulus:1.1.2") { isTransitive = false }
     // optional: placeholders for MiniMessage texts of other plugins (integrations/CtbMiniPlaceholders)
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
+    // optional: money for kills, beacons and wins (integrations/EconomySupport); VaultUnlocked (the Vault fork) contains
+    // the legacy Vault api (net.milkbowl.vault) and its new one (net.milkbowl.vault2), like in EasyPrefix
+    compileOnly("net.milkbowl.vault:VaultUnlockedAPI:2.20") { isTransitive = false }
 
     implementation("org.incendo:cloud-annotations:2.1.0")
     implementation("org.incendo:cloud-paper:2.0.1")
@@ -62,6 +67,7 @@ dependencies {
     testImplementation("org.jetbrains:annotations:26.1.0")
     testImplementation("me.clip:placeholderapi:2.12.3")
     testImplementation("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
+    testImplementation("net.milkbowl.vault:VaultUnlockedAPI:2.20") { isTransitive = false }
     // the database drivers Paper ships (stats)
     testRuntimeOnly("org.xerial:sqlite-jdbc:3.49.1.0")
     testRuntimeOnly("com.mysql:mysql-connector-j:9.2.0")

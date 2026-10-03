@@ -316,7 +316,12 @@ public enum LangText {
     NPC_NOT_LINKED("npc_not_linked"),
     NPC_LIST_TITLE("npc_list_title"),
     NPC_LIST_ENTRY("npc_list_entry"),
-    NPC_LIST_EMPTY("npc_list_empty");
+    NPC_LIST_EMPTY("npc_list_empty"),
+    REWARD("reward"),
+    REWARD_KILL("reward_kill"),
+    REWARD_BEACON("reward_beacon"),
+    REWARD_WIN("reward_win"),
+    REWARD_GAME("reward_game");
 
     private final String KEY;
 

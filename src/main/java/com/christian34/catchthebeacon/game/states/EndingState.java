@@ -6,6 +6,7 @@ import com.christian34.catchthebeacon.game.Countdown;
 import com.christian34.catchthebeacon.game.Game;
 import com.christian34.catchthebeacon.game.RoundSummary;
 import com.christian34.catchthebeacon.game.Team;
+import com.christian34.catchthebeacon.integrations.EconomySupport;
 import com.christian34.catchthebeacon.lib.lang.I;
 import com.christian34.catchthebeacon.lib.lang.LangText;
 import com.christian34.catchthebeacon.network.NetworkManager;
@@ -64,11 +65,14 @@ public class EndingState implements State {
         Team winner = game.getWinner();
         game.log(winner == null ? "The game ended without a winner" : "Team " + winner.getName() + " has won");
         game.broadcast(winner == null ? i18n(LangText.GAME_DRAW) : i18n(LangText.GAME_WON, winner.getDisplayName()));
+        EconomySupport economy = CatchTheBeacon.getInstance().getEconomySupport();
         StatsManager stats = CatchTheBeacon.getInstance().getStatsManager();
         for (GamePlayer gamePlayer : game.getGamePlayers()) {
             stats.add(gamePlayer.getPlayer(), StatsManager.Stat.GAMES);
+            economy.reward(gamePlayer.getPlayer(), EconomySupport.Reward.GAME);
             if (winner != null && winner.equals(gamePlayer.getTeam())) {
                 stats.add(gamePlayer.getPlayer(), StatsManager.Stat.WINS);
+                economy.reward(gamePlayer.getPlayer(), EconomySupport.Reward.WIN);
                 unlockWinAchievements(gamePlayer, winner);
             }
         }

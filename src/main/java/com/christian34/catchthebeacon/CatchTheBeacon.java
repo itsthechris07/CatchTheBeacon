@@ -13,6 +13,7 @@ import com.christian34.catchthebeacon.game.states.GameState;
 import com.christian34.catchthebeacon.game.states.LobbyState;
 import com.christian34.catchthebeacon.game.SignManager;
 import com.christian34.catchthebeacon.integrations.BedrockForms;
+import com.christian34.catchthebeacon.integrations.EconomySupport;
 import com.christian34.catchthebeacon.integrations.CtbMiniPlaceholders;
 import com.christian34.catchthebeacon.integrations.NpcSupport;
 import com.christian34.catchthebeacon.integrations.PartySupport;
@@ -65,6 +66,7 @@ public class CatchTheBeacon extends JavaPlugin {
     private SignManager signManager;
     private NetworkManager networkManager;
     private PartySupport partySupport;
+    private EconomySupport economySupport;
     private NpcSupport npcSupport;
     private BedrockForms bedrockForms = BedrockForms.NONE;
     private Telemetry telemetry;
@@ -115,6 +117,10 @@ public class CatchTheBeacon extends JavaPlugin {
 
     public PartySupport getPartySupport() {
         return partySupport;
+    }
+
+    public EconomySupport getEconomySupport() {
+        return economySupport;
     }
 
     public NetworkManager getNetworkManager() {
@@ -178,6 +184,7 @@ public class CatchTheBeacon extends JavaPlugin {
         this.achievementManager = new AchievementManager(this);
         this.gameManager = new GameManager(this);
         this.partySupport = new PartySupport(this);
+        this.economySupport = new EconomySupport(this);
         this.networkManager = new NetworkManager(this);
         this.gameManager.createAutoGames();
         this.signManager = new SignManager(this);

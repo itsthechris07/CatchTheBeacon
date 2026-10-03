@@ -1,6 +1,7 @@
 package com.christian34.catchthebeacon;
 
 import com.christian34.catchthebeacon.commands.CommandManager;
+import com.christian34.catchthebeacon.game.map.DefaultMap;
 import com.christian34.catchthebeacon.game.map.GameWorld;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -40,6 +41,7 @@ public abstract class PluginTestBase {
         this.server = MockBukkit.mock();
         this.server.addSimpleWorld("world");
         GameWorld.setDimensionsFolder(new File(worldsFolder, "dimensions/minecraft"));
+        System.setProperty(DefaultMap.PROPERTY, String.valueOf(installDefaultMap()));
         this.plugin = MockBukkit.load(CatchTheBeacon.class);
         this.commands = new TestCommandManager();
         this.plugin.setCommandManager(new CommandManager(commands));
@@ -48,6 +50,13 @@ public abstract class PluginTestBase {
     @AfterEach
     void tearDownServer() {
         MockBukkit.unmock();
+    }
+
+    /**
+     * true: the plugin installs the map that comes with it on the start (like on a new server)
+     */
+    protected boolean installDefaultMap() {
+        return false;
     }
 
     protected PlayerMock addPlayer(String name, String... permissions) {

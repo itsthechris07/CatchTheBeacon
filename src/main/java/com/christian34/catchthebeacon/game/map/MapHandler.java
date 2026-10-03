@@ -29,6 +29,7 @@ public class MapHandler {
         this.arenas = Collections.synchronizedSet(new HashSet<>());
         this.instance = instance;
         this.mapDirectory = new File(FileManager.getPluginFolder(), "maps/");
+        DefaultMap.installIfNew(instance, mapDirectory);
         loadMaps();
     }
 

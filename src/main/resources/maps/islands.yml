@@ -1,0 +1,21 @@
+# The map that comes with CatchTheBeacon (maps/islands.zip): installed with its lobby on the first start, as long as
+# there are no arenas yet. Red plays on the negative z side, blue on the positive one (the map is point-symmetric).
+arena:
+  display-name: "<aqua>Islands"
+  min-players: 2
+  max-players: 8
+  lobby: islands_lobby
+  auto-game: true
+  teams:
+    RED:
+      spawn: { x: 0.5, y: 65.0, z: -61.5, yaw: 0.0, pitch: 0.0 }
+      beacon:
+        LEFT: { x: 21, y: 66, z: -44 }
+        RIGHT: { x: -21, y: 66, z: -44 }
+    BLUE:
+      spawn: { x: 0.5, y: 65.0, z: 62.5, yaw: 180.0, pitch: 0.0 }
+      beacon:
+        LEFT: { x: -21, y: 66, z: 44 }
+        RIGHT: { x: 21, y: 66, z: 44 }
+lobby:
+  spawn: { x: 1100.5, y: 65.0, z: 100.5, yaw: 0.0, pitch: 0.0 }

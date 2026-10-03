@@ -15,8 +15,11 @@ import com.christian34.catchthebeacon.game.SignManager;
 import com.christian34.catchthebeacon.integrations.BedrockForms;
 import com.christian34.catchthebeacon.integrations.EconomySupport;
 import com.christian34.catchthebeacon.integrations.CtbMiniPlaceholders;
+import com.christian34.catchthebeacon.integrations.EssentialsSupport;
+import com.christian34.catchthebeacon.integrations.MultiverseSupport;
 import com.christian34.catchthebeacon.integrations.NpcSupport;
 import com.christian34.catchthebeacon.integrations.PartySupport;
+import com.christian34.catchthebeacon.integrations.VanishSupport;
 import com.christian34.catchthebeacon.lib.GameScoreboard;
 import com.christian34.catchthebeacon.stats.AchievementManager;
 import com.christian34.catchthebeacon.stats.StatsExpansion;
@@ -69,6 +72,7 @@ public class CatchTheBeacon extends JavaPlugin {
     private EconomySupport economySupport;
     private NpcSupport npcSupport;
     private BedrockForms bedrockForms = BedrockForms.NONE;
+    private EssentialsSupport essentials = EssentialsSupport.NONE;
     private Telemetry telemetry;
 
     public static CatchTheBeacon getInstance() {
@@ -113,6 +117,17 @@ public class CatchTheBeacon extends JavaPlugin {
      */
     public void setBedrockForms(BedrockForms bedrockForms) {
         this.bedrockForms = bedrockForms;
+    }
+
+    public EssentialsSupport getEssentials() {
+        return essentials;
+    }
+
+    /**
+     * replaces the hook into EssentialsX (the tests use a fake one)
+     */
+    public void setEssentials(EssentialsSupport essentials) {
+        this.essentials = essentials;
     }
 
     public PartySupport getPartySupport() {
@@ -172,6 +187,8 @@ public class CatchTheBeacon extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
+        // Multiverse may have loaded worlds of games again
+        MultiverseSupport.hook(this);
         GameWorld.deleteLeftovers();
         this.plugin = this;
         this.gamePlayers = Collections.synchronizedSet(new HashSet<>());
@@ -182,6 +199,7 @@ public class CatchTheBeacon extends JavaPlugin {
         this.mapHandler = new MapHandler(this);
         this.statsManager = new StatsManager(this);
         this.achievementManager = new AchievementManager(this);
+        this.essentials = EssentialsSupport.create(this);
         this.gameManager = new GameManager(this);
         this.partySupport = new PartySupport(this);
         this.economySupport = new EconomySupport(this);
@@ -230,7 +248,7 @@ public class CatchTheBeacon extends JavaPlugin {
         }
         Game game = optionalGame.get();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            game.join(getUser(player));
+            if (!VanishSupport.isVanished(player)) game.join(getUser(player));
         }
         Player player1 = TestPlayer.create("Player1");
         game.join(new GamePlayer(player1, this));
@@ -243,6 +261,9 @@ public class CatchTheBeacon extends JavaPlugin {
         }
         if (setupManager != null) {
             setupManager.stopAll();
+        }
+        if (npcSupport != null) {
+            npcSupport.removeStatus();
         }
         if (gameManager != null) {
             // no ENDING state here: it would go on to RESTART, which creates a new game for the arena

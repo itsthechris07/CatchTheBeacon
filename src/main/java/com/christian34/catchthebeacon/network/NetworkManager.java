@@ -5,6 +5,7 @@ import com.christian34.catchthebeacon.Debug;
 import com.christian34.catchthebeacon.game.Game;
 import com.christian34.catchthebeacon.game.GameManager;
 import com.christian34.catchthebeacon.game.map.Arena;
+import com.christian34.catchthebeacon.integrations.VanishSupport;
 import com.christian34.catchthebeacon.lib.lang.I;
 import com.christian34.catchthebeacon.lib.lang.LangText;
 import com.christian34.catchthebeacon.user.GamePlayer;
@@ -145,18 +146,18 @@ public class NetworkManager implements Listener {
     }
 
     /**
-     * players joining a game server join the game
+     * players joining a game server join the game (not vanished ones, e.g. admins checking the server)
      */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         if (!isGameServer() || player.hasPermission(BYPASS_PERMISSION)) return;
-        // after the join is done, otherwise the teleport doesn't work
+        // after the join is done, otherwise the teleport doesn't work (and vanish plugins have hidden him)
         Bukkit.getScheduler().runTask(plugin, () -> joinGame(player));
     }
 
     private void joinGame(Player player) {
-        if (!player.isOnline()) return;
+        if (!player.isOnline() || VanishSupport.isVanished(player)) return;
         GamePlayer gamePlayer = plugin.getUser(player);
         if (gamePlayer.getGame() != null) return;
         GameManager gameManager = plugin.getGameManager();

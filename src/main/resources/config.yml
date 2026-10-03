@@ -146,6 +146,10 @@ parties:
   join-together: true
   # parties play in the same team, as long as the teams stay even (players who chose a team keep it)
   same-team: true
+# join NPCs of Citizens or FancyNpcs (/ctb npc link <arena>)
+npcs:
+  # linked NPCs show the state of the game (Citizens: an extra hologram line, FancyNpcs: behind the display name)
+  show-status: true
 # money of an economy plugin (needs Vault or VaultUnlocked and an economy plugin, e.g. EssentialsX), 0 = nothing
 rewards:
   enabled: false

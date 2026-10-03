@@ -24,6 +24,10 @@ repositories {
     maven("https://maven.citizensnpcs.co/repo") { content { includeGroup("net.citizensnpcs") } }
     maven("https://repo.fancyinnovations.com/releases") { content { includeGroup("de.oliver") } }
     maven("https://repo.opencollab.dev/main/") { content { includeGroupByRegex("org\\.geysermc.*") } }
+    // TAB, EssentialsX, Multiverse (integrations/TabSupport, EssentialsSupport, MultiverseSupport)
+    maven("https://jitpack.io") { content { includeGroup("com.github.NEZNAMY") } }
+    maven("https://repo.essentialsx.net/releases/") { content { includeGroup("net.essentialsx") } }
+    maven("https://repo.onarandombox.com/multiverse-releases") { content { includeGroupByRegex("org\\.mvplugins.*") } }
     // VaultUnlocked API (integrations/EconomySupport)
     maven("https://repo.codemc.io/repository/creatorfromhell/") { content { includeGroup("net.milkbowl.vault") } }
 }
@@ -47,6 +51,13 @@ dependencies {
     compileOnly("org.geysermc.cumulus:cumulus:1.1.2") { isTransitive = false }
     // optional: placeholders for MiniMessage texts of other plugins (integrations/CtbMiniPlaceholders)
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
+    // optional: TAB doesn't overwrite tab list, name tags and sidebar in games (integrations/TabSupport)
+    compileOnly("com.github.NEZNAMY:TAB-API:6.1.2") { isTransitive = false }
+    // optional: god mode, vanish, /back, ... (integrations/EssentialsSupport)
+    compileOnly("net.essentialsx:EssentialsX:2.21.2") { isTransitive = false }
+    // optional: the worlds of games aren't managed by Multiverse (integrations/MultiverseSupport)
+    compileOnly("org.mvplugins.multiverse.core:multiverse-core:5.8.1") { isTransitive = false }
+    compileOnly("org.mvplugins.multiverse.inventories:multiverse-inventories:5.3.6") { isTransitive = false }
     // optional: money for kills, beacons and wins (integrations/EconomySupport); VaultUnlocked (the Vault fork) contains
     // the legacy Vault api (net.milkbowl.vault) and its new one (net.milkbowl.vault2), like in EasyPrefix
     compileOnly("net.milkbowl.vault:VaultUnlockedAPI:2.20") { isTransitive = false }
@@ -194,3 +205,4 @@ tasks {
         relocate("io.sentry", "com.christian34.catchthebeacon.libs.sentry")
     }
 }
+

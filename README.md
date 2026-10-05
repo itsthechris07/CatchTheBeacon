@@ -6,6 +6,9 @@ A team PvP minigame for Paper: **Red vs Blue on a sky map, every team guards two
 to win – but near an enemy beacon you get Mining Fatigue, so one player mines while the rest of the team keeps them
 alive.
 
+📖 **Documentation: [itsthechris07.github.io/CatchTheBeacon](https://itsthechris07.github.io/CatchTheBeacon/)** –
+setup, configuration, commands, placeholders, network and more.
+
 ![How a round works](https://raw.githubusercontent.com/itsthechris07/CatchTheBeacon/main/branding/how-it-works.png)
 
 ## Features

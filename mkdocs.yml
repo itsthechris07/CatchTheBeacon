@@ -1,0 +1,72 @@
+site_name: CatchTheBeacon
+site_description: Documentation of CatchTheBeacon, a team PvP minigame plugin for Paper
+site_url: https://itsthechris07.github.io/CatchTheBeacon/
+repo_url: https://github.com/itsthechris07/CatchTheBeacon
+repo_name: itsthechris07/CatchTheBeacon
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  logo: assets/icon.png
+  favicon: assets/icon.png
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: cyan
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: cyan
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Dark mode
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - How a round works: gameplay.md
+  - Setting up arenas:
+      - Arenas and maps: arenas.md
+      - Join signs and NPCs: signs-and-npcs.md
+  - Reference:
+      - Commands and permissions: commands.md
+      - Configuration: configuration.md
+      - Teams, kit and messages: customization.md
+      - Placeholders: placeholders.md
+  - Stats and rewards: stats.md
+  - Velocity network: network.md
+  - Supported plugins: integrations.md
+  - FAQ and troubleshooting: faq.md
+  - Privacy: privacy.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn

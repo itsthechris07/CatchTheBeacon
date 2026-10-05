@@ -78,6 +78,13 @@ public record MapPreset(String name, String author, String url, ConfigurationSec
         }
     }
 
+    /**
+     * the name for messages (Sakura), {@link #name()} is the name of the arena (sakura)
+     */
+    public String displayName() {
+        return name.isEmpty() ? name : name.substring(0, 1).toUpperCase(Locale.ROOT) + name.substring(1);
+    }
+
     private static boolean hasArena(CatchTheBeacon plugin, String name) {
         ConfigurationSection arenas = plugin.getFileManager().getArenasFile().getSection("");
         return arenas != null && arenas.getKeys(false).stream().anyMatch(name::equalsIgnoreCase);

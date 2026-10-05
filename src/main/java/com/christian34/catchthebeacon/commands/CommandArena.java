@@ -116,6 +116,12 @@ public class CommandArena {
                             ClickEvent.runCommand("/ctb arena " + installed + " creategame")))));
             return;
         } else if (!mapHandler.isMap(arenaName)) {
+            if (preset != null) {
+                // e.g. [Set up Sakura] of the first steps clicked before the download is there
+                sender.sendMessage(I.prefixed(I.i18n(LangText.PRESET_DOWNLOAD_MISSING, preset.displayName())
+                        .append(I.button(LangText.BUTTON_MAP_DOWNLOAD, ClickEvent.openUrl(preset.url())))));
+                return;
+            }
             send(sender, LangText.MAP_MISSING, arenaName);
             return;
         }
@@ -150,7 +156,7 @@ public class CommandArena {
         if (presets.isEmpty()) return;
         send(sender, LangText.ARENA_PRESETS);
         for (MapPreset preset : presets) {
-            sender.sendMessage(I.i18n(LangText.ARENA_PRESET, preset.name(), preset.author())
+            sender.sendMessage(I.i18n(LangText.ARENA_PRESET, preset.displayName(), preset.author())
                     .append(I.button(LangText.BUTTON_MAP_DOWNLOAD, ClickEvent.openUrl(preset.url()))));
         }
     }

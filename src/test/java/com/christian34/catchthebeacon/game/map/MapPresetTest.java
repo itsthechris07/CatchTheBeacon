@@ -3,6 +3,8 @@ package com.christian34.catchthebeacon.game.map;
 import com.christian34.catchthebeacon.PluginTestBase;
 import com.christian34.catchthebeacon.game.Beacon;
 import com.christian34.catchthebeacon.game.Team;
+import net.kyori.adventure.text.Component;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
@@ -126,7 +128,7 @@ class MapPresetTest extends PluginTestBase {
         PlayerMock admin = addAdmin("Admin");
         execute(admin, "ctb arena list");
         List<String> messages = messages(admin);
-        assertContains(messages, "sakura by BreadBuilds");
+        assertContains(messages, "Sakura by BreadBuilds");
         assertContains(messages, "[Download]");
 
         addDownload("sakura.zip");
@@ -134,6 +136,38 @@ class MapPresetTest extends PluginTestBase {
         messages(admin);
         execute(admin, "ctb arena list");
         assertNotContains(messages(admin), "by BreadBuilds");
+    }
+
+    @Test
+    void adminsGetTheFirstStepsWhileThereIsNoArena() throws IOException {
+        PlayerMock admin = addAdmin("Admin");
+        PlayerMock player = addPlayer("Player");
+        server.getScheduler().performTicks(60);
+        List<String> messages = messages(admin);
+        assertContains(messages, "There is no arena yet");
+        assertContains(messages, "1. Download Sakura by BreadBuilds [Download]");
+        assertContains(messages, "[Set up Sakura]");
+        assertContains(messages, "[Import a world]");
+        assertTrue(messages(player).isEmpty(), "only admins");
+
+        // [Set up Sakura] before the download is there
+        execute(admin, "ctb arena create sakura");
+        assertContains(messages(admin), "Download the map 'Sakura' first");
+
+        addDownload("sakura.zip");
+        execute(admin, "ctb arena create sakura");
+        messages(admin);
+        server.getPluginManager().callEvent(new PlayerJoinEvent(admin, Component.empty()));
+        server.getScheduler().performTicks(60);
+        assertNotContains(messages(admin), "There is no arena yet");
+    }
+
+    @Test
+    void lobbyServerOfANetworkHasNoFirstSteps() {
+        plugin.getFileManager().getConfigFile().set("network.mode", "lobby");
+        PlayerMock admin = addAdmin("Admin");
+        server.getScheduler().performTicks(60);
+        assertNotContains(messages(admin), "There is no arena yet");
     }
 
     @Test

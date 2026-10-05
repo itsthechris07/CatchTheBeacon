@@ -33,8 +33,9 @@ public class MapHandler {
         loadMaps();
         if (arenas.isEmpty()) {
             for (MapPreset preset : MapPreset.notInstalled(instance)) {
-                Debug.info("No arenas yet? Download '" + preset.name() + "' by " + preset.author() + " (" + preset.url()
-                        + "), put the zip into " + mapDirectory + " and restart - its setup comes with CatchTheBeacon");
+                Debug.info("No arenas yet? Download '" + preset.displayName() + "' by " + preset.author() + " ("
+                        + preset.url() + "), put the zip into " + mapDirectory + " and restart (or run /ctb arena create "
+                        + preset.name() + ") - its setup comes with CatchTheBeacon");
             }
         }
     }

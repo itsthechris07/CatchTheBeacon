@@ -192,14 +192,20 @@ public class Telemetry {
     }
 
     private void report(LogRecord record) {
+        if (shouldReport(record)) Sentry.captureException(record.getThrown());
+    }
+
+    /**
+     * @return true if the record is an error of the plugin that hasn't been reported yet (Debug.warn with an exception)
+     */
+    boolean shouldReport(LogRecord record) {
         Throwable thrown = record.getThrown();
-        if (thrown == null || record.getLevel().intValue() < Level.WARNING.intValue() || !isOwnError(thrown)) return;
+        if (thrown == null || record.getLevel().intValue() < Level.WARNING.intValue() || !isOwnError(thrown)) return false;
         // every error once, and not too many
         String signature = signature(thrown);
         synchronized (reported) {
-            if (reported.size() >= MAX_REPORTS || !reported.add(signature)) return;
+            return reported.size() < MAX_REPORTS && reported.add(signature);
         }
-        Sentry.captureException(thrown);
     }
 
     /**

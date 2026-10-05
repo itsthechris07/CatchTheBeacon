@@ -134,7 +134,7 @@ public class MapTemplate {
         try {
             gameWorld.close(true);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Debug.warn("Couldn't close the template world", exception);
         }
         MapTemplate.getTemplates().remove(this);
     }

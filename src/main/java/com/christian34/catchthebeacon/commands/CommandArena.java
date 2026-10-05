@@ -344,7 +344,7 @@ public class CommandArena {
             game = CatchTheBeacon.getInstance().getGameManager().createGame(arena);
         } catch (RuntimeException ex) {
             send(sender, LangText.GAME_CREATE_FAILED, ex.getMessage());
-            Debug.handleException(ex);
+            Debug.warn("Couldn't create a game with arena '" + arena.getName() + "'", ex);
             return null;
         }
         send(sender, LangText.GAME_CREATED, game.getUniqueId(), game.getArena().getName(),

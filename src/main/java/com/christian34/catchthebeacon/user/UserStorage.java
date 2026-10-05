@@ -71,8 +71,7 @@ public class UserStorage {
             apply(player, backup, true);
         } catch (RuntimeException ex) {
             // keep the file, so the items can still be recovered
-            Debug.warn("Couldn't restore the state of " + player.getName() + ": " + ex);
-            Debug.handleException(ex);
+            Debug.warn("Couldn't restore the state of " + player.getName(), ex);
             this.backup = null;
             return;
         }

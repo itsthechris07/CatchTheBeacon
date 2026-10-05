@@ -7,10 +7,13 @@ import io.sentry.protocol.User;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -81,6 +84,38 @@ class TelemetryTest extends PluginTestBase {
         assertNull(minimized.getServerName());
         assertEquals("<player> has no team", minimized.getExceptions().getFirst().getValue());
         assertEquals("player <uuid>", minimized.getMessage().getFormatted());
+    }
+
+    @Test
+    void debugErrorsReachTheReportHandler() {
+        // Telemetry listens on the plugin's logger, Debug must log there (printStackTrace would bypass it)
+        List<LogRecord> records = new ArrayList<>();
+        Handler handler = new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                records.add(record);
+            }
+
+            @Override
+            public void flush() {
+            }
+
+            @Override
+            public void close() {
+            }
+        };
+        plugin.getLogger().addHandler(handler);
+        try {
+            Debug.warn("Couldn't do something", new IllegalStateException("test"));
+            Debug.warn("Expected problem");
+        } finally {
+            plugin.getLogger().removeHandler(handler);
+        }
+        assertEquals(2, records.size());
+        Telemetry telemetry = new Telemetry(plugin);
+        assertTrue(telemetry.shouldReport(records.get(0)));
+        assertFalse(telemetry.shouldReport(records.get(0)), "every error is reported once");
+        assertFalse(telemetry.shouldReport(records.get(1)), "warnings without an exception aren't reported");
     }
 
     @Test

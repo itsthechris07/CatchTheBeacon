@@ -19,8 +19,7 @@ public class TextContainer {
         try {
             ConfigUpdater.update(CatchTheBeacon.getInstance(), "messages.yml", this.file);
         } catch (IOException ex) {
-            Debug.catchException(ex);
-            Debug.warn("Couldn't update file 'messages.yml'.");
+            Debug.warn("Couldn't update file 'messages.yml'", ex);
         }
         this.data = YamlConfiguration.loadConfiguration(file);
     }

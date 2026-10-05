@@ -60,8 +60,8 @@ public abstract class PluginFile {
         try {
             data.options().copyDefaults(true);
             data.save(sourceFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Debug.warn("Couldn't save file '" + sourceFile.getName() + "'", ex);
         }
         load();
     }

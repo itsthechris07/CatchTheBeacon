@@ -203,7 +203,7 @@ public class Game {
             this.lobbyWorld.close(false);
             this.gameWorld.close(false);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Debug.warn("Couldn't close the worlds of game " + uniqueId, exception);
         }
     }
 

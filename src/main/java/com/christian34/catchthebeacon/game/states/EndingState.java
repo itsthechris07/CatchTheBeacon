@@ -1,6 +1,7 @@
 package com.christian34.catchthebeacon.game.states;
 
 import com.christian34.catchthebeacon.CatchTheBeacon;
+import com.christian34.catchthebeacon.Debug;
 import com.christian34.catchthebeacon.game.Beacon;
 import com.christian34.catchthebeacon.game.Countdown;
 import com.christian34.catchthebeacon.game.Game;
@@ -194,7 +195,7 @@ public class EndingState implements State {
             this.game.getLobbyWorld().close(false);
             this.game.getGameWorld().close(false);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Debug.warn("Couldn't close the worlds of game " + game.getUniqueId(), exception);
         }
     }
 

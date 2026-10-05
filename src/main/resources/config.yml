@@ -146,7 +146,7 @@ network:
 # game servers; the proxy plugins take the members along when the leader is sent to a game server)
 parties:
   enabled: true
-  # the party leader takes the members of his party on this server into the game (/ctb join, join signs)
+  # the party leader takes the members of their party on this server into the game (/ctb join, join signs)
   join-together: true
   # parties play in the same team, as long as the teams stay even (players who chose a team keep it)
   same-team: true
@@ -164,7 +164,7 @@ rewards:
   # every player who is still in the game at the end, also without a winner
   game: 10
 achievements:
-  # e.g. "Last-second rescue": kill an enemy while he is mining your beacon (saved in the database, /ctb achievements)
+  # e.g. "Last-second rescue": kill an enemy while they are mining your beacon (saved in the database, /ctb achievements)
   enabled: true
   # "That was quick": win within this time (in minutes)
   quick-win-minutes: 5

@@ -145,7 +145,7 @@ public class GameManager {
     }
 
     /**
-     * joins a waiting game, otherwise watches a running one - a party leader takes the members of his party along
+     * joins a waiting game, otherwise watches a running one - a party leader takes the members of their party along
      * (into a game with room for all of them, if there is one)
      *
      * @param arena only games of this arena, null: all
@@ -156,7 +156,7 @@ public class GameManager {
 
     /**
      * joins the game (or watches it while it is running), e.g. the game of a join sign - a party leader takes the
-     * members of his party along
+     * members of their party along
      */
     public void join(@NotNull GamePlayer gamePlayer, @NotNull Game game) {
         join(gamePlayer, game.getArena(), game);

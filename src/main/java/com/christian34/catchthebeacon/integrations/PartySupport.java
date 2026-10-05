@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Parties of party plugins (Parties, Party and Friends): the leader takes the members of his party into the game
+ * Parties of party plugins (Parties, Party and Friends): the leader takes the members of their party into the game
  * (parties.join-together) and parties play in the same team (parties.same-team).
  *
  * @author Christian34

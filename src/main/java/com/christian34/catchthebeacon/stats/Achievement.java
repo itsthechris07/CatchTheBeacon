@@ -15,7 +15,7 @@ public enum Achievement {
     FIRST_WIN(LangText.ACHIEVEMENT_FIRST_WIN, LangText.ACHIEVEMENT_FIRST_WIN_DESCRIPTION),
     FIRST_BLOOD(LangText.ACHIEVEMENT_FIRST_BLOOD, LangText.ACHIEVEMENT_FIRST_BLOOD_DESCRIPTION),
     /**
-     * kill an enemy while he is mining an own beacon
+     * kill an enemy while they are mining an own beacon
      */
     LAST_SECOND(LangText.ACHIEVEMENT_LAST_SECOND, LangText.ACHIEVEMENT_LAST_SECOND_DESCRIPTION),
     /**

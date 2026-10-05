@@ -335,6 +335,14 @@ public class Game {
                 beacon.hideBossBar(gamePlayer.getPlayer());
             }
         }
+        // a dead player would stay on the death screen in a world that is about to be closed
+        if (gamePlayer.getPlayer().isDead()) {
+            try {
+                gamePlayer.getPlayer().spigot().respawn();
+            } catch (UnsupportedOperationException ignored) {
+                // MockBukkit
+            }
+        }
         gamePlayer.getUserStorage().restore();
         gamePlayer.setGame(null);
         instance.getEssentials().leaveGame(gamePlayer.getPlayer());

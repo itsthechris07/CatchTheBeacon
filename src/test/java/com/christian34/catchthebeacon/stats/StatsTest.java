@@ -53,7 +53,7 @@ class StatsTest extends GameTestBase {
         for (Location location : blueBeacons()) {
             Block beacon = location.getBlock();
             beacon.setType(Material.BEACON);
-            red.simulateBlockBreak(beacon);
+            breakBlock(red, beacon);
         }
         assertEquals(new StatsManager.PlayerStats(0, 0, 1, 1, 2), stats(red));
         assertEquals(new StatsManager.PlayerStats(0, 0, 0, 1, 0), stats(blue));

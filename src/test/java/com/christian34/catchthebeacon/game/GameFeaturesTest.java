@@ -6,6 +6,7 @@ import com.christian34.catchthebeacon.lib.InteractionItems;
 import com.christian34.catchthebeacon.user.GamePlayer;
 import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.chat.SignedMessage;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ExplosionResult;
@@ -30,9 +31,12 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Map;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockbukkit.mockbukkit.matcher.sound.SoundReceiverSoundHeardMatcher.hasHeard;
 
 /**
  * The features that make the game more exciting: last hit, mining fatigue, base effects, resources, timed events,
@@ -95,11 +99,11 @@ class GameFeaturesTest extends GameTestBase {
         startGame();
         Block beacon = blueBeacons().getFirst().getBlock();
         beacon.setType(Material.BEACON);
-        red.simulateBlockBreak(beacon);
+        breakBlock(red, beacon);
         assertEquals(Material.AIR, beacon.getType());
         assertEquals(GameState.INGAME, game.getGameState());
-        blue.assertSoundHeard(Sound.ENTITY_ENDER_DRAGON_GROWL);
-        red.assertSoundHeard(Sound.ENTITY_PLAYER_LEVELUP);
+        assertThat(blue, hasHeard(Sound.ENTITY_ENDER_DRAGON_GROWL));
+        assertThat(red, hasHeard(Sound.ENTITY_PLAYER_LEVELUP));
     }
 
     // --- bug fix: the compass of WorldEdit teleported players in the game
@@ -152,7 +156,7 @@ class GameFeaturesTest extends GameTestBase {
     @Test
     void wholeMapCanBeMinedByDefault() {
         startGame();
-        BlockBreakEvent event = red.simulateBlockBreak(mapBlock(Material.STONE));
+        BlockBreakEvent event = breakBlock(red, mapBlock(Material.STONE));
         assertNotNull(event);
         assertFalse(event.isCancelled());
     }
@@ -162,14 +166,14 @@ class GameFeaturesTest extends GameTestBase {
         config("game.only-placed-blocks-breakable", true);
         startGame();
         messages(red);
-        BlockBreakEvent event = red.simulateBlockBreak(mapBlock(Material.STONE));
+        BlockBreakEvent event = breakBlock(red, mapBlock(Material.STONE));
         assertTrue(event == null || event.isCancelled(), "a block of the map was broken");
         assertContains(messages(red), "You can only break blocks placed by players!");
 
         Location location = new Location(gameWorld(), 0, 65, 60);
-        red.simulateBlockPlace(Material.RED_WOOL, location);
+        placeBlock(red, Material.RED_WOOL, location);
         assertTrue(game.isPlacedBlock(location.getBlock()));
-        event = red.simulateBlockBreak(location.getBlock());
+        event = breakBlock(red, location.getBlock());
         assertNotNull(event);
         assertFalse(event.isCancelled());
         assertFalse(game.isPlacedBlock(location.getBlock()));
@@ -179,7 +183,7 @@ class GameFeaturesTest extends GameTestBase {
     void resourcesCanAlwaysBeMined() {
         config("game.only-placed-blocks-breakable", true);
         startGame();
-        BlockBreakEvent event = red.simulateBlockBreak(mapBlock(Material.IRON_BLOCK));
+        BlockBreakEvent event = breakBlock(red, mapBlock(Material.IRON_BLOCK));
         assertNotNull(event);
         assertFalse(event.isCancelled());
     }
@@ -188,7 +192,7 @@ class GameFeaturesTest extends GameTestBase {
     void enchantingTablesCantBeBroken() {
         startGame();
         messages(red);
-        BlockBreakEvent event = red.simulateBlockBreak(mapBlock(Material.ENCHANTING_TABLE));
+        BlockBreakEvent event = breakBlock(red, mapBlock(Material.ENCHANTING_TABLE));
         assertTrue(event == null || event.isCancelled());
         assertContains(messages(red), "This block cannot be broken!");
     }
@@ -219,7 +223,7 @@ class GameFeaturesTest extends GameTestBase {
         config("game.only-placed-blocks-breakable", true);
         startGame();
         Location location = new Location(gameWorld(), 0, 65, 60);
-        red.simulateBlockPlace(Material.RED_WOOL, location);
+        placeBlock(red, Material.RED_WOOL, location);
         assertEquals(List.of(location.getBlock()), explode(mapBlock(Material.STONE), location.getBlock()));
         assertFalse(game.isPlacedBlock(location.getBlock()));
     }
@@ -231,7 +235,7 @@ class GameFeaturesTest extends GameTestBase {
         config("resources", List.of(Map.of("block", "IRON_BLOCK", "rewards", List.of("IRON_CHESTPLATE"))));
         startGame();
         messages(red);
-        BlockBreakEvent event = red.simulateBlockBreak(mapBlock(Material.IRON_BLOCK));
+        BlockBreakEvent event = breakBlock(red, mapBlock(Material.IRON_BLOCK));
         assertNotNull(event);
         assertFalse(event.isDropItems(), "the iron block is dropped too");
         assertEquals(Material.IRON_CHESTPLATE, red.getInventory().getItem(EquipmentSlot.CHEST).getType(),
@@ -244,7 +248,7 @@ class GameFeaturesTest extends GameTestBase {
         config("resources", List.of(Map.of("block", "IRON_BLOCK", "rewards", List.of("IRON_INGOT:4"))));
         startGame();
         red.getInventory().setItem(EquipmentSlot.CHEST, new ItemStack(Material.DIAMOND_CHESTPLATE));
-        red.simulateBlockBreak(mapBlock(Material.IRON_BLOCK));
+        breakBlock(red, mapBlock(Material.IRON_BLOCK));
         assertTrue(red.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT), 4));
 
         ResourceBlocks.give(red, new ItemStack(Material.IRON_CHESTPLATE));
@@ -256,8 +260,8 @@ class GameFeaturesTest extends GameTestBase {
     void placedResourcesAreNormalBlocks() {
         startGame();
         Location location = new Location(gameWorld(), 0, 65, 60);
-        red.simulateBlockPlace(Material.IRON_BLOCK, location);
-        BlockBreakEvent event = red.simulateBlockBreak(location.getBlock());
+        placeBlock(red, Material.IRON_BLOCK, location);
+        BlockBreakEvent event = breakBlock(red, location.getBlock());
         assertNotNull(event);
         assertTrue(event.isDropItems());
     }
@@ -372,14 +376,14 @@ class GameFeaturesTest extends GameTestBase {
         startGame();
         Block nearBeacon = at(BLUE_BEACONS.getFirst(), gameWorld()).getBlock().getRelative(1, 0, 0);
         nearBeacon.setType(Material.STONE);
-        BlockBreakEvent before = red.simulateBlockBreak(nearBeacon);
+        BlockBreakEvent before = breakBlock(red, nearBeacon);
         assertTrue(before == null || before.isCancelled());
 
         server.getScheduler().performTicks(20 * 8);
         assertFalse(game.hasBeaconProtection());
         assertContains(messages(red), "The protection zones around the beacons are gone!");
         nearBeacon.setType(Material.STONE);
-        BlockBreakEvent after = red.simulateBlockBreak(nearBeacon);
+        BlockBreakEvent after = breakBlock(red, nearBeacon);
         assertNotNull(after);
         assertFalse(after.isCancelled());
         assertNull(ingame().getNextEvent());
@@ -402,7 +406,7 @@ class GameFeaturesTest extends GameTestBase {
         startGame();
         Block beacon = at(BLUE_BEACONS.getFirst(), gameWorld()).getBlock();
         beacon.setType(Material.BEACON);
-        red.simulateBlockBreak(beacon);
+        breakBlock(red, beacon);
         server.getScheduler().performTicks(20 * 8);
         assertEquals(GameState.ENDING, game.getGameState());
         assertEquals(Team.RED, game.getWinner());
@@ -454,13 +458,13 @@ class GameFeaturesTest extends GameTestBase {
     void spectatorsCantInterfere() {
         startGame();
         PlayerMock late = spectator();
-        BlockBreakEvent event = late.simulateBlockBreak(mapBlock(Material.STONE));
+        BlockBreakEvent event = breakBlock(late, mapBlock(Material.STONE));
         assertTrue(event == null || event.isCancelled(), "a spectator broke a block");
         assertFalse(attack(late, red), "a spectator hurt a player");
         assertFalse(attack(red, late), "a spectator got hurt");
         Block beacon = at(BLUE_BEACONS.getFirst(), gameWorld()).getBlock();
         beacon.setType(Material.BEACON);
-        late.simulateBlockBreak(beacon);
+        breakBlock(late, beacon);
         assertEquals(Material.BEACON, beacon.getType());
     }
 
@@ -608,6 +612,32 @@ class GameFeaturesTest extends GameTestBase {
         chat(late, "nice");
         assertNotContains(messages(red), "nice");
         assertContains(messages(late), "[Spectator] Late: nice");
+    }
+
+    private Set<Audience> chatViewers(PlayerMock player, String message) {
+        AsyncChatEvent event = new AsyncChatEvent(false, player, new HashSet<>(server.getOnlinePlayers()),
+                ChatRenderer.defaultRenderer(), Component.text(message), Component.text(message),
+                SignedMessage.system(message, null));
+        server.getPluginManager().callEvent(event);
+        return event.viewers();
+    }
+
+    @Test
+    void playersInGamesDontReadTheServerChat() {
+        PlayerMock outside = addPlayer("Outside");
+        Set<Audience> viewers = chatViewers(outside, "hello server");
+        assertFalse(viewers.contains(red), "lobby");
+        assertFalse(viewers.contains(blue), "lobby");
+        assertTrue(viewers.contains(outside));
+        startGame();
+        assertFalse(chatViewers(outside, "hello server").contains(red), "ingame");
+    }
+
+    @Test
+    void serverChatIsolationCanBeDisabled() {
+        config("chat.isolate-games", false);
+        PlayerMock outside = addPlayer("Outside");
+        assertTrue(chatViewers(outside, "hello server").contains(red));
     }
 
     // --- players

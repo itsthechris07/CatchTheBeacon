@@ -31,7 +31,10 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.christian34.catchthebeacon.lib.lang.I.i18n;
 
@@ -50,6 +53,10 @@ public class SignManager implements Listener {
     private final CatchTheBeacon plugin;
     private final File file;
     private final List<JoinSign> signs = new ArrayList<>();
+    /**
+     * every sign shows its own game of the arena, until that game is over (then the next round)
+     */
+    private final Map<JoinSign, Game> linkedGames = new HashMap<>();
 
     /**
      * @param target the arena, on a lobby server of a network the game server
@@ -95,12 +102,16 @@ public class SignManager implements Listener {
     }
 
     /**
-     * creates a game for the arena if it has none (the games themselves aren't saved)
+     * creates games for the arena, so that every join sign of it has its own one (at least one game, the games
+     * themselves aren't saved)
      */
     public void ensureGame(Arena arena) {
-        if (!plugin.getGameManager().getGames(arena).isEmpty() || !arena.isPlayable()) return;
+        if (!arena.isPlayable()) return;
+        long needed = Math.max(1, signs.stream().filter(sign -> sign.target().equals(arena.getName())).count());
         try {
-            plugin.getGameManager().createGame(arena);
+            for (long i = plugin.getGameManager().getGames(arena).size(); i < needed; i++) {
+                plugin.getGameManager().createGame(arena);
+            }
         } catch (RuntimeException ex) {
             Debug.warn("Couldn't create a game for the join sign of arena '" + arena.getName() + "': " + ex.getMessage());
         }
@@ -133,7 +144,7 @@ public class SignManager implements Listener {
             World world = Bukkit.getWorld(sign.world());
             if (world == null || !world.isChunkLoaded(sign.x() >> 4, sign.z() >> 4)) continue;
             if (!(world.getBlockAt(sign.x(), sign.y(), sign.z()).getState() instanceof Sign state)) continue;
-            List<Component> lines = getLines(sign.target());
+            List<Component> lines = getLines(sign);
             SignSide side = state.getSide(Side.FRONT);
             boolean changed = false;
             for (int i = 0; i < lines.size(); i++) {
@@ -148,10 +159,10 @@ public class SignManager implements Listener {
     }
 
     /**
-     * @param target the arena, on a lobby server the game server
      * @return the four lines: plugin, arena (or server), state, players
      */
-    List<Component> getLines(String target) {
+    List<Component> getLines(JoinSign sign) {
+        String target = sign.target();
         Component name;
         if (plugin.getNetworkManager().isLobby()) {
             name = Component.text(target);
@@ -159,7 +170,7 @@ public class SignManager implements Listener {
             Arena arena = plugin.getMapHandler().getArena(target);
             name = arena == null ? Component.text(target) : arena.getDisplayName();
         }
-        ServerStatus status = getStatus(target);
+        ServerStatus status = plugin.getNetworkManager().isLobby() ? getStatus(target) : ServerStatus.of(getGame(sign));
         return List.of(
                 i18n(LangText.SIGN_TITLE),
                 i18n(LangText.SIGN_NAME, name),
@@ -179,6 +190,29 @@ public class SignManager implements Listener {
         return games.isEmpty() ? null : games.getFirst();
     }
 
+    /**
+     * @return the game of the sign: the one it showed until now, otherwise one no other sign shows (preferably the
+     * one players can join), null if the arena has no game or on a lobby server
+     */
+    @Nullable
+    public Game getGame(JoinSign sign) {
+        if (plugin.getNetworkManager().isLobby()) return null;
+        Arena arena = plugin.getMapHandler().getArena(sign.target());
+        if (arena == null) return null;
+        List<Game> games = plugin.getGameManager().getGames(arena);
+        // over (the next round of the arena takes its place)
+        linkedGames.values().removeIf(game -> !plugin.getGameManager().getGames().contains(game));
+        Game linked = linkedGames.get(sign);
+        if (linked != null) return linked;
+        Collection<Game> taken = linkedGames.values();
+        Game game = games.stream().filter(Game::isJoinable).filter(g -> !taken.contains(g)).findFirst()
+                .orElse(games.stream().filter(g -> !taken.contains(g)).findFirst().orElse(null));
+        // more signs than games: show one of them, but don't take it from its sign
+        if (game == null) return getGame(arena);
+        linkedGames.put(sign, game);
+        return game;
+    }
+
     private static String plain(@Nullable Component component) {
         return component == null ? "" : PlainTextComponentSerializer.plainText().serialize(component).trim();
     }
@@ -192,10 +226,13 @@ public class SignManager implements Listener {
         Component created = i18n(plugin.getNetworkManager().isLobby() ? LangText.SIGN_CREATED_SERVER : LangText.SIGN_CREATED, target);
         Block block = e.getBlock();
         JoinSign old = getSign(block);
-        if (old != null) signs.remove(old);
-        signs.add(new JoinSign(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), target));
+        if (old != null) remove(old);
+        JoinSign sign = new JoinSign(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), target);
+        signs.add(sign);
         save();
-        List<Component> lines = getLines(target);
+        Arena arena = plugin.getMapHandler().getArena(target);
+        if (arena != null) ensureGame(arena);
+        List<Component> lines = getLines(sign);
         for (int i = 0; i < lines.size(); i++) {
             e.line(i, lines.get(i));
         }
@@ -209,7 +246,18 @@ public class SignManager implements Listener {
         if (sign == null) return;
         // no sign editor
         e.setCancelled(true);
-        join(e.getPlayer(), sign.target());
+        Game game = getGame(sign);
+        GamePlayer gamePlayer = plugin.getUser(e.getPlayer());
+        if (game != null && gamePlayer.getGame() == null) {
+            plugin.getGameManager().join(gamePlayer, game);
+        } else {
+            join(e.getPlayer(), sign.target());
+        }
+    }
+
+    private void remove(JoinSign sign) {
+        signs.remove(sign);
+        linkedGames.remove(sign);
     }
 
     /**
@@ -280,7 +328,7 @@ public class SignManager implements Listener {
         if (sign == null) return;
         // sneaking, so the sign isn't removed by accident
         if (e.getPlayer().hasPermission("ctb.admin") && e.getPlayer().isSneaking()) {
-            signs.remove(sign);
+            remove(sign);
             save();
             e.getPlayer().sendMessage(I.prefixed(LangText.SIGN_REMOVED));
 

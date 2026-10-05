@@ -170,7 +170,7 @@ class NetworkTest extends GameTestBase {
         for (Location location : blueBeacons()) {
             Block beacon = location.getBlock();
             beacon.setType(Material.BEACON);
-            red.simulateBlockBreak(beacon);
+            breakBlock(red, beacon);
         }
         assertEquals(GameState.ENDING, game.getGameState());
         messages(red);
@@ -191,7 +191,7 @@ class NetworkTest extends GameTestBase {
         for (Location location : blueBeacons()) {
             Block beacon = location.getBlock();
             beacon.setType(Material.BEACON);
-            red.simulateBlockBreak(beacon);
+            breakBlock(red, beacon);
         }
         messages(red);
         server.getScheduler().performTicks(20L * (EndingState.getDuration() + 2));

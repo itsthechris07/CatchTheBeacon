@@ -66,11 +66,11 @@ class GameFlowTest extends GameTestBase {
     void blocksNearTheSpawnAreProtected() {
         startGame();
         Block nearSpawn = at(RED_SPAWN, gameWorld()).add(2, 0, 0).getBlock();
-        BlockPlaceEvent place = red.simulateBlockPlace(Material.RED_WOOL, nearSpawn.getLocation());
+        BlockPlaceEvent place = placeBlock(red, Material.RED_WOOL, nearSpawn.getLocation());
         assertTrue(place == null || place.isCancelled(), "could place a block next to the spawn");
 
         Block farAway = at(RED_SPAWN, gameWorld()).add(15, 0, 15).getBlock();
-        BlockPlaceEvent allowed = red.simulateBlockPlace(Material.RED_WOOL, farAway.getLocation());
+        BlockPlaceEvent allowed = placeBlock(red, Material.RED_WOOL, farAway.getLocation());
         assertNotNull(allowed);
         assertFalse(allowed.isCancelled());
     }
@@ -80,7 +80,7 @@ class GameFlowTest extends GameTestBase {
         startGame();
         Block beacon = at(RED_BEACONS.getFirst(), gameWorld()).getBlock();
         beacon.setType(Material.BEACON);
-        red.simulateBlockBreak(beacon);
+        breakBlock(red, beacon);
         assertEquals(Material.BEACON, beacon.getType());
         assertEquals(GameState.INGAME, game.getGameState());
     }
@@ -91,7 +91,7 @@ class GameFlowTest extends GameTestBase {
         for (Location location : BLUE_BEACONS) {
             Block beacon = at(location, gameWorld()).getBlock();
             beacon.setType(Material.BEACON);
-            BlockBreakEvent event = red.simulateBlockBreak(beacon);
+            BlockBreakEvent event = breakBlock(red, beacon);
             assertTrue(event == null || event.isCancelled());
             assertEquals(Material.AIR, beacon.getType());
         }

@@ -3,6 +3,7 @@ package com.christian34.catchthebeacon.commands;
 import com.christian34.catchthebeacon.CatchTheBeacon;
 import com.christian34.catchthebeacon.UpdateChecker;
 import com.christian34.catchthebeacon.game.Game;
+import com.christian34.catchthebeacon.game.map.Arena;
 import com.christian34.catchthebeacon.game.states.GameState;
 import com.christian34.catchthebeacon.game.states.LobbyState;
 import com.christian34.catchthebeacon.lib.lang.I;
@@ -88,7 +89,7 @@ public class CommandCatchTheBeacon {
             return;
         }
         // watches a running game if no game is waiting for players
-        getInstance().getGameManager().join(gamePlayer, null);
+        getInstance().getGameManager().join(gamePlayer, (Arena) null);
     }
 
     @Command(ROOT + " spectate")
@@ -235,18 +236,6 @@ public class CommandCatchTheBeacon {
             gamePlayer.sendMessage(LangText.FORCE_START);
         } else {
             gamePlayer.sendMessage(LangText.GAME_WAS_ALREADY_STARTED);
-        }
-    }
-
-    @Command(ROOT + " tp")
-    @CommandDescription("command_tp")
-    @Permission(ADMIN)
-    public void teleportCmd(Player player) {
-        player.teleport(Bukkit.getWorlds().getFirst().getSpawnLocation());
-        for (World world : Bukkit.getWorlds()) {
-            if (world.getName().startsWith("ctb_")) {
-                Bukkit.unloadWorld(world, false);
-            }
         }
     }
 

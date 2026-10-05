@@ -12,17 +12,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.damage.DamageSource;
-import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -84,7 +80,7 @@ class RoundFeaturesTest extends GameTestBase {
 
     private void destroyBlueBeacons(PlayerMock player) {
         for (Location location : BLUE_BEACONS) {
-            player.simulateBlockBreak(beaconBlock(location));
+            breakBlock(player, beaconBlock(location));
         }
     }
 
@@ -108,6 +104,21 @@ class RoundFeaturesTest extends GameTestBase {
     }
 
     // --- mining boss bar
+
+    @Test
+    void playersDieInstantlyBelowTheDeathHeight() {
+        startGame();
+        org.bukkit.Location from = red.getLocation();
+        from.setY(1);
+        red.teleport(from);
+        org.bukkit.Location to = from.clone().subtract(0, 2, 0);
+        server.getPluginManager().callEvent(new org.bukkit.event.player.PlayerMoveEvent(red, from, to));
+        assertTrue(red.isDead());
+
+        plugin.getFileManager().getConfigFile().set("game.instant-death-height", false);
+        server.getPluginManager().callEvent(new org.bukkit.event.player.PlayerMoveEvent(blue, from, to));
+        assertFalse(blue.isDead());
+    }
 
     @Test
     void everybodySeesTheMiningProgress() {
@@ -155,7 +166,7 @@ class RoundFeaturesTest extends GameTestBase {
         startGame();
         Block beacon = redLeft();
         mine(blue, beacon, 0.9f);
-        blue.simulateBlockBreak(beacon);
+        breakBlock(blue, beacon);
         assertFalse(redLeftBeacon().isAlive());
         assertTrue(bossBars(red).isEmpty());
         assertTrue(bossBars(blue).isEmpty());
@@ -266,8 +277,8 @@ class RoundFeaturesTest extends GameTestBase {
         kill(red, blue);
         Block iron = new Location(gameWorld(), 0, 64, 60).getBlock();
         iron.setType(Material.IRON_BLOCK);
-        red.simulateBlockBreak(iron);
-        red.simulateBlockBreak(beaconBlock(BLUE_BEACONS.getFirst()));
+        breakBlock(red, iron);
+        breakBlock(red, beaconBlock(BLUE_BEACONS.getFirst()));
         messages(red);
         execute(blue, "ctb quit");
         assertEquals(GameState.ENDING, game.getGameState());
@@ -296,7 +307,7 @@ class RoundFeaturesTest extends GameTestBase {
         startGame();
         kill(red, blue);
         kill(red, blue);
-        red2.simulateBlockBreak(beaconBlock(BLUE_BEACONS.getFirst()));
+        breakBlock(red2, beaconBlock(BLUE_BEACONS.getFirst()));
         assertEquals(plugin.getUser(red2), RoundSummary.getMvp(game));
     }
 
@@ -377,7 +388,7 @@ class RoundFeaturesTest extends GameTestBase {
     @Test
     void noFlawlessWinAfterLosingABeacon() {
         startGame();
-        blue.simulateBlockBreak(redLeft());
+        breakBlock(blue, redLeft());
         destroyBlueBeacons(red);
         List<String> achievements = achievements(red);
         assertContains(achievements, "First victory");
@@ -389,8 +400,8 @@ class RoundFeaturesTest extends GameTestBase {
         PlayerMock red2 = addPlayer("Red2");
         joinWithTeam(red2, Team.RED);
         startGame();
-        red2.simulateBlockBreak(beaconBlock(BLUE_BEACONS.getFirst()));
-        red.simulateBlockBreak(beaconBlock(BLUE_BEACONS.getLast()));
+        breakBlock(red2, beaconBlock(BLUE_BEACONS.getFirst()));
+        breakBlock(red, beaconBlock(BLUE_BEACONS.getLast()));
         assertNotContains(achievements(red), "One-man army");
     }
 
@@ -604,15 +615,6 @@ class RoundFeaturesTest extends GameTestBase {
         assertEquals(GameItems.DEFAULT_BLOCK_BREAK_SPEED, red.getAttribute(Attribute.BLOCK_BREAK_SPEED).getBaseValue());
     }
 
-    private EntityDamageByEntityEvent damage(Entity damager, PlayerMock attacker, PlayerMock victim) {
-        var event = new EntityDamageByEntityEvent(damager, victim,
-                damager instanceof Arrow ? EntityDamageEvent.DamageCause.PROJECTILE : EntityDamageEvent.DamageCause.ENTITY_ATTACK,
-                DamageSource.builder(damager instanceof Arrow ? DamageType.ARROW : DamageType.PLAYER_ATTACK)
-                        .withCausingEntity(attacker).withDirectEntity(damager).build(), 5);
-        server.getPluginManager().callEvent(event);
-        return event;
-    }
-
     private Arrow arrow(PlayerMock shooter) {
         Arrow arrow = gameWorld().spawn(shooter.getLocation(), Arrow.class);
         arrow.setShooter(shooter);
@@ -664,7 +666,7 @@ class RoundFeaturesTest extends GameTestBase {
         startGame();
         Block iron = new Location(gameWorld(), 0, 64, 60).getBlock();
         iron.setType(Material.IRON_BLOCK);
-        BlockBreakEvent event = red.simulateBlockBreak(iron);
+        BlockBreakEvent event = breakBlock(red, iron);
         assertNotNull(event);
         assertFalse(event.isDropItems(), "the iron block is dropped");
         assertNotEquals(Material.IRON_CHESTPLATE, red.getInventory().getItem(EquipmentSlot.CHEST).getType());

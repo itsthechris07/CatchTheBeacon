@@ -20,7 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -34,7 +34,7 @@ public class GameManager {
 
     public GameManager(CatchTheBeacon plugin) {
         this.plugin = plugin;
-        this.games = Collections.synchronizedSet(new HashSet<>());
+        this.games = Collections.synchronizedSet(new LinkedHashSet<>()); // oldest first
         importGamesFile();
     }
 
@@ -151,6 +151,18 @@ public class GameManager {
      * @param arena only games of this arena, null: all
      */
     public void join(@NotNull GamePlayer gamePlayer, @Nullable Arena arena) {
+        join(gamePlayer, arena, null);
+    }
+
+    /**
+     * joins the game (or watches it while it is running), e.g. the game of a join sign - a party leader takes the
+     * members of his party along
+     */
+    public void join(@NotNull GamePlayer gamePlayer, @NotNull Game game) {
+        join(gamePlayer, game.getArena(), game);
+    }
+
+    private void join(@NotNull GamePlayer gamePlayer, @Nullable Arena arena, @Nullable Game target) {
         // vanish plugins would hide him from the other players (EssentialsX makes him visible)
         if (!VanishSupport.canPlay(gamePlayer.getPlayer())) {
             gamePlayer.sendMessage(LangText.JOIN_VANISHED);
@@ -164,8 +176,13 @@ public class GameManager {
                 followers.add(follower);
             }
         }
-        Game game = findJoinableGame(arena, 1 + followers.size());
-        if (game == null) game = findGameFor(arena, gamePlayer.getPlayer());
+        Game game;
+        if (target != null) {
+            game = target.isJoinable(gamePlayer.getPlayer()) ? target : null;
+        } else {
+            game = findJoinableGame(arena, 1 + followers.size());
+            if (game == null) game = findGameFor(arena, gamePlayer.getPlayer());
+        }
         if (game != null) {
             game.join(gamePlayer);
             for (GamePlayer follower : followers) {
@@ -175,7 +192,12 @@ public class GameManager {
             }
             return;
         }
-        game = findSpectatableGame(arena);
+        if (target == null) {
+            game = findSpectatableGame(arena);
+        } else {
+            game = target.isSpectatable() && plugin.getFileManager().getConfigFile().getBoolean("spectators.enabled")
+                    ? target : null;
+        }
         if (game != null) {
             game.spectate(gamePlayer);
             for (GamePlayer follower : followers) {

@@ -5,6 +5,12 @@ import com.christian34.catchthebeacon.game.states.GameState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
@@ -113,12 +119,23 @@ public abstract class GameTestBase extends PluginTestBase {
      * @return false if the attack has been cancelled
      */
     protected boolean attack(PlayerMock attacker, PlayerMock victim) {
-        var event = new org.bukkit.event.entity.EntityDamageByEntityEvent(attacker, victim,
-                org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK,
-                org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.PLAYER_ATTACK)
-                        .withCausingEntity(attacker).withDirectEntity(attacker).build(), 5);
+        return !damage(attacker, attacker, victim).isCancelled();
+    }
+
+    /**
+     * fires the damage event of a melee attack or an arrow (damager) of the attacker
+     */
+    // the server creates the event internally: the only constructor that isn't marked for removal needs the
+    // deprecated DamageModifier maps
+    @SuppressWarnings("removal")
+    protected EntityDamageByEntityEvent damage(Entity damager, PlayerMock attacker, PlayerMock victim) {
+        boolean arrow = damager instanceof Arrow;
+        var event = new EntityDamageByEntityEvent(damager, victim,
+                arrow ? EntityDamageEvent.DamageCause.PROJECTILE : EntityDamageEvent.DamageCause.ENTITY_ATTACK,
+                DamageSource.builder(arrow ? DamageType.ARROW : DamageType.PLAYER_ATTACK)
+                        .withCausingEntity(attacker).withDirectEntity(damager).build(), 5);
         server.getPluginManager().callEvent(event);
-        return !event.isCancelled();
+        return event;
     }
 
     protected void joinWithTeam(PlayerMock player, Team team) {

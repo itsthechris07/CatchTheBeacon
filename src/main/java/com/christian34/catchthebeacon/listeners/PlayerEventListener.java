@@ -42,6 +42,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.GameMode;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -512,7 +513,39 @@ public class PlayerEventListener implements Listener {
                 gamePlayer.protectFor(seconds);
                 e.getPlayer().sendActionBar(i18n(LangText.SPAWN_PROTECTION, seconds));
             }
+        } else if (game.getGameState().equals(GameState.ENDING) && gamePlayer.getTeam() != null) {
+            e.setRespawnLocation(game.getTeamSpawn(gamePlayer.getTeam()));
         }
+    }
+
+    /**
+     * players die instantly below game.instant-death-height instead of falling into the void
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onFallBelowDeathHeight(PlayerMoveEvent e) {
+        if (e.getTo().getY() >= e.getFrom().getY() || !WorldUtils.isPlayWorld(e.getPlayer().getWorld())) return;
+        Object height = instance.getFileManager().getConfigFile().getData().get("game.instant-death-height");
+        if (!(height instanceof Number number) || e.getTo().getY() >= number.doubleValue()) return;
+        Player player = e.getPlayer();
+        if (player.isDead() || player.getGameMode() == GameMode.SPECTATOR) return;
+        Game game = instance.getUser(player).getGame();
+        if (game == null || game.getGameState() != GameState.INGAME || instance.getUser(player).isSpectator()) return;
+        player.setHealth(0);
+    }
+
+    /**
+     * no deaths while the winner is celebrated: whoever falls into the void is brought back to his spawn
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onVoidWhileEnding(EntityDamageEvent e) {
+        if (!(e.getEntity() instanceof Player player) || e.getCause() != EntityDamageEvent.DamageCause.VOID
+                || !WorldUtils.isGameWorld(player.getWorld())) return;
+        GamePlayer gamePlayer = instance.getUser(player);
+        Game game = gamePlayer.getGame();
+        if (game == null || game.getGameState() != GameState.ENDING || gamePlayer.getTeam() == null) return;
+        e.setCancelled(true);
+        player.setFallDistance(0);
+        player.teleport(game.getTeamSpawn(gamePlayer.getTeam()));
     }
 
     private boolean showDeathMessages() {

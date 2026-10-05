@@ -3,9 +3,14 @@ package com.christian34.catchthebeacon;
 import com.christian34.catchthebeacon.commands.CommandManager;
 import com.christian34.catchthebeacon.game.map.GameWorld;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +20,7 @@ import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.command.MessageTarget;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
+import org.mockbukkit.mockbukkit.simulate.entity.PlayerSimulation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -104,9 +110,28 @@ public abstract class PluginTestBase {
         Component message;
         while ((message = target.nextComponentMessage()) != null) {
             // legacy messages keep their color codes in the text
-            messages.add(ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(message)));
+            String text = PlainTextComponentSerializer.plainText().serialize(message);
+            messages.add(PlainTextComponentSerializer.plainText().serialize(LegacyComponentSerializer.legacySection().deserialize(text)));
         }
         return messages;
+    }
+
+    /**
+     * the player breaks the block (fires the events like a real player)
+     *
+     * @return the fired event, null if the player can't break blocks (adventure/spectator mode)
+     */
+    protected static @Nullable BlockBreakEvent breakBlock(PlayerMock player, Block block) {
+        return new PlayerSimulation(player).simulateBlockBreak(block);
+    }
+
+    /**
+     * the player places a block of the material at the location
+     *
+     * @return the fired event, null if the player can't place blocks (adventure/spectator mode)
+     */
+    protected static @Nullable BlockPlaceEvent placeBlock(PlayerMock player, Material material, Location location) {
+        return new PlayerSimulation(player).simulateBlockPlace(material, location);
     }
 
     protected static void assertContains(List<String> messages, String expected) {

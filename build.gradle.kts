@@ -97,6 +97,7 @@ tasks {
     }
     compileTestJava {
         options.encoding = Charsets.UTF_8.name()
+        options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:removal"))
     }
 
     build {

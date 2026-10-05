@@ -33,6 +33,8 @@ game:
   # the last player who hit somebody gets the kill if the victim dies within this time (knocked into the void,
   # into lava, ...) - in seconds, 0: only direct kills count
   last-hit-seconds: 10
+  # players die instantly below this height instead of falling into the void (false: off)
+  instant-death-height: 0
   # true: players can only break blocks placed by players, the map stays as it is
   only-placed-blocks-breakable: false
   # a player who leaves a running game can come back into the team within this time (in seconds, 0: disabled)
@@ -109,6 +111,8 @@ chat:
   team-chat: true
   # messages starting with this go to everybody (empty: disabled)
   shout-prefix: "!"
+  # players in games don't read the chat of players outside of games
+  isolate-games: true
 stats:
   # saves kills, deaths, wins, ... of every player in the database (placeholders with PlaceholderAPI)
   enabled: true

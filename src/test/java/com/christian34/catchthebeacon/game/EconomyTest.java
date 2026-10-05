@@ -66,7 +66,7 @@ class EconomyTest extends GameTestBase {
         for (Location location : blueBeacons()) {
             Block beacon = location.getBlock();
             beacon.setType(Material.BEACON);
-            red.simulateBlockBreak(beacon);
+            breakBlock(red, beacon);
         }
         assertEquals(GameState.ENDING, game.getGameState());
     }
@@ -124,6 +124,7 @@ class EconomyTest extends GameTestBase {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // the old Vault API is still used by many economy plugins (EssentialsX)
     void paysWithTheEconomyRegisteredAtVault() {
         Map<String, Double> deposits = new HashMap<>();
         Economy economy = (Economy) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{Economy.class},

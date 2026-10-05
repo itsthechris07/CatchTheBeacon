@@ -27,7 +27,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class JoinSignTest extends GameTestBase {
 
     private Block signBlock() {
-        Block block = new Location(server.getWorld("world"), 5, 70, 5).getBlock();
+        return signBlock(5);
+    }
+
+    private Block signBlock(int z) {
+        Block block = new Location(server.getWorld("world"), 5, 70, z).getBlock();
         block.setType(Material.OAK_SIGN);
         // MockBukkit doesn't load chunks by itself (signs are only updated in loaded chunks)
         block.getChunk().load();
@@ -46,8 +50,12 @@ class JoinSignTest extends GameTestBase {
     }
 
     private Block createSign() {
-        PlayerMock admin = addAdmin("SignAdmin");
-        Block block = signBlock();
+        return createSign(5);
+    }
+
+    private Block createSign(int z) {
+        PlayerMock admin = addAdmin("SignAdmin" + z);
+        Block block = signBlock(z);
         SignChangeEvent event = write(admin, block, "[CTB]", "castle", "", "");
         assertEquals("[CatchTheBeacon]", plain(event.line(0)));
         assertContains(messages(admin), "The join sign for arena castle has been created.");
@@ -71,6 +79,32 @@ class JoinSignTest extends GameTestBase {
         startGame();
         server.getScheduler().performTicks(20);
         assertEquals("Running", plain(((Sign) block.getState()).getSide(Side.FRONT).line(2)));
+    }
+
+    private String state(Block block) {
+        return plain(((Sign) block.getState()).getSide(Side.FRONT).line(2));
+    }
+
+    @Test
+    void everySignShowsItsOwnGame() {
+        Block first = createSign(5);
+        Block second = createSign(6);
+        assertEquals(2, plugin.getGameManager().getGames().size());
+        startGame();
+        server.getScheduler().performTicks(20);
+        assertEquals("Running", state(first));
+        assertEquals("Lobby", state(second));
+
+        PlayerMock steve = addPlayer("Steve");
+        click(steve, second);
+        Game joined = plugin.getUser(steve).getGame();
+        assertNotNull(joined);
+        assertNotEquals(game, joined);
+        assertFalse(plugin.getUser(steve).isSpectator());
+        PlayerMock alex = addPlayer("Alex");
+        click(alex, first);
+        assertEquals(game, plugin.getUser(alex).getGame());
+        assertTrue(plugin.getUser(alex).isSpectator());
     }
 
     @Test
@@ -113,12 +147,12 @@ class JoinSignTest extends GameTestBase {
     void signsAreOnlyRemovedWhileSneaking() {
         Block block = createSign();
         PlayerMock admin = addAdmin("Remover");
-        BlockBreakEvent event = admin.simulateBlockBreak(block);
+        BlockBreakEvent event = breakBlock(admin, block);
         assertTrue(event == null || event.isCancelled(), "removed by accident");
         assertNotNull(plugin.getSignManager().getSign(block));
 
         admin.setSneaking(true);
-        admin.simulateBlockBreak(block);
+        breakBlock(admin, block);
         assertNull(plugin.getSignManager().getSign(block));
         assertContains(messages(admin), "The join sign has been removed.");
     }

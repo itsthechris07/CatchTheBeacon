@@ -12,7 +12,7 @@ Images for the plugin pages on SpigotMC, Modrinth and Hangar.
 ## Editing
 
 The sources are in `design/` (one `.dc.html` per image, `canvas.json` holds the sizes). They were made on a
-Claude design canvas and are plain HTML with inline styles (fonts: Pixelify Sans + Barlow from Google Fonts).
+Claude design canvas and are plain HTML with inline styles (fonts: Chakra Petch + Barlow from Google Fonts).
 
 After a change, render the PNGs again (needs Chrome or Edge):
 

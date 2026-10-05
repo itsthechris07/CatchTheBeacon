@@ -9,71 +9,113 @@
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&amp;family=Barlow:wght@400;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&amp;family=Barlow:wght@400;600&amp;display=swap" rel="stylesheet">
 <style>
 body{margin:0}
 a{color:#7FF5E8}a:hover{color:#BFFBF4}
 </style>
 </helmet>
-<div style="width: 1600px; height: 900px; box-sizing: border-box; padding: 56px 64px; background: #0D1120; font-family: 'Barlow', sans-serif; color: #EEF1FA; display: flex; flex-direction: column; gap: 40px">
+<div style="width: 1600px; height: 900px; box-sizing: border-box; padding: 52px 64px; background: #0D1120; font-family: 'Barlow', sans-serif; color: #EEF1FA; display: flex; flex-direction: column; gap: 32px">
 <div style="display: flex; flex-direction: column; gap: 10px">
-<h2 style="margin: 0; font-family: 'Pixelify Sans', sans-serif; font-weight: 700; font-size: 56px">Built for real matches</h2>
-<p style="margin: 0; font-size: 22px; color: #D3D9EA">Tactical PvP for small and big servers – set up in minutes, no config editing.</p>
+<h2 style="margin: 0; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 56px">Built for real matches</h2>
+<p style="margin: 0; font-size: 22px; color: #D3D9EA">Tactical team PvP for Paper – from a single server to a Velocity network.</p>
 </div>
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; flex-grow: 1">
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 20px; flex-grow: 1">
 
-<div style="background: #151B2E; border: 2px solid #2A3352; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7FF5E8" stroke-width="2" stroke-linecap="square"><rect x="5" y="12" width="14" height="10"></rect><line x1="12" y1="2" x2="12" y2="12"></line><rect x="9" y="15" width="6" height="4"></rect></svg>
-<h3 style="margin: 0; font-size: 24px; font-weight: 600">Two beacons per team</h3>
-<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #D3D9EA">Break both enemy cores to win. Losing one isn’t the end.</p>
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#7FF5E8" stroke-width="2" stroke-linecap="square"><rect x="5" y="12" width="14" height="10"></rect><line x1="12" y1="2" x2="12" y2="12"></line><rect x="9" y="15" width="6" height="4"></rect></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Two beacons per team</h3>
 </div>
-
-<div style="background: #151B2E; border: 2px solid #2A3352; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#F5B83D" stroke-width="2" stroke-linecap="square"><path d="M4 8c4-5 12-5 16 0"></path><line x1="12" y1="5" x2="12" y2="21"></line><line x1="9" y1="21" x2="15" y2="21"></line></svg>
-<h3 style="margin: 0; font-size: 24px; font-weight: 600">Mining Fatigue zones</h3>
-<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #D3D9EA">A beacon takes ~15 s to break. Rushing alone won’t work – teamwork does.</p>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">Break both enemy cores to win. A live boss bar shows every attack on a beacon.</p>
 </div>
 
-<div style="background: #151B2E; border: 2px solid #2A3352; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4FD8E0" stroke-width="2" stroke-linejoin="miter"><path d="M6 3h12l4 6-10 12L2 9z"></path><path d="M2 9h20"></path></svg>
-<h3 style="margin: 0; font-size: 24px; font-weight: 600">Resources, not generators</h3>
-<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #D3D9EA">Iron and diamond blocks are part of the map. Raid the enemy’s, secure yours.</p>
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F5B83D" stroke-width="2" stroke-linecap="square"><path d="M4 8c4-5 12-5 16 0"></path><line x1="12" y1="5" x2="12" y2="21"></line><line x1="9" y1="21" x2="15" y2="21"></line></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Mining Fatigue zones</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">A beacon takes about 15 seconds. One player mines, the team has to cover them.</p>
 </div>
 
-<div style="background: #151B2E; border: 2px solid #2A3352; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#F0505A" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z"></path></svg>
-<h3 style="margin: 0; font-size: 24px; font-weight: 600">Fair kit</h3>
-<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #D3D9EA">Start gear on every respawn, 16 arrows, 3 extra hearts, protected spawn.</p>
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4B95FF" stroke-width="2" stroke-linejoin="miter"><path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"></path></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Base defense</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">Alarm when enemies get close, a trap at every beacon, regeneration for defenders, no camping.</p>
 </div>
 
-<div style="background: #151B2E; border: 2px solid #2A3352; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#8CC77F" stroke-width="2" stroke-linecap="square"><path d="M14 4l6 6"></path><path d="M10 4c4 0 8 2 10 6"></path><line x1="16" y1="8" x2="4" y2="20"></line></svg>
-<h3 style="margin: 0; font-size: 24px; font-weight: 600">Fully breakable maps</h3>
-<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #D3D9EA">Bridge, tunnel and dig anywhere – or protect blocks via config.</p>
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4FD8E0" stroke-width="2" stroke-linejoin="miter"><path d="M6 3h12l4 6-10 12L2 9z"></path><path d="M2 9h20"></path></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">No generators</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">Iron and diamond blocks of the map give armor and swords. Raid the enemy’s, secure yours.</p>
 </div>
 
-<div style="background: #151B2E; border: 2px solid #2A3352; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7FF5E8" stroke-width="2" stroke-linecap="square"><rect x="4" y="3" width="16" height="18"></rect><path d="M8 9l2 2 4-4"></path><line x1="8" y1="16" x2="16" y2="16"></line></svg>
-<h3 style="margin: 0; font-size: 24px; font-weight: 600">Guided arena setup</h3>
-<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #D3D9EA">Hotbar tools and a checklist walk you through spawns and beacons.</p>
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F0505A" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z"></path></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Fair kit</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">Fresh kit on every respawn, 16 arrows, 3 extra hearts, spawn protection. Modern or 1.8 PvP.</p>
 </div>
 
-<div style="background: #151B2E; border: 2px solid #2A3352; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#F5B83D" stroke-width="2" stroke-linecap="square"><rect x="3" y="4" width="18" height="11"></rect><line x1="12" y1="15" x2="12" y2="21"></line><line x1="7" y1="8" x2="17" y2="8"></line><line x1="7" y1="11" x2="13" y2="11"></line></svg>
-<h3 style="margin: 0; font-size: 24px; font-weight: 600">Signs, NPCs, parties</h3>
-<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #D3D9EA">Join signs, Citizens/FancyNpcs, Parties and Party and Friends.</p>
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F5B83D" stroke-width="2" stroke-linecap="square"><rect x="3" y="3" width="18" height="18"></rect><rect x="7" y="7" width="2" height="2"></rect><rect x="15" y="7" width="2" height="2"></rect><rect x="11" y="11" width="2" height="2"></rect><rect x="7" y="15" width="2" height="2"></rect><rect x="15" y="15" width="2" height="2"></rect></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Variants and events</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">Vote for Rush, Bow only, No iron or One hit. Timed events keep every round moving.</p>
 </div>
 
-<div style="background: #151B2E; border: 2px solid #2A3352; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4B95FF" stroke-width="2" stroke-linecap="square"><rect x="9" y="2" width="6" height="6"></rect><rect x="2" y="16" width="6" height="6"></rect><rect x="16" y="16" width="6" height="6"></rect><path d="M12 8v4M5 16v-4h14v4"></path></svg>
-<h3 style="margin: 0; font-size: 24px; font-weight: 600">Velocity network mode</h3>
-<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #D3D9EA">One game per server, lobby signs with live status, shared MySQL stats.</p>
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#8CC77F" stroke-width="2" stroke-linecap="square"><path d="M7 3h10v6a5 5 0 0 1-10 0z"></path><path d="M7 5H3v2a4 4 0 0 0 4 4M17 5h4v2a4 4 0 0 1-4 4"></path><line x1="12" y1="14" x2="12" y2="18"></line><line x1="8" y1="21" x2="16" y2="21"></line></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Stats and achievements</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">Leaderboard, 8 achievements and a round summary with MVP. SQLite or MySQL.</p>
 </div>
 
-<div style="background: #151B2E; border: 2px solid #2A3352; padding: 28px; display: flex; flex-direction: column; gap: 12px">
-<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#8CC77F" stroke-width="2" stroke-linecap="square"><line x1="4" y1="20" x2="20" y2="20"></line><rect x="6" y="12" width="3" height="8"></rect><rect x="11" y="6" width="3" height="14"></rect><rect x="16" y="9" width="3" height="11"></rect></svg>
-<h3 style="margin: 0; font-size: 24px; font-weight: 600">Stats and achievements</h3>
-<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #D3D9EA">SQLite or MySQL, PlaceholderAPI, Bedrock forms via Floodgate.</p>
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#7FF5E8" stroke-width="2" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Spectate and rejoin</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">Watch running games. Lost connection? Come back into your team within 2 minutes.</p>
+</div>
+
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#7FF5E8" stroke-width="2" stroke-linecap="square"><rect x="4" y="3" width="16" height="18"></rect><path d="M8 9l2 2 4-4"></path><line x1="8" y1="16" x2="16" y2="16"></line></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Setup in minutes</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">Guided setup with hotbar tools. Map presets: drop in the Sakura zip and play.</p>
+</div>
+
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F5B83D" stroke-width="2" stroke-linecap="square"><rect x="3" y="4" width="18" height="11"></rect><line x1="12" y1="15" x2="12" y2="21"></line><line x1="7" y1="8" x2="17" y2="8"></line><line x1="7" y1="11" x2="13" y2="11"></line></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Signs, NPCs, parties</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">Join signs, Citizens and FancyNpcs, Parties and Party and Friends. Balanced teams.</p>
+</div>
+
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4B95FF" stroke-width="2" stroke-linecap="square"><rect x="9" y="2" width="6" height="6"></rect><rect x="2" y="16" width="6" height="6"></rect><rect x="16" y="16" width="6" height="6"></rect><path d="M12 8v4M5 16v-4h14v4"></path></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Velocity network</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">One game per server, lobby signs with live status, shared stats in MySQL.</p>
+</div>
+
+<div style="background: #151B2E; border: 2px solid #2A3352; padding: 22px 24px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#8CC77F" stroke-width="2" stroke-linecap="square"><path d="M8 2v5M16 2v5"></path><path d="M5 7h14v4a7 7 0 0 1-14 0z"></path><line x1="12" y1="18" x2="12" y2="22"></line></svg>
+<h3 style="margin: 0; font-size: 23px; font-weight: 600">Works with your plugins</h3>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.45; color: #D3D9EA">PlaceholderAPI, TAB, EssentialsX, Multiverse, Vault rewards, Bedrock forms via Floodgate.</p>
 </div>
 </div>
 </div>

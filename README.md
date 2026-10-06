@@ -2,7 +2,7 @@
 
 # CatchTheBeacon
 
-A team PvP minigame for Paper: **Red vs Blue on a sky map, every team guards two beacons.** Break both enemy beacons
+A **Cores** minigame for Paper: **Red vs Blue on a sky map, every team guards two beacons (cores).** Break both enemy beacons
 to win – but near an enemy beacon you get Mining Fatigue, so one player mines while the rest of the team keeps them
 alive.
 

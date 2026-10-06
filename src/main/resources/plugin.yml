@@ -1,6 +1,8 @@
 name: CatchTheBeacon
 version: ${version}
 author: Christian34
+description: Cores minigame - Red vs Blue, break both enemy beacons to win
+website: https://itsthechris07.github.io/CatchTheBeacon/
 main: com.christian34.catchthebeacon.CatchTheBeacon
 # the current version only: older ones make Paper rewrite the bytecode of the plugin for old api calls
 api-version: "26.2"

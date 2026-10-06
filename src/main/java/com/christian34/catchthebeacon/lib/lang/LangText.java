@@ -356,7 +356,12 @@ public enum LangText {
     UPDATE_AVAILABLE("update_available"),
     UPDATE_OUTDATED("update_outdated"),
     UPDATE_DOWNLOAD("update_download"),
-    UPDATE_DOWNLOAD_HOVER("update_download_hover");
+    UPDATE_DOWNLOAD_HOVER("update_download_hover"),
+    CLICK_TO_RUN("click_to_run"),
+    CLICK_TO_SUGGEST("click_to_suggest"),
+    TEAM_RED("team_red"),
+    TEAM_BLUE("team_blue"),
+    TEAM_RANDOM("team_random");
 
     private final String KEY;
 

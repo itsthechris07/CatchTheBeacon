@@ -78,8 +78,11 @@ public class CommandManager {
                 .build();
 
         MinecraftExceptionHandler.<CommandSender>create(sender -> sender)
-                .handler(InvalidSyntaxException.class, (formatter, ctx) ->
-                        I.prefixed(LangText.INVALID_SYNTAX, ctx.exception().correctSyntax()))
+                // {1}: the command up to its first argument, a click puts it into the chat
+                .handler(InvalidSyntaxException.class, (formatter, ctx) -> {
+                    String syntax = ctx.exception().correctSyntax();
+                    return I.prefixed(LangText.INVALID_SYNTAX, syntax, syntax.replaceFirst("[<\\[|].*", ""));
+                })
                 .handler(InvalidCommandSenderException.class, (formatter, ctx) -> {
                     if (ctx.exception().requiredSenderTypes().contains(Player.class)) {
                         return I.prefixed(LangText.ONLY_PLAYERS);

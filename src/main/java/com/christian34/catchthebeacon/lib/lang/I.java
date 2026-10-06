@@ -4,10 +4,12 @@ import com.christian34.catchthebeacon.CatchTheBeacon;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -27,12 +29,21 @@ import java.util.regex.Pattern;
  * color codes (messages.yml files of older versions, config.yml) still work. {@code {0}}, {@code {1}}, ... are
  * replaced by the arguments: components keep their style, everything else is inserted as plain text (so names or
  * chat messages of players can't contain formatting).
+ * <p>
+ * Commands in texts are clickable: {@code <run:'/ctb quit'>/ctb quit</run>} runs the command,
+ * {@code <suggest:'/ctb arena create '>...</suggest>} puts it into the chat box (for commands that need more input or
+ * shouldn't run by accident). Arguments inside these tags are inserted as plain text.
  */
 public class I {
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacySection();
     private static final Pattern LEGACY_CODE = Pattern.compile("[&§](?:#([0-9a-fA-F]{6})|([0-9a-fA-Fk-oK-OrR]))");
     private static final Pattern ARGUMENT = Pattern.compile("\\{(\\d+)}");
+    private static final Pattern COMMAND_TAG = Pattern.compile("<(?:run|suggest|click)(?::[^>]*)?>");
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
+            .editTags(tags -> tags
+                    .tag("run", (arguments, context) -> commandTag(arguments.popOr("command expected").value(), false))
+                    .tag("suggest", (arguments, context) -> commandTag(arguments.popOr("command expected").value(), true)))
+            .build();
     private static TextContainer textContainer = null;
 
     /**
@@ -76,6 +87,14 @@ public class I {
         String miniMessage = legacyToMiniMessage(text);
         List<TagResolver> resolvers = new ArrayList<>();
         if (arguments != null && arguments.length > 0) {
+            // placeholders don't work inside the arguments of tags: the command of a click gets the plain text
+            miniMessage = COMMAND_TAG.matcher(miniMessage).replaceAll(tag -> Matcher.quoteReplacement(
+                    ARGUMENT.matcher(tag.group()).replaceAll(argument -> {
+                        int index = Integer.parseInt(argument.group(1));
+                        if (index >= arguments.length) return Matcher.quoteReplacement(argument.group());
+                        // names never contain quotes or brackets - they would end the argument of the tag
+                        return Matcher.quoteReplacement(plain(component(arguments[index])).replaceAll("[\\\\'\"<>]", ""));
+                    })));
             Matcher matcher = ARGUMENT.matcher(miniMessage);
             miniMessage = matcher.replaceAll(result -> {
                 int index = Integer.parseInt(result.group(1));
@@ -131,6 +150,15 @@ public class I {
 
     public static String plain(LangText langText, Object... arguments) {
         return plain(i18n(langText, arguments));
+    }
+
+    /**
+     * the style of {@code <run:command>} and {@code <suggest:command>}: click + a hover that tells what happens
+     */
+    private static Tag commandTag(String command, boolean suggest) {
+        return Tag.styling(
+                suggest ? ClickEvent.suggestCommand(command) : ClickEvent.runCommand(command),
+                HoverEvent.showText(i18n(suggest ? LangText.CLICK_TO_SUGGEST : LangText.CLICK_TO_RUN, command.trim())));
     }
 
     private static Component component(@Nullable Object argument) {

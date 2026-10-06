@@ -5,22 +5,21 @@ is stopped, or restart it afterwards.
 
 ## Teams
 
-`teams.yml` sets the names and colors of the teams. *Random* is the choice in the team menu that lets the plugin pick.
+`teams.yml` sets the colors and items of the teams. *Random* is the choice in the team menu that lets the plugin pick.
+The names come from the [messages](#messages) (`team_red`, `team_blue`, `team_random`), so they follow the language –
+add `name: "..."` to a team to give it another name.
 
 ```yaml
 teams:
   blue:
-    name: "Blue"
     chat_color: "9"              # color code (0-9, a-f), color name (dark_blue) or hex (#0000cd)
     item: "BLUE_WOOL"            # icon in the team menu, also the wool of the kit
     leather_color: "0, 0, 205"   # leather armor of the kit (RGB)
   red:
-    name: "Red"
     chat_color: "c"
     item: "RED_WOOL"
     leather_color: "176, 46, 38"
   random:
-    name: "Random"
     chat_color: "a"
     item: "WHITE_WOOL"
     leather_color: "255, 255, 255"
@@ -62,8 +61,8 @@ the map.
 
 ## Messages
 
-Every text players see is in `messages.yml` – messages, item names, menus, scoreboard, signs, titles. Translate it or
-change the style:
+Every text players see is in `messages.yml` – messages, item names, menus, scoreboard, signs, titles. Change the
+style or the wording:
 
 ```yaml
 player_joined_game: '<yellow>{0} <gray>joined the game! (<yellow>{1}<gray>/<yellow>{2}<gray>)'
@@ -72,13 +71,29 @@ sign_status_lobby: '<green>Lobby'
 ```
 
 - Texts use [MiniMessage](https://docs.papermc.io/adventure/minimessage/format): `<red>`, `<bold>`, `<#ff8800>`,
-  `<gradient:aqua:blue>`, `<click:run_command:'/ctb join'>`, … Old color codes like `&c` still work.
+  `<gradient:aqua:blue>`, … Old color codes like `&c` still work.
+- Commands in messages are clickable: `<run:"/ctb quit">/ctb quit</run>` runs the command,
+  `<suggest:"/ctb arena create ">/ctb arena create \<name></suggest>` puts it into the chat box. Players see what a
+  click does when they hover over it.
 - `{0}`, `{1}`, … are replaced with names, numbers, … – keep them in the text.
 - Write `\<` for a literal `<`.
 - The prefix in front of messages is `prefix` in `config.yml`, the tab list header and footer are `tablist.*`.
 
 New messages of an update are added to your file automatically; texts you changed stay as they are. To get the
 default text of a message back, delete its line and restart.
+
+### Language
+
+Set `language` in `config.yml` and restart:
+
+| `language` | File |
+|---|---|
+| `en` (default) | `messages.yml` |
+| `de` | `messages_de.yml` (German) |
+
+For another language, copy `messages.yml` to `messages_<language>.yml` (e.g. `messages_fr.yml`), translate it and
+set `language: fr`. Texts missing in your file are shown in English. A translation you'd like to share is welcome as
+a [pull request](https://github.com/itsthechris07/CatchTheBeacon/pulls).
 
 ## Lobby
 

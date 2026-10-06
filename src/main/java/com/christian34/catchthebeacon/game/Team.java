@@ -4,6 +4,7 @@ package com.christian34.catchthebeacon.game;
 import com.christian34.catchthebeacon.CatchTheBeacon;
 import com.christian34.catchthebeacon.Debug;
 import com.christian34.catchthebeacon.lib.lang.I;
+import com.christian34.catchthebeacon.lib.lang.LangText;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -41,7 +42,11 @@ public enum Team {
     private Color leatherColor;
 
     Team() {
-        this.name = getString("name");
+        // teams.yml can rename a team, otherwise the name comes from the messages (language)
+        String configured = getString("name");
+        this.name = configured == null || configured.isBlank()
+                ? I.plain(I.i18n(LangText.valueOf("TEAM_" + name())))
+                : configured;
         this.color = parseColor(getString("chat_color"));
         this.displayName = Component.text(name, color);
         String itemName = getString("item");

@@ -46,7 +46,8 @@ setup, configuration, commands, placeholders, network and more.
 - **VIP perks** (`ctb.vip`) – start the game, join full lobbies, double vote, join message, kill particles and a
   victory firework. Cosmetic only, no advantage in the fight.
 - **Your world stays untouched** – inventories, stats, advancements and recipes of the players are saved and given back.
-- **Every message can be changed** in `messages.yml` (MiniMessage).
+- **English and German** (`language: de`), every message can be changed (MiniMessage), commands in messages are
+  clickable.
 
 ## Supported plugins
 

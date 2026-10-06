@@ -52,6 +52,6 @@ The game starts when the lobby has enough players (`min-players` of the arena) a
 ## What's next
 
 - Tune the game in [`config.yml`](configuration.md) – changes apply after a restart.
-- Translate or restyle every message in [`messages.yml`](customization.md#messages).
+- Switch to German (`language: de`) or restyle every message in [`messages.yml`](customization.md#messages).
 - Share stats across servers with [MySQL/MariaDB](stats.md#database).
 - Run one game per server behind [Velocity](network.md).

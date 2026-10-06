@@ -5,6 +5,9 @@
 # +------------------------------------------------------+ #
 ############################################################
 
+# language of the messages: en (messages.yml) or de (messages_de.yml) - other languages: put a translated
+# messages_<language>.yml into the plugin folder (missing texts are English); restart after a change
+language: en
 # texts use MiniMessage (<red>, <bold>, <#ff8800>, <gradient:aqua:blue>, ... see https://docs.papermc.io/adventure/minimessage/format),
 # old color codes (&c) still work - the same goes for messages.yml
 # in front of all messages (leave it empty for none)

@@ -3,6 +3,8 @@ import java.util.concurrent.atomic.AtomicLong
 plugins {
     java
     id("com.gradleup.shadow") version "9.6.1"
+    id("com.modrinth.minotaur") version "2.10.0"
+    id("io.papermc.hangar-publish-plugin") version "0.1.4"
 }
 
 group = "com.christian34.catchthebeacon"
@@ -201,6 +203,61 @@ tasks {
         // bStats refuses to start unless relocated
         relocate("org.bstats", "com.christian34.catchthebeacon.libs.bstats")
         relocate("io.sentry", "com.christian34.catchthebeacon.libs.sentry")
+    }
+}
+
+// uploads to Modrinth (modrinth) and Hangar (publishPluginPublicationToHangar), run by .github/workflows/release.yml;
+// -PpublishDryRun only shows what Modrinth would get
+val minecraftVersions = listOf("26.2", "26.3")
+// the release notes, written by the workflow
+val releaseNotes = providers.gradleProperty("releaseNotes").map { file(it).readText() }
+    .orElse("See https://github.com/itsthechris07/CatchTheBeacon/releases")
+
+modrinth {
+    // token: MODRINTH_TOKEN environment variable
+    projectId = "catchthebeacon"
+    versionName = "CatchTheBeacon $version"
+    versionType = "release"
+    uploadFile.set(tasks.shadowJar)
+    gameVersions.addAll(minecraftVersions)
+    loaders.addAll("paper", "purpur")
+    detectLoaders = false
+    changelog = releaseNotes
+    debugMode = providers.gradleProperty("publishDryRun").isPresent
+    // the optional integrations available on Modrinth (Citizens isn't, Floodgate only for mod loaders)
+    dependencies {
+        for (slug in listOf(
+            "placeholderapi", "miniplaceholders", "parties", "fancynpcs", "vaultunlocked", "tab-was-taken",
+            "essentialsx", "multiverse-core", "multiverse-inventories"
+        )) {
+            optional.project(slug)
+        }
+    }
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        id = "CatchTheBeacon"
+        version = project.version.toString()
+        channel = "Release"
+        changelog = releaseNotes
+        apiKey = providers.environmentVariable("HANGAR_API_KEY")
+        platforms {
+            paper {
+                jar = tasks.shadowJar.flatMap { it.archiveFile }
+                platformVersions = minecraftVersions
+                // the optional integrations (Vault = VaultUnlocked on Hangar, Party and Friends isn't there)
+                dependencies {
+                    for (slug in listOf(
+                        "PlaceholderAPI", "MiniPlaceholders", "Parties", "FancyNpcs", "VaultUnlocked", "TAB",
+                        "Essentials", "Multiverse-Core", "Multiverse-Inventories", "Floodgate"
+                    )) {
+                        hangar(slug) { required = false }
+                    }
+                    url("Citizens", "https://www.spigotmc.org/resources/citizens.13811/") { required = false }
+                }
+            }
+        }
     }
 }
 

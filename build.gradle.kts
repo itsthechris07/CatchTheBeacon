@@ -68,7 +68,7 @@ dependencies {
     implementation("org.incendo:cloud-minecraft-extras:2.0.1")
     // anonymous statistics (bstats.org) and error reports (sentry.io), see Telemetry
     implementation("org.bstats:bstats-bukkit:3.2.1")
-    implementation("io.sentry:sentry:8.58.0")
+    implementation("io.sentry:sentry:8.60.0")
 
     // tests run the plugin against a mocked Paper server
     testImplementation("io.papermc.paper:paper-api:26.2.build.129-stable")

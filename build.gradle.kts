@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.christian34.catchthebeacon"
-version = "1.0.0"
+version = "1.1.0"
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(25)
@@ -33,9 +33,13 @@ repositories {
     maven("https://repo.codemc.io/repository/creatorfromhell/") { content { includeGroup("net.milkbowl.vault") } }
 }
 
+// the Paper version the plugin is built for (= the oldest supported one); -PpaperApi=<version> compiles against a
+// newer one to find API changes early (the tests keep using MockBukkit and the API of this version)
+val paperApi = providers.gradleProperty("paperApi").getOrElse("26.2.build.129-stable")
+
 dependencies {
     // Paper API already ships Adventure (incl. MiniMessage + legacy serializer)
-    compileOnly("io.papermc.paper:paper-api:26.2.build.129-stable")
+    compileOnly("io.papermc.paper:paper-api:$paperApi")
     compileOnly("org.jetbrains:annotations:26.1.0")
     // optional: placeholders for the stats (stats/StatsExpansion)
     compileOnly("me.clip:placeholderapi:2.12.3")

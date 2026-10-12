@@ -35,7 +35,7 @@ repositories {
 
 // the Paper version the plugin is built for (= the oldest supported one); -PpaperApi=<version> compiles against a
 // newer one to find API changes early (the tests keep using MockBukkit and the API of this version)
-val paperApi = providers.gradleProperty("paperApi").getOrElse("26.2.build.129-stable")
+val paperApi = providers.gradleProperty("paperApi").getOrElse("26.2.build.132-stable")
 
 dependencies {
     // Paper API already ships Adventure (incl. MiniMessage + legacy serializer)
@@ -72,11 +72,11 @@ dependencies {
     implementation("org.incendo:cloud-minecraft-extras:2.0.1")
     // anonymous statistics (bstats.org) and error reports (sentry.io), see Telemetry
     implementation("org.bstats:bstats-bukkit:3.2.1")
-    implementation("io.sentry:sentry:8.58.0")
+    implementation("io.sentry:sentry:8.60.0")
 
     // tests run the plugin against a mocked Paper server
-    testImplementation("io.papermc.paper:paper-api:26.2.build.129-stable")
-    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v26.2:4.116.1")
+    testImplementation("io.papermc.paper:paper-api:26.2.build.132-stable")
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v26.2:4.117.0")
     testImplementation(platform("org.junit:junit-bom:6.1.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.jetbrains:annotations:26.1.0")
@@ -108,6 +108,12 @@ tasks {
 
     build {
         dependsOn(shadowJar)
+    }
+
+    // the shadow jar has no classifier: without an own name both tasks write the same file, which Gradle refuses for
+    // tasks reading it (publishPluginPublicationToHangar)
+    jar {
+        archiveClassifier = "plain"
     }
 
     test {

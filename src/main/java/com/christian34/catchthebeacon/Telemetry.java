@@ -151,8 +151,8 @@ public class Telemetry {
             options.setDsn(SENTRY_DSN);
             options.setRelease("catchthebeacon@" + plugin.getPluginMeta().getVersion());
             options.setEnvironment("production");
-            // no data about the server or its players
-            options.setSendDefaultPii(false);
+            // no data about the server or its players (personal data is off by default: nothing of DataCollection
+            // is enabled here)
             options.setAttachServerName(false);
             options.setServerName(null);
             options.setMaxBreadcrumbs(0);

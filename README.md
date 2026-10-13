@@ -2,14 +2,34 @@
 
 # CatchTheBeacon
 
-A **Cores** minigame for Paper: **Red vs Blue on a sky map, every team guards two beacons (cores).** Break both enemy beacons
-to win – but near an enemy beacon you get Mining Fatigue, so one player mines while the rest of the team keeps them
-alive.
+**Team PvP minigame for Paper – Red vs Blue on a sky map, every team guards two beacons (cores).** Break both enemy
+beacons to win. Known as **Cores** or **Destroy the Core**, and a good fit for everybody who likes BedWars – but
+without generators and without waiting for a shop.
 
-📖 **Documentation: [itsthechris07.github.io/CatchTheBeacon](https://itsthechris07.github.io/CatchTheBeacon/)** –
-setup, configuration, commands, placeholders, network and more.
+- ⚔️ **Attacks need teamwork** – near an enemy beacon you get Mining Fatigue: one player mines for about 15 seconds,
+  the rest of the team keeps them alive.
+- ⛏️ **No generators** – iron and diamond blocks are part of the map. Steal the enemy's iron, guard your own.
+- 🚀 **Playable in minutes** – drop a supported map into a folder and the arena sets itself up, or use the guided
+  setup for your own map.
+- 🌐 **One server or a network** – runs on a single server or with one game per server behind Velocity.
+- 🎮 **Java and Bedrock** – Bedrock players (Geyser/Floodgate) get forms instead of chest menus.
+- 🌍 **English and German** included, every message can be changed (MiniMessage).
+
+📖 **[Documentation](https://itsthechris07.github.io/CatchTheBeacon/)** ·
+🐛 **[Report a bug or suggest a feature](https://github.com/itsthechris07/CatchTheBeacon/issues)**
 
 ![How a round works](https://raw.githubusercontent.com/itsthechris07/CatchTheBeacon/main/branding/how-it-works.png)
+
+## Quick start
+
+1. Put `CatchTheBeacon.jar` into `plugins/` and start the server.
+2. Download the map [Sakura by BreadBuilds](https://www.planetminecraft.com/project/sakura-cores-map/), put the zip
+   into `plugins/CatchTheBeacon/maps/` and restart. The arena and the lobby are set up automatically.
+3. Players join with `/ctb join` – the round starts as soon as enough players are in the lobby.
+
+Your own map: `/ctb arena create <name> --world <world>`, then `/ctb arena <name> setup` and follow the checklist
+(every team needs a spawn and two beacons). More in the
+[documentation](https://itsthechris07.github.io/CatchTheBeacon/getting-started/).
 
 ## Features
 
@@ -21,12 +41,12 @@ setup, configuration, commands, placeholders, network and more.
 - **Mining Fatigue around beacons** – breaking a beacon takes about 15 seconds, attacks need teamwork.
 - **Base defense** – the team is warned when enemies come close, every beacon has a trap (blindness + slowness),
   defenders regenerate near their beacons and campers get poison.
-- **No generators** – iron and diamond blocks of the map give armor and swords when mined. Steal the enemy's iron,
-  guard your own.
+- **No generators** – iron and diamond blocks of the map give armor and swords when mined.
 - **Fair start** – a fresh kit on every respawn (16 arrows, wool, stone tools, leather armor in team colors),
   3 extra hearts, spawn and respawn protection, a compass pointing to the next enemy beacon.
 - **Modern or 1.8 PvP** – with or without attack cooldown.
-- **Variants** – players vote in the lobby: *Rush* (beacons break twice as fast, events come twice as often), *Bow only*, *No iron*, *One hit*.
+- **Variants** – players vote in the lobby: *Rush* (beacons break twice as fast, events come twice as often),
+  *Bow only*, *No iron*, *One hit*.
 - **Timed events** – beacon protection ends after 10 minutes, effects after 15, the round ends after 25 (all configurable).
 - **The whole map can be broken** – or only placed blocks, with protected blocks of your choice.
 - **Stats, leaderboard and achievements** – kills, deaths, K/D, wins, beacons, `/ctb top`, 8 achievements, a round
@@ -37,17 +57,25 @@ setup, configuration, commands, placeholders, network and more.
 
 **For server owners**
 - **Guided arena setup** – `/ctb arena <name> setup` gives you hotbar tools for spawns and beacons and a checklist.
-- **Map presets** – download a supported map, drop the zip into `plugins/CatchTheBeacon/maps` and it is set up
-  automatically (currently: [Sakura by BreadBuilds](https://www.planetminecraft.com/project/sakura-cores-map/)).
-  The lobby comes with the plugin.
+- **Map presets** – a supported map is set up automatically, the lobby comes with the plugin.
 - **Join signs and NPCs** – `[ctb]` signs with live status, Citizens or FancyNpcs as join NPCs.
 - **Game manager GUI** – `/ctb game` lists, starts, stops and creates games.
-- **Velocity network** – one game per server, lobby server with join signs that show the state of every game server.
+- **Velocity network** – one game per server, a lobby server with join signs that show the state of every game
+  server, shared stats in MySQL.
 - **VIP perks** (`ctb.vip`) – start the game, join full lobbies, double vote, join message, kill particles and a
   victory firework. Cosmetic only, no advantage in the fight.
 - **Your world stays untouched** – inventories, stats, advancements and recipes of the players are saved and given back.
-- **English and German** (`language: de`), every message can be changed (MiniMessage), commands in messages are
-  clickable.
+- **Clickable commands** in chat messages, placeholders for PlaceholderAPI and MiniPlaceholders.
+
+## Languages
+
+| Language | `language` in `config.yml` |
+|---|---|
+| English | `en` (default) |
+| German (Deutsch) | `de` |
+
+Every text is in `messages.yml` and can be changed. For another language copy the file to `messages_<language>.yml`
+and translate it – missing texts fall back to English. Translations are welcome as a pull request.
 
 ## Supported plugins
 
@@ -66,21 +94,8 @@ All optional:
 
 ## Requirements
 
-- **Paper 26.2** (only the current version is supported)
+- **Paper 26.2 or 26.3** (forks of Paper like Purpur work too, Spigot doesn't)
 - **Java 25**
-
-## Getting started
-
-1. Put `CatchTheBeacon.jar` into `plugins/` and start the server.
-2. Get a map:
-   - **Preset:** download [Sakura](https://www.planetminecraft.com/project/sakura-cores-map/), put the zip into
-     `plugins/CatchTheBeacon/maps/` and restart (or run `/ctb arena create sakura`). Done – the game starts as soon
-     as enough players join.
-   - **Your own map:** copy the world folder to `plugins/CatchTheBeacon/maps/<name>` (or use
-     `/ctb arena create <name> --world <world>`), set a lobby world with `/ctb arena <name> lobby setworld <map or world>`,
-     then run `/ctb arena <name> setup` and follow the steps. Every team needs a spawn and two beacons.
-3. `/ctb arena <name> creategame` – or place a sign with `[ctb]` in the first line and the arena name in the second.
-4. Players join with `/ctb join` or the sign.
 
 ## Commands
 
@@ -89,27 +104,12 @@ All optional:
 | `/ctb join`, `/ctb quit`, `/ctb spectate` | – | Join, leave or watch a game |
 | `/ctb stats [player]`, `/ctb achievements [player]`, `/ctb top [stat]` | – | Stats and leaderboard |
 | `/ctb start` | `ctb.vip` | Starts the game in the lobby immediately |
-| `/ctb arena create <name> [--world <world>]`, `/ctb arena list` | `ctb.admin` | Create and list arenas |
-| `/ctb arena <arena> setup` / `check` / `creategame` / `removegame` | `ctb.admin` | Set up and run an arena |
-| `/ctb game` | `ctb.admin` | Game manager (GUI) |
-| `/ctb npc link <arena>` / `unlink` / `list` | `ctb.admin` | Join NPCs |
-| `/ctb config items set` | `ctb.admin` | Saves your inventory as the kit |
+| `/ctb arena …`, `/ctb game`, `/ctb npc …`, `/ctb config …` | `ctb.admin` | Arenas, games, join NPCs and the kit |
 
-`/ctb help` shows all commands. `ctb.network.bypass`: not put into the game automatically on a game server.
-
-## Placeholders
-
-PlaceholderAPI (`%ctb_…%`) and MiniPlaceholders:
-`kills`, `deaths`, `kd`, `wins`, `games`, `beacons`, `achievements`, `team`, `arena`,
-`players_<arena>`, `maxplayers_<arena>`, `state_<arena>`, `top_<stat>_<place>_<name|value>`.
-
-## Network (Velocity)
-
-- **Game servers:** `network.mode: game` – one arena per server, players joining the server join the game and are sent
-  back to the lobby afterwards.
-- **Lobby server:** `network.mode: lobby` with the game servers in `network.servers` – join signs (`[ctb]` + server
-  name) and `/ctb join` send players to a free game.
-- Use the same MySQL database on all servers (`sql.enabled: true`) for shared stats.
+All commands, permissions and placeholders:
+[commands](https://itsthechris07.github.io/CatchTheBeacon/commands/) ·
+[placeholders](https://itsthechris07.github.io/CatchTheBeacon/placeholders/) ·
+[network](https://itsthechris07.github.io/CatchTheBeacon/network/)
 
 ## Building
 

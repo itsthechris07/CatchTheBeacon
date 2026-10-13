@@ -2,7 +2,7 @@
 
 ## Which versions are supported?
 
-Only the current version: **Paper 26.2** with **Java 25** (forks of Paper like Purpur work too). Spigot isn't
+Only the current versions: **Paper 26.2 and 26.3** with **Java 25** (forks of Paper like Purpur work too). Spigot isn't
 supported. When a new Minecraft version comes out, update CatchTheBeacon as well.
 
 ## Players can't join – "no game"

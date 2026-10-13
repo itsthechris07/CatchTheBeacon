@@ -2,9 +2,9 @@
 
 ![CatchTheBeacon](assets/banner.png)
 
-A **Cores** minigame for Paper: **Red vs Blue on a sky map, every team guards two beacons (cores).** Break both enemy beacons
-to win – but near an enemy beacon you get Mining Fatigue, so one player mines while the rest of the team keeps them
-alive.
+**Team PvP minigame for Paper – Red vs Blue on a sky map, every team guards two beacons (cores).** Break both enemy
+beacons to win – but near an enemy beacon you get Mining Fatigue, so one player mines while the rest of the team keeps
+them alive. Known as **Cores** or **Destroy the Core**: like BedWars, but without generators.
 
 ![How a round works](assets/how-it-works.png)
 
@@ -23,7 +23,7 @@ alive.
 
 ## Requirements
 
-- **Paper 26.2** – only the current version is supported (forks of Paper like Purpur work too)
+- **Paper 26.2 or 26.3** – only the current versions are supported (forks of Paper like Purpur work too)
 - **Java 25**
 
 ## Downloads

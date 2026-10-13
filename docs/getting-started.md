@@ -2,7 +2,7 @@
 
 ## Installation
 
-1. Make sure your server runs **Paper 26.2** on **Java 25**.
+1. Make sure your server runs **Paper 26.2 or 26.3** on **Java 25**.
 2. Put `CatchTheBeacon.jar` into `plugins/` and start the server.
 3. The plugin creates `plugins/CatchTheBeacon/` with `config.yml`, `messages.yml` and `teams.yml`.
 

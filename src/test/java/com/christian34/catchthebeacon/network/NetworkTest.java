@@ -26,6 +26,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -229,7 +230,7 @@ class NetworkTest extends GameTestBase {
     @Test
     void gameServerSendsStatusAsMotd() {
         mode("game");
-        ServerListPingEvent event = new ServerListPingEvent("localhost", InetAddress.getLoopbackAddress(),
+        ServerListPingEvent event = new ServerListPingEvent("localhost", new InetSocketAddress(InetAddress.getLoopbackAddress(), 25565),
                 Component.text("A Minecraft Server"), 2, 20);
         network().onPing(event);
         assertEquals("CTB;LOBBY;2;8;castle", PlainTextComponentSerializer.plainText().serialize(event.motd()));
@@ -238,7 +239,7 @@ class NetworkTest extends GameTestBase {
 
     @Test
     void standaloneKeepsMotd() {
-        ServerListPingEvent event = new ServerListPingEvent("localhost", InetAddress.getLoopbackAddress(),
+        ServerListPingEvent event = new ServerListPingEvent("localhost", new InetSocketAddress(InetAddress.getLoopbackAddress(), 25565),
                 Component.text("A Minecraft Server"), 2, 20);
         network().onPing(event);
         assertEquals("A Minecraft Server", PlainTextComponentSerializer.plainText().serialize(event.motd()));

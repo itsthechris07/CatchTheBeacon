@@ -68,7 +68,8 @@ sql:
   # ...
 ```
 
-See [Database](stats.md#database).
+See [Database](stats.md#database) – there is also how to keep the password out of `config.yml` with an environment
+variable (`password: "${CTB_MYSQL_PASSWORD}"`).
 
 ## Parties
 

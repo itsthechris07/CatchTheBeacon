@@ -119,7 +119,7 @@ Without an `end` event a round lasts until a team has lost both beacons.
 | Option | Default | Meaning |
 |---|---|---|
 | `stats.enabled` | `true` | save kills, deaths, wins, … of every player |
-| `sql.*` | off | MySQL/MariaDB instead of SQLite – see [Stats](stats.md#database) |
+| `sql.*` | off | MySQL/MariaDB instead of SQLite – see [Stats](stats.md#database); `"${NAME}"` reads an [environment variable](stats.md#keep-the-password-out-of-configyml) |
 | `achievements.enabled` | `true` | [achievements](stats.md#achievements) |
 | `achievements.quick-win-minutes` | `5` | time limit of *That was quick* |
 | `tips.rounds` | `3` | new players get tips in the action bar during their first rounds (0: off) |

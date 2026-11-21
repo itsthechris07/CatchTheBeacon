@@ -35,6 +35,64 @@ sql:
 The database must exist; the tables are created automatically. The keys are the same as in EasyPrefix, so both
 plugins can use the same database. Paper ships the drivers.
 
+### Keep the password out of config.yml
+
+`config.yml` is often shared – in a support chat, with an AI assistant or in git. Instead of the password, write
+`${NAME}` and set the environment variable `NAME` on the server:
+
+```yaml
+sql:
+  password: "${CTB_MYSQL_PASSWORD}"
+```
+
+This works for every `sql.*` value (e.g. `host: "${CTB_MYSQL_HOST}"`, `port: "${CTB_MYSQL_PORT}"`). The variable is
+read when the plugin loads the config and never written into the file. If it isn't set, the console warns (with the
+name of the variable, not its value) and the value stays empty. Values without `${...}` work as before.
+
+=== "Start script"
+
+    ```bash
+    # Linux (or Environment=CTB_MYSQL_PASSWORD=... in a systemd service)
+    export CTB_MYSQL_PASSWORD='secret'
+    java -jar paper.jar --nogui
+    ```
+
+    ```bat
+    rem Windows (start.bat)
+    set CTB_MYSQL_PASSWORD=secret
+    java -jar paper.jar --nogui
+    ```
+
+=== "Docker"
+
+    ```yaml
+    # docker-compose.yml
+    services:
+      minecraft:
+        environment:
+          CTB_MYSQL_PASSWORD: "secret"
+    ```
+
+    or `docker run -e CTB_MYSQL_PASSWORD=secret ...`. With an `env_file:` the password stays out of the compose file too.
+
+=== "Pterodactyl"
+
+    Environment variables come from the egg: the panel admin adds a variable `CTB_MYSQL_PASSWORD` under
+    *Admin → Nests → (egg) → Variables* (user viewable and editable, not shown in the startup command), then the value
+    is set in the *Startup* tab of the server.
+
+!!! tip "A MySQL user of its own"
+    Don't use `root`. Create a user that only has rights on the plugin's database – if the password leaks anyway,
+    nothing else is at risk:
+
+    ```sql
+    CREATE DATABASE CatchTheBeacon;
+    CREATE USER 'ctb'@'%' IDENTIFIED BY 'a-long-random-password';
+    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, INDEX ON CatchTheBeacon.* TO 'ctb'@'%';
+    ```
+
+    Replace `%` with the address of the Minecraft server if you can.
+
 !!! note "Older versions"
     A `stats.yml` of an older version of CatchTheBeacon is imported into the database once and renamed to
     `stats.yml.imported`.

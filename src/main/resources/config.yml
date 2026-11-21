@@ -121,6 +121,9 @@ stats:
   enabled: true
 # player data (stats) in MySQL or MariaDB - use it in a network, so all servers share the stats
 # disabled: saved in plugins/CatchTheBeacon/database.db (SQLite)
+# "${NAME}" is replaced with the environment variable NAME, so the password doesn't have to stand in this file, e.g.
+# password: "${CTB_MYSQL_PASSWORD}" (works for every value here). Use a MySQL user that only has rights on this
+# database, not root.
 sql:
   enabled: false
   host: 'localhost'

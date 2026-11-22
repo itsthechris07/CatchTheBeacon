@@ -23,13 +23,13 @@ Lobby
 | State | Meaning |
 |---|---|
 | Lobby | players can join |
-| Running | the game is on – a click lets you watch |
+| Running | the game is on; a click lets you watch |
 | Ending | the round is over, a new one starts soon |
 | No game | the arena has no game (see below) |
 
 - **Right-click** joins the game of the sign (or spectates it while it is running).
 - Arenas with a sign get a game automatically when the server starts.
-- **Every sign has its own game.** Two signs of the same arena run two games side by side – useful for busy servers.
+- **Every sign has its own game.** Two signs of the same arena run two games side by side, which helps on busy servers.
 - Signs can only be broken by admins while **sneaking**, so nobody breaks them by accident.
 
 Signs are stored in `signs.yml`. The texts (`sign_title`, `sign_status_*`, …) are in
@@ -48,7 +48,7 @@ With [Citizens](https://www.spigotmc.org/resources/citizens.13811/) or
 3. Right-click the NPC within 30 seconds.
 
 Now a click on the NPC joins the arena. The NPC shows the state of the game (Citizens: an extra hologram line,
-FancyNpcs: behind the name) – turn this off with `npcs.show-status: false`.
+FancyNpcs: behind the name). Turn this off with `npcs.show-status: false`.
 
 | Command | What it does |
 |---|---|

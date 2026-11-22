@@ -7,7 +7,7 @@
 3. The plugin creates `plugins/CatchTheBeacon/` with `config.yml`, `messages.yml` and `teams.yml`.
 
 As long as there is no arena, CatchTheBeacon tells you in the console and admins (`ctb.admin`) on every join what to
-do next – with clickable commands.
+do next, with clickable commands.
 
 ## Your first arena in two minutes (map preset)
 
@@ -16,7 +16,7 @@ The lobby comes with the plugin.
 
 1. Download [Sakura by BreadBuilds](https://www.planetminecraft.com/project/sakura-cores-map/).
 2. Put the zip file (don't unpack it) into `plugins/CatchTheBeacon/maps/`.
-3. Restart the server – or run `/ctb arena create sakura`.
+3. Restart the server, or run `/ctb arena create sakura`.
 
 The map is unpacked, spawns and beacons are set, the lobby `default_lobby` is installed and the arena gets a game.
 Players can join right away with `/ctb join`. The zip is deleted afterwards.
@@ -28,7 +28,7 @@ Players can join right away with `/ctb join`. The zip is deleted afterwards.
 ## Your own map
 
 Every team needs **a spawn and two beacons**, the arena needs a **lobby world**. The guided setup walks you through
-it – see [Arenas and maps](arenas.md):
+it, see [Arenas and maps](arenas.md):
 
 ```
 /ctb arena create castle --world castle_world
@@ -51,7 +51,7 @@ The game starts when the lobby has enough players (`min-players` of the arena) a
 
 ## What's next
 
-- Tune the game in [`config.yml`](configuration.md) – changes apply after a restart.
+- Tune the game in [`config.yml`](configuration.md); changes apply after a restart.
 - Switch to German (`language: de`) or restyle every message in [`messages.yml`](customization.md#messages).
 - Share stats across servers with [MySQL/MariaDB](stats.md#database).
 - Run one game per server behind [Velocity](network.md).

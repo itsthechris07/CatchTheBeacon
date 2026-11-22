@@ -1,13 +1,13 @@
 # Configuration
 
 Everything is set in `plugins/CatchTheBeacon/config.yml`. Change it while the server is stopped, or restart the server
-afterwards. New options of an update are added to your file automatically – your values and comments stay.
+afterwards. New options of an update are added to your file automatically; your values and comments stay.
 
 Texts use [MiniMessage](https://docs.papermc.io/adventure/minimessage/format) (`<red>`, `<bold>`, `<#ff8800>`,
 `<gradient:aqua:blue>`, …). Old color codes like `&c` still work.
 
 !!! tip "Other files"
-    Teams, the kit and all messages are in their own files – see [Teams, kit and messages](customization.md).
+    Teams, the kit and all messages are in their own files, see [Teams, kit and messages](customization.md).
     Settings of single arenas (players, display name) are in [`arenas.yml`](arenas.md#settings-in-arenasyml).
 
 ## General
@@ -46,7 +46,7 @@ Texts use [MiniMessage](https://docs.papermc.io/adventure/minimessage/format) (`
 
 ## Bases
 
-The bases around the beacons – the heart of the game, see [How a round works](gameplay.md#3-attack-and-defend).
+The bases around the beacons, see [How a round works](gameplay.md#3-attack-and-defend).
 All radii are in blocks, 0 turns the feature off.
 
 | Option | Default | Meaning |
@@ -119,11 +119,11 @@ Without an `end` event a round lasts until a team has lost both beacons.
 | Option | Default | Meaning |
 |---|---|---|
 | `stats.enabled` | `true` | save kills, deaths, wins, … of every player |
-| `sql.*` | off | MySQL/MariaDB instead of SQLite – see [Stats](stats.md#database); `"${NAME}"` reads an [environment variable](stats.md#keep-the-password-out-of-configyml) |
+| `sql.*` | off | MySQL/MariaDB instead of SQLite, see [Stats](stats.md#database); `"${NAME}"` reads an [environment variable](stats.md#keep-the-password-out-of-configyml) |
 | `achievements.enabled` | `true` | [achievements](stats.md#achievements) |
 | `achievements.quick-win-minutes` | `5` | time limit of *That was quick* |
 | `tips.rounds` | `3` | new players get tips in the action bar during their first rounds (0: off) |
-| `rewards.*` | off | money for kills, beacons, wins – see [Rewards](stats.md#rewards) |
+| `rewards.*` | off | money for kills, beacons, wins, see [Rewards](stats.md#rewards) |
 
 ## Variants
 
@@ -138,15 +138,15 @@ See [Variants](gameplay.md#variants) for their rules.
 
 | Option | Meaning |
 |---|---|
-| `network.*` | one game per server behind Velocity – see [Velocity network](network.md) |
-| `parties.*` | parties join together and play in the same team – see [Supported plugins](integrations.md#parties) |
-| `npcs.show-status` | join NPCs show the state of their game – see [Join NPCs](signs-and-npcs.md#join-npcs) |
+| `network.*` | one game per server behind Velocity, see [Velocity network](network.md) |
+| `parties.*` | parties join together and play in the same team, see [Supported plugins](integrations.md#parties) |
+| `npcs.show-status` | join NPCs show the state of their game, see [Join NPCs](signs-and-npcs.md#join-npcs) |
 
 ## Telemetry and updates
 
 | Option | Default | Meaning |
 |---|---|---|
-| `sentry.enabled` | `true` | anonymous error reports – see [Privacy](privacy.md) |
+| `sentry.enabled` | `true` | anonymous error reports, see [Privacy](privacy.md) |
 | `update-checker.enabled` | `true` | checks GitHub for new versions and tells admins on join |
 
 bStats is turned off in `plugins/bStats/config.yml`.

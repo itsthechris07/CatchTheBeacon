@@ -1,7 +1,7 @@
 # Commands and permissions
 
 All commands start with `/ctb` (aliases: `/catchthebeacon`, `/catchbeacon`, `/ctbeacon`). `/ctb help [query]` lists
-the commands a player can use – click a command to put it into the chat.
+the commands a player can use. Click a command to put it into the chat.
 
 ## Permissions
 
@@ -10,7 +10,7 @@ the commands a player can use – click a command to put it into the chat.
 | *(none)* | everybody | play: join, spectate, stats, … |
 | `ctb.vip` | op | start the game early and the [VIP perks](#vip-perks) |
 | `ctb.admin` | op | set up arenas, manage games, join signs and NPCs, update notifications |
-| `ctb.network.bypass` | **nobody** (not even ops) | not put into the game when joining a [game server](network.md) – e.g. to set up its arena |
+| `ctb.network.bypass` | **nobody** (not even ops) | not put into the game when joining a [game server](network.md), e.g. to set up its arena |
 
 ## Players
 
@@ -18,7 +18,7 @@ the commands a player can use – click a command to put it into the chat.
 |---|---|
 | `/ctb` | shows the plugin version |
 | `/ctb help [query]` | shows all commands |
-| `/ctb join` | joins the game that waits for players – or watches a running one |
+| `/ctb join` | joins the game that waits for players, or watches a running one |
 | `/ctb spectate` | watches a running game |
 | `/ctb quit` | leaves the current game |
 | `/ctb stats [player]` | shows the [statistics](stats.md) of a player |
@@ -33,7 +33,7 @@ the commands a player can use – click a command to put it into the chat.
 
 ### VIP perks
 
-Nothing that helps in the fight – VIP ranks are often sold, so they only give comfort and cosmetics:
+Nothing that helps in the fight. VIP ranks are often sold, so they only give comfort and cosmetics:
 
 - start the game early (`/ctb start` or the lime dye in the lobby)
 - join a full lobby (the last player without VIP makes room)

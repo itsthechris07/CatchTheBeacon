@@ -24,12 +24,12 @@ network:
   arena: ""             # the arena of this server (empty: the first playable one)
 ```
 
-- Every player joining the server joins the game – or watches it while it is running.
+- Every player joining the server joins the game, or watches it while it is running.
 - After the round, or with `/ctb quit`, players are sent to the lobby server.
 - The state of the game is sent as the server's MOTD, so the lobby server can read it.
 
 !!! warning "Setting up a game server"
-    Players – also admins – are put into the game as soon as they join. To set up the arena, give yourself
+    Players, admins included, are put into the game as soon as they join. To set up the arena, give yourself
     `ctb.network.bypass` (not even ops have it), or set the arena up before it can be played. Vanished players aren't
     put into the game either.
 
@@ -49,7 +49,7 @@ network:
 
 The lobby server reads the state of every game server every 2 seconds.
 
-- `/ctb join` sends the player to the game server with the most players waiting – or to a running game to watch it.
+- `/ctb join` sends the player to the game server with the most players waiting, or to a running game to watch it.
 - `/ctb spectate` sends the player to a running game.
 - [Join signs](signs-and-npcs.md#join-signs): `[ctb]` in the first line, the **server name** (e.g. `ctb-1`) in the
   second.
@@ -68,7 +68,7 @@ sql:
   # ...
 ```
 
-See [Database](stats.md#database) – there is also how to keep the password out of `config.yml` with an environment
+See [Database](stats.md#database). It also explains how to keep the password out of `config.yml` with an environment
 variable (`password: "${CTB_MYSQL_PASSWORD}"`).
 
 ## Parties

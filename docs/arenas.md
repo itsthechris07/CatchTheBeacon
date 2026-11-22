@@ -15,7 +15,7 @@ unpacked world folder) into `plugins/CatchTheBeacon/maps/` and restart the serve
 |---|---|---|
 | `sakura` | [Sakura by BreadBuilds](https://www.planetminecraft.com/project/sakura-cores-map/) | 2–8 |
 
-The lobby `default_lobby` comes with the plugin – a glass-walled platform any arena can use:
+The lobby `default_lobby` comes with the plugin. It is a glass-walled platform any arena can use:
 `/ctb arena <arena> lobby setworld default_lobby`.
 
 `/ctb arena list` shows the arenas and links the downloads of presets that aren't installed yet.
@@ -60,19 +60,19 @@ arena. The hotbar holds the tools:
 
 | Tool | Use |
 |---|---|
-| Nether star – *Lobby spawn* (in the lobby) | sets the lobby spawn where you stand |
-| Red / blue banner – *Spawn* (in the arena) | sets the team spawn where you stand, including your view direction |
-| Red / blue glass – *Beacon left / right* | right-click the beacon block |
-| Book – *Checklist* | shows what is still missing |
-| Ender pearl – *Switch world* | switches between lobby and arena |
-| Emerald – *Save and leave* | saves both worlds and gives you your inventory back |
+| Nether star: *Lobby spawn* (in the lobby) | sets the lobby spawn where you stand |
+| Red / blue banner: *Spawn* (in the arena) | sets the team spawn where you stand, including your view direction |
+| Red / blue glass: *Beacon left / right* | right-click the beacon block |
+| Book: *Checklist* | shows what is still missing |
+| Ender pearl: *Switch world* | switches between lobby and arena |
+| Emerald: *Save and leave* | saves both worlds and gives you your inventory back |
 
 The next step glows and is selected, the action bar tells you what to do. Changes you make to the worlds (building,
-breaking) are saved too. Leaving in any other way – `/ctb arena castle setup exit`, quitting, teleporting away – also
+breaking) are saved too. Leaving in any other way (`/ctb arena castle setup exit`, quitting, teleporting away) also
 saves.
 
 !!! note "Beacons"
-    Place the beacon blocks in the map first. *Left* and *right* are just names – each team needs two beacons, the
+    Place the beacon blocks in the map first. *Left* and *right* are just names: each team needs two beacons, the
     order doesn't matter.
 
 ### 4. Check and play
@@ -86,7 +86,7 @@ saves.
 gets a game again after every restart, and a new round after every game. Arenas with a [join sign](signs-and-npcs.md)
 get a game automatically, too.
 
-`creategame --force` only needs the lobby to be set up – for testing.
+For testing, `creategame --force` only needs the lobby to be set up.
 
 ## Changing an arena
 
@@ -124,7 +124,7 @@ arenas:
 ## Map tips
 
 - Both sides should be the same (mirrored or rotated by 180°), so the game is fair.
-- Put iron and diamond blocks on the map – they are the only way to better gear (see `resources`).
+- Put iron and diamond blocks on the map. They are the only way to better gear (see `resources`).
 - Leave some room around the beacons: Mining Fatigue reaches 6 blocks by default, the trap 5 blocks.
 - Use a void world. Players die at y 0 (`game.instant-death-height`).
 - Protect blocks that must not be broken with `game.unbreakable-blocks` (e.g. an enchanting table).

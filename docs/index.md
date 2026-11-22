@@ -2,8 +2,8 @@
 
 ![CatchTheBeacon](assets/banner.png)
 
-**Team PvP minigame for Paper – Red vs Blue on a sky map, every team guards two beacons (cores).** Break both enemy
-beacons to win – but near an enemy beacon you get Mining Fatigue, so one player mines while the rest of the team keeps
+**Team PvP minigame for Paper: Red vs Blue on a sky map, every team guards two beacons (cores).** Break both enemy
+beacons to win. Near an enemy beacon you get Mining Fatigue, so one player mines while the rest of the team keeps
 them alive. Known as **Cores** or **Destroy the Core**: like BedWars, but without generators.
 
 ![How a round works](assets/how-it-works.png)
@@ -12,18 +12,18 @@ them alive. Known as **Cores** or **Destroy the Core**: like BedWars, but withou
 
 <div class="grid cards" markdown>
 
-- **[Getting started](getting-started.md)** – install the plugin and play your first round in a few minutes
-- **[How a round works](gameplay.md)** – lobby, teams, beacons, resources, events, the end of a round
-- **[Arenas and maps](arenas.md)** – map presets, your own maps, the guided setup
-- **[Join signs and NPCs](signs-and-npcs.md)** – let players join with a click
-- **[Configuration](configuration.md)** – every option of `config.yml`
-- **[Commands and permissions](commands.md)** – everything under `/ctb`
+- **[Getting started](getting-started.md)**: install the plugin and play your first round in a few minutes
+- **[How a round works](gameplay.md)**: lobby, teams, beacons, resources, events, the end of a round
+- **[Arenas and maps](arenas.md)**: map presets, your own maps, the guided setup
+- **[Join signs and NPCs](signs-and-npcs.md)**: let players join with a click
+- **[Configuration](configuration.md)**: every option of `config.yml`
+- **[Commands and permissions](commands.md)**: everything under `/ctb`
 
 </div>
 
 ## Requirements
 
-- **Paper 26.2 or 26.3** – only the current versions are supported (forks of Paper like Purpur work too)
+- **Paper 26.2 or 26.3**: only the current versions are supported (forks of Paper like Purpur work too)
 - **Java 25**
 
 ## Downloads

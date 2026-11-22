@@ -12,12 +12,12 @@ Every player's kills, deaths, wins, played games and destroyed beacons are saved
 Use them in scoreboards and holograms with [placeholders](placeholders.md), e.g. `%ctb_wins%` or a leaderboard with
 `%ctb_top_wins_1_name%`.
 
-Stats only count in real games – nothing a player does in a game changes their normal Minecraft statistics,
+Stats only count in real games. Nothing a player does in a game changes their normal Minecraft statistics,
 advancements or recipes, and the ender chest is locked in game worlds.
 
 ## Database
 
-By default stats are saved in `plugins/CatchTheBeacon/database.db` (SQLite) – nothing to set up.
+By default stats are saved in `plugins/CatchTheBeacon/database.db` (SQLite), so there is nothing to set up.
 
 For a network, or if you prefer it, use **MySQL or MariaDB** so all servers share the stats:
 
@@ -37,7 +37,7 @@ plugins can use the same database. Paper ships the drivers.
 
 ### Keep the password out of config.yml
 
-`config.yml` is often shared – in a support chat, with an AI assistant or in git. Instead of the password, write
+`config.yml` is often shared: in a support chat, with an AI assistant or in git. Instead of the password, write
 `${NAME}` and set the environment variable `NAME` on the server:
 
 ```yaml
@@ -82,7 +82,7 @@ name of the variable, not its value) and the value stays empty. Values without `
     is set in the *Startup* tab of the server.
 
 !!! tip "A MySQL user of its own"
-    Don't use `root`. Create a user that only has rights on the plugin's database – if the password leaks anyway,
+    Don't use `root`. Create a user that only has rights on the plugin's database. If the password leaks anyway,
     nothing else is at risk:
 
     ```sql
@@ -120,14 +120,14 @@ Names and descriptions are in [`messages.yml`](customization.md#messages) (`achi
 At the end of a round everybody sees a summary in the chat (`game.round-summary`):
 
 - duration and variant
-- the **MVP** – the player with the most points (a kill = 1, a destroyed beacon = 3)
+- the **MVP**: the player with the most points (a kill = 1, a destroyed beacon = 3)
 - the player with the most kills
 - who destroyed which beacon, and when
 - what every player got from resource blocks
 
 ## Tips for new players
 
-During their first rounds (`tips.rounds`, default 3) new players get short tips in the action bar – e.g. that a beacon takes
+During their first rounds (`tips.rounds`, default 3) new players get short tips in the action bar, e.g. that a beacon takes
 about 15 seconds to mine. This needs the stats to know who is new.
 
 ## Rewards

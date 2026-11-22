@@ -1,6 +1,6 @@
 # Supported plugins
 
-CatchTheBeacon works on its own. If one of these plugins is installed, it is used automatically – none of them is
+CatchTheBeacon works on its own. If one of these plugins is installed, it is used automatically. None of them is
 needed.
 
 | Plugin | What CatchTheBeacon does with it |
@@ -26,7 +26,7 @@ With **Parties** (by AlessioDP) or **Party and Friends** (by Simonsator), partie
 |---|---|---|
 | `parties.enabled` | `true` | use the party plugin |
 | `parties.join-together` | `true` | the leader takes the party members on this server into the game (`/ctb join`, signs, NPCs) |
-| `parties.same-team` | `true` | parties play in the same team – as long as the teams stay even; players who chose a team keep it |
+| `parties.same-team` | `true` | parties play in the same team as long as the teams stay even; players who chose a team keep it |
 
 Party and Friends keeps its parties on the proxy: install *Spigot Party API for Party and Friends* on the servers
 with CatchTheBeacon. In a [network](network.md), the proxy plugins take the members along when the leader is sent to
@@ -50,15 +50,15 @@ team colors and the sidebar of the game. Everything of TAB comes back when the p
 
 ## Vanish plugins
 
-Vanished players (SuperVanish, PremiumVanish, EssentialsX, CMI, …) aren't put into games automatically – not on a
-game server of a network, not as a party member – and can only play once they are visible again. Handy for admins
+Vanished players (SuperVanish, PremiumVanish, EssentialsX, CMI, …) aren't put into games automatically (not on a
+game server of a network, not as a party member) and can only play once they are visible again. Handy for admins
 checking a server.
 
 ## Multiverse
 
-- Multiverse-Core would import the game worlds (`ctb_…`) and load them again after a restart – they are removed from
+- Multiverse-Core would import the game worlds (`ctb_…`) and load them again after a restart, so they are removed from
   it.
-- Multiverse-Inventories would swap inventories when players enter game worlds – CatchTheBeacon saves and restores
+- Multiverse-Inventories would swap inventories when players enter game worlds. CatchTheBeacon saves and restores
   the inventory itself, so Multiverse-Inventories leaves players in games alone.
 
 ## Floodgate (Bedrock players)
@@ -69,5 +69,5 @@ voting, the spectator compass, the game manager, …
 ## Other plugins
 
 CatchTheBeacon saves the whole state of a player (inventory, health, game mode, effects, …) when they join a game
-and restores it afterwards – also after a crash, from `backups/`. Plugins that change players in other worlds should
+and restores it afterwards, also after a crash (from `backups/`). Plugins that change players in other worlds should
 leave the worlds starting with `ctb_` alone.

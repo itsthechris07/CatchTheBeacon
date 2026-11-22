@@ -25,7 +25,7 @@ teams:
     leather_color: "255, 255, 255"
 ```
 
-There are always exactly two teams – the keys `blue` and `red` stay, only their look changes.
+There are always exactly two teams: the keys `blue` and `red` stay, only their look changes.
 
 ## Kit
 
@@ -53,7 +53,7 @@ bow fight.
 The kit is saved in `items.yml` and used from the next spawn on. **Leather armor and wool are recolored** to the team
 of the player, so put in any color. Enchantments, names and other item data are kept.
 
-`/ctb config items get --confirm` gives you the current kit to change it – it replaces your inventory and only works
+`/ctb config items get --confirm` gives you the current kit to change it. It replaces your inventory and only works
 while you are in a team (in a game). To go back to the default kit, delete `items.yml`.
 
 Better gear doesn't belong into the kit: players get it from the [resource blocks](configuration.md#resources) of
@@ -61,7 +61,7 @@ the map.
 
 ## Messages
 
-Every text players see is in `messages.yml` – messages, item names, menus, scoreboard, signs, titles. Change the
+Every text players see is in `messages.yml`: messages, item names, menus, scoreboard, signs, titles. Change the
 style or the wording:
 
 ```yaml
@@ -75,7 +75,7 @@ sign_status_lobby: '<green>Lobby'
 - Commands in messages are clickable: `<run:"/ctb quit">/ctb quit</run>` runs the command,
   `<suggest:"/ctb arena create ">/ctb arena create \<name></suggest>` puts it into the chat box. Players see what a
   click does when they hover over it.
-- `{0}`, `{1}`, … are replaced with names, numbers, … – keep them in the text.
+- `{0}`, `{1}`, … are replaced with names, numbers, …; keep them in the text.
 - Write `\<` for a literal `<`.
 - The prefix in front of messages is `prefix` in `config.yml`, the tab list header and footer are `tablist.*`.
 
@@ -97,5 +97,5 @@ a [pull request](https://github.com/itsthechris07/CatchTheBeacon/pulls).
 
 ## Lobby
 
-The default lobby `default_lobby` is a normal map in `maps/` – change it like any other map with
+The default lobby `default_lobby` is a normal map in `maps/`. Change it like any other map with
 `/ctb arena <arena> lobby edit` and `lobby save`, or build your own and set it with `lobby setworld`.

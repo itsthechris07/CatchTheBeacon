@@ -1,7 +1,7 @@
 # Placeholders
 
 CatchTheBeacon has placeholders for [PlaceholderAPI](https://modrinth.com/plugin/placeholderapi) and
-[MiniPlaceholders](https://modrinth.com/plugin/miniplaceholders). Install one of them – the placeholders are registered
+[MiniPlaceholders](https://modrinth.com/plugin/miniplaceholders). Install one of them and the placeholders are registered
 automatically, no eCloud download needed. Use them in scoreboards, tab lists, holograms, NPC names, menus, …
 
 ## Player stats
@@ -22,7 +22,7 @@ Stats of the player who sees the text (see [Stats](stats.md)).
 
 ## Leaderboard
 
-The best 10 players of a stat – for leaderboard holograms. `<stat>` is `kills`, `deaths`, `wins`, `games` or
+The best 10 players of a stat, for leaderboard holograms. `<stat>` is `kills`, `deaths`, `wins`, `games` or
 `beacons`, `<place>` is 1 to 10. Empty if nobody is at that place. Refreshed every minute.
 
 | PlaceholderAPI | MiniPlaceholders | Value |
@@ -30,7 +30,7 @@ The best 10 players of a stat – for leaderboard holograms. `<stat>` is `kills`
 | `%ctb_top_<stat>_<place>_name%` | `<ctb_top:<stat>:<place>:name>` | name of the player |
 | `%ctb_top_<stat>_<place>_value%` | `<ctb_top:<stat>:<place>:value>` | their value |
 
-Example – a hologram with the top 3 by wins:
+Example: a hologram with the top 3 by wins:
 
 ```
 Best players
@@ -41,7 +41,7 @@ Best players
 
 ## Games
 
-The game of an arena – for NPC names, holograms or menu items next to your join points. On the lobby server of a
+The game of an arena, for NPC names, holograms or menu items next to your join points. On the lobby server of a
 [network](network.md), use the name of the game server instead of the arena.
 
 | PlaceholderAPI | MiniPlaceholders | Value |
@@ -53,5 +53,5 @@ The game of an arena – for NPC names, holograms or menu items next to your joi
 Example: `Sakura %ctb_players_sakura%/%ctb_maxplayers_sakura% %ctb_state_sakura%`.
 
 !!! tip
-    [Join NPCs](signs-and-npcs.md#join-npcs) of Citizens and FancyNpcs show the state on their own – no placeholders
-    needed.
+    [Join NPCs](signs-and-npcs.md#join-npcs) of Citizens and FancyNpcs show the state on their own, without
+    placeholders.

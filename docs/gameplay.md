@@ -1,6 +1,6 @@
 # How a round works
 
-Two teams – **Red** and **Blue** – play on a sky map. Every team has **two beacons** (cores). The team that destroys
+Two teams, **Red** and **Blue**, play on a sky map. Every team has **two beacons** (cores). The team that destroys
 both enemy beacons wins.
 
 ![How a round works](assets/how-it-works.png)
@@ -11,10 +11,10 @@ Players join with `/ctb join`, a [join sign or NPC](signs-and-npcs.md) and wait 
 
 | Item | What it does |
 |---|---|
-| Red bed – *Select team* | choose Red, Blue or Random |
-| Paper – *Vote for a variant* | vote for the [variant](#variants) of this round |
-| Lime dye – *Start the game* | starts in 5 seconds (only with `ctb.vip`) |
-| Red dye – *Leave* | leave the game |
+| Red bed: *Select team* | choose Red, Blue or Random |
+| Paper: *Vote for a variant* | vote for the [variant](#variants) of this round |
+| Lime dye: *Start the game* | starts in 5 seconds (only with `ctb.vip`) |
+| Red dye: *Leave* | leave the game |
 
 As soon as the arena's `min-players` are in the lobby, the countdown starts (`lobby.countdown`, default 180 seconds).
 It is shortened to 10 seconds when the lobby is full. `/ctb start` starts the game in 5 seconds.
@@ -41,16 +41,16 @@ team spawns (`game.spawn-protection`).
 
 Beacons are protected by the base around them:
 
-- **Mining Fatigue** – enemies near a beacon get Mining Fatigue I, breaking the beacon takes about 15 seconds
+- **Mining Fatigue**: enemies near a beacon get Mining Fatigue I, breaking the beacon takes about 15 seconds
   (`base.mining-fatigue-*`). One player mines, the rest of the team has to keep them alive. This is the central idea
   of the game.
-- **Warning** – the team is warned when an enemy comes close to one of its beacons (`game.beacon-warning-radius`).
-- **Trap** – the first enemy who comes close to a beacon gets blindness and slowness for a few seconds
+- **Warning**: the team is warned when an enemy comes close to one of its beacons (`game.beacon-warning-radius`).
+- **Trap**: the first enemy who comes close to a beacon gets blindness and slowness for a few seconds
   (`base.trap-*`).
-- **Regeneration** – defenders regenerate near their own beacons (`base.regeneration-radius`).
-- **No camping** – players who stand at their own beacon for too long get poison (`base.camping-*`). The time doesn't
+- **Regeneration**: defenders regenerate near their own beacons (`base.regeneration-radius`).
+- **No camping**: players who stand at their own beacon for too long get poison (`base.camping-*`). The time doesn't
   count while enemies are near: defending is not camping.
-- **Boss bar** – everybody sees when a beacon is being mined and how far it is (`base.mining-bossbar`).
+- **Boss bar**: everybody sees when a beacon is being mined and how far it is (`base.mining-bossbar`).
 
 While one of your beacons is being mined, your compass points to it.
 
@@ -71,7 +71,7 @@ Events happen after some minutes and are shown as *Next event* in the scoreboard
 
 A team wins when both enemy beacons are destroyed. Everybody sees the winner with fireworks and a
 [round summary](stats.md#round-summary) (MVP, most kills, destroyed beacons, mined resources). After
-`game.ending-seconds` everybody is sent back – with a **[Play again]** button – and the arena gets a new round.
+`game.ending-seconds` everybody is sent back with a **[Play again]** button, and the arena gets a new round.
 
 ## Dying, leaving and coming back
 
